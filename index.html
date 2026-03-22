@@ -1256,14 +1256,14 @@
             <div class="card-head"><span class="card-title">Commission History</span></div>
             <table class="tbl">
               <thead>
-                <tr><th>Customer</th><th>Product</th><th>Rate</th><th>Payment Date</th><th>Status</th></tr>
+                <tr><th>Customer</th><th>Product</th><th>Rate</th><th>Amount</th><th>Payment Date</th><th>Status</th></tr>
               </thead>
               <tbody>
-                <tr><td><div class="td-main">HorizonIQ</div></td><td>UCaaS + CCaaS</td><td>Standard</td><td>Apr 1, 2026</td><td><span class="badge b-pend">Pending</span></td></tr>
-                <tr><td><div class="td-main">Metro Law Group</div></td><td>UCaaS + Fax</td><td>Standard</td><td>Apr 1, 2026</td><td><span class="badge b-pend">Pending</span></td></tr>
-                <tr><td><div class="td-main">HorizonIQ</div></td><td>UCaaS + CCaaS</td><td>Standard</td><td>Mar 1, 2026</td><td><span class="badge b-paid">Paid</span></td></tr>
-                <tr><td><div class="td-main">Metro Law Group</div></td><td>UCaaS + Fax</td><td>Standard</td><td>Mar 1, 2026</td><td><span class="badge b-paid">Paid</span></td></tr>
-                <tr><td><div class="td-main">HorizonIQ</div></td><td>UCaaS + CCaaS</td><td>Standard</td><td>Feb 1, 2026</td><td><span class="badge b-paid">Paid</span></td></tr>
+                <tr><td><div class="td-main">HorizonIQ</div></td><td>UCaaS + CCaaS</td><td>Standard</td><td style="font-weight:700;color:#E8612A;">—</td><td>Apr 1, 2026</td><td><span class="badge b-pend">Pending</span></td></tr>
+                <tr><td><div class="td-main">Metro Law Group</div></td><td>UCaaS + Fax</td><td>Standard</td><td style="font-weight:700;color:#E8612A;">—</td><td>Apr 1, 2026</td><td><span class="badge b-pend">Pending</span></td></tr>
+                <tr><td><div class="td-main">HorizonIQ</div></td><td>UCaaS + CCaaS</td><td>Standard</td><td style="font-weight:700;color:#E8612A;">—</td><td>Mar 1, 2026</td><td><span class="badge b-paid">Paid</span></td></tr>
+                <tr><td><div class="td-main">Metro Law Group</div></td><td>UCaaS + Fax</td><td>Standard</td><td style="font-weight:700;color:#E8612A;">—</td><td>Mar 1, 2026</td><td><span class="badge b-paid">Paid</span></td></tr>
+                <tr><td><div class="td-main">HorizonIQ</div></td><td>UCaaS + CCaaS</td><td>Standard</td><td style="font-weight:700;color:#E8612A;">—</td><td>Feb 1, 2026</td><td><span class="badge b-paid">Paid</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -1416,6 +1416,7 @@
       const initials = (result.agent.firstName[0] + result.agent.lastName[0]).toUpperCase();
       launchPortal(result.agent.firstName, initials, result.agent.firstName + " " + result.agent.lastName);
       loadAgentDeals(result.agent.email);
+    loadAgentCommissions(result.agent.email);
     } else {
       showToast(result.message || "Login failed. Please try again.");
     }
@@ -1474,6 +1475,27 @@
     } else {
       showToast(result.message || "Submission failed. Please try again.");
     }
+  }
+
+  async function loadAgentCommissions(agentEmail) {
+    const result = await callAPI({ action: "getCommissions", agentEmail });
+    if (!result.success || !result.commissions || !result.commissions.length) return;
+    const tbody = document.querySelector('#page-commissions .tbl tbody');
+    if (!tbody) return;
+    tbody.innerHTML = "";
+    result.commissions.forEach(c => {
+      const statusClass = c.status === "Paid" ? "b-paid" : "b-pend";
+      const amount = c.amount ? "$" + parseFloat(c.amount).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) : "—";
+      const date = c.paymentDate ? new Date(c.paymentDate).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : "";
+      tbody.innerHTML += `<tr>
+        <td><div class="td-main">${c.customer}</div></td>
+        <td>${c.product}</td>
+        <td>${c.rate || "Standard"}</td>
+        <td style="font-weight:700;color:#E8612A;">${amount}</td>
+        <td>${date}</td>
+        <td><span class="badge ${statusClass}">${c.status}</span></td>
+      </tr>`;
+    });
   }
 
   async function loadAgentDeals(agentEmail) {
