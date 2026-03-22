@@ -1417,16 +1417,15 @@
     const pass  = document.getElementById('loginPassword').value.trim();
     if (!email || !pass) { showToast('Please enter your email and password.'); return; }
 
-    showToast('Signing in...');
-
-    // DEMO LOGIN — always works
+    // DEMO LOGIN — always works first
     if (email === "agent@demo.com" && pass === "demo1234") {
       currentAgent = { firstName: "Demo", lastName: "Agent", email: email, company: "Demo Agency" };
-      launchPortal("Demo", "DA");
+      launchPortal("Demo", "DA", "Demo Agent");
       return;
     }
 
-    // LIVE MODE
+    // LIVE MODE — real agents from Google Sheet
+    showToast('Signing in...');
     const result = await callAPI({ action: "loginAgent", email, password: pass });
     if (result.success) {
       currentAgent = result.agent;
