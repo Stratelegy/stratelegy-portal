@@ -1,3 +1,4 @@
+<!-- Stratelegy Portal v4917ba9c -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,8 +18,6 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gray-800);font-size:14px;line-height:1.6;}
-
-/* AUTH */
 .auth-screen{min-height:100vh;background:var(--gray-50);display:flex;align-items:center;justify-content:center;padding:40px 20px;}
 .auth-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:var(--shadow);width:100%;max-width:440px;overflow:hidden;}
 .auth-header{background:var(--white);border-bottom:3px solid var(--orange);padding:24px 36px 20px;text-align:center;}
@@ -37,12 +36,8 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
 .auth-switch{text-align:center;margin-top:16px;font-size:13px;color:var(--gray-400);}
 .auth-switch a{color:var(--orange);font-weight:700;cursor:pointer;text-decoration:none;}
 .auth-footer{text-align:center;padding:14px;background:var(--gray-50);border-top:1px solid var(--gray-200);font-size:11px;color:var(--gray-400);}
-
-/* PORTAL */
 .portal{display:none;}
 .portal-layout{display:flex;min-height:100vh;}
-
-/* SIDEBAR */
 .sidebar{width:220px;flex-shrink:0;background:var(--navy);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;z-index:200;}
 .sidebar-logo{padding:20px 20px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
 .sidebar-logo-sub{display:block;font-size:10px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-top:6px;}
@@ -63,8 +58,6 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
 .agent-role{font-size:11px;color:rgba(232,97,42,.9);margin-top:1px;}
 .btn-signout{width:100%;padding:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);color:rgba(255,255,255,.35);font-family:'Open Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:7px;}
 .btn-signout:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);}
-
-/* MAIN */
 .main{margin-left:220px;min-height:100vh;display:flex;flex-direction:column;}
 .topbar{background:var(--white);border-bottom:1px solid var(--gray-200);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:100;}
 .topbar-left{display:flex;align-items:center;gap:12px;}
@@ -74,23 +67,17 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
 .topbar-greeting{font-size:13px;color:var(--gray-400);}
 .topbar-greeting strong{color:var(--navy);}
 .topbar-tag{background:var(--orange-pale);color:var(--orange);border:1px solid rgba(232,97,42,.2);font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em;}
-
-/* PAGES */
 .page{display:none;padding:28px;flex:1;}
 .page.active{display:block;}
 .pg-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;}
 .pg-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:3px;}
 .pg-sub{font-size:13px;color:var(--gray-400);}
-
-/* CARDS */
 .card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);overflow:hidden;}
 .card-top{height:3px;background:var(--orange);}
 .card-head{padding:16px 20px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;}
 .card-title{font-size:14px;font-weight:700;color:var(--navy);}
 .card-link{font-size:12px;color:var(--orange);font-weight:700;cursor:pointer;text-decoration:none;}
 .card-body{padding:20px;}
-
-/* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
 .stat{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);border-left:3px solid var(--orange);padding:18px 20px;box-shadow:var(--shadow-sm);}
 .stat.featured{background:var(--navy);border-left-color:var(--orange);border-color:var(--navy);}
@@ -101,8 +88,6 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
 .stat-meta{font-size:12px;color:var(--gray-400);}
 .stat.featured .stat-meta{color:rgba(255,255,255,.3);}
 .dash-grid{display:grid;grid-template-columns:1fr 300px;gap:18px;}
-
-/* TABLE */
 .tbl{width:100%;border-collapse:collapse;}
 .tbl th{text-align:left;font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.09em;padding:10px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);}
 .tbl td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--gray-200);vertical-align:middle;}
@@ -110,18 +95,14 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
 .tbl tbody tr:hover td{background:var(--gray-50);}
 .td-main{font-weight:700;color:var(--navy);}
 .td-sub{font-size:11px;color:var(--gray-400);margin-top:1px;}
-
-/* BADGES */
 .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:4px;font-size:11px;font-weight:700;}
 .badge::before{content:'';width:5px;height:5px;border-radius:50%;}
-.b-sub{background:var(--blue-pale);color:var(--blue-text);} .b-sub::before{background:var(--blue-text);}
-.b-rev{background:var(--amber-pale);color:var(--amber);} .b-rev::before{background:var(--amber);}
-.b-app{background:var(--green-pale);color:var(--green);} .b-app::before{background:var(--green);}
-.b-act{background:var(--purple-pale);color:var(--purple-text);} .b-act::before{background:var(--purple-text);}
-.b-pend{background:var(--amber-pale);color:var(--amber);} .b-pend::before{background:var(--amber);}
-.b-paid{background:var(--green-pale);color:var(--green);} .b-paid::before{background:var(--green);}
-
-/* QUICK ACTIONS */
+.b-sub{background:var(--blue-pale);color:var(--blue-text);}.b-sub::before{background:var(--blue-text);}
+.b-rev{background:var(--amber-pale);color:var(--amber);}.b-rev::before{background:var(--amber);}
+.b-app{background:var(--green-pale);color:var(--green);}.b-app::before{background:var(--green);}
+.b-act{background:var(--purple-pale);color:var(--purple-text);}.b-act::before{background:var(--purple-text);}
+.b-pend{background:var(--amber-pale);color:var(--amber);}.b-pend::before{background:var(--amber);}
+.b-paid{background:var(--green-pale);color:var(--green);}.b-paid::before{background:var(--green);}
 .qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px;}
 .qa-btn{display:flex;align-items:center;gap:9px;padding:11px 13px;border:1.5px solid var(--gray-200);border-radius:var(--radius);background:var(--white);cursor:pointer;transition:all .15s;text-align:left;}
 .qa-btn:hover{border-color:var(--orange);background:var(--orange-pale);}
@@ -133,8 +114,6 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
 .comm-client{font-size:13px;font-weight:700;color:var(--navy);}
 .comm-date{font-size:11px;color:var(--gray-400);margin-top:1px;}
 .comm-status{font-size:12px;font-weight:700;color:var(--green);}
-
-/* DEAL FORM */
 .deal-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;padding:24px;}
 .sec-head{display:flex;align-items:center;gap:9px;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid var(--orange);}
 .sec-num{width:20px;height:20px;background:var(--orange);border-radius:50%;font-size:11px;font-weight:700;color:white;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -145,8 +124,18 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
 .btn-ghost:hover{border-color:var(--gray-400);}
 .btn-orange{padding:10px 24px;background:var(--orange);color:white;border:none;border-radius:var(--radius);font-family:'Open Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:7px;}
 .btn-orange:hover{background:var(--orange-dark);}
-
-/* COMMISSIONS */
+.prod-box{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:16px;margin-bottom:16px;}
+.prod-box-title{font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+.prod-box-note{font-size:11px;color:var(--gray-400);margin-bottom:12px;}
+.prod-row{display:grid;grid-template-columns:1fr 1fr 80px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--gray-200);}
+.prod-row:last-child{border-bottom:none;}
+.prod-row-2{display:grid;grid-template-columns:1fr 80px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--gray-200);}
+.prod-row-2:last-child{border-bottom:none;}
+.prod-name{font-size:13px;font-weight:700;color:var(--navy);}
+.prod-price{font-size:11px;color:var(--gray-400);}
+.prod-phone{font-size:12px;color:var(--gray-600);}
+.prod-warn{font-size:11px;color:var(--orange);font-weight:600;}
+.qty-input{padding:8px;text-align:center;}
 .comm-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
 .comm-card{background:var(--white);border:1px solid var(--gray-200);border-top:3px solid var(--orange);border-radius:var(--radius-md);padding:20px;box-shadow:var(--shadow-sm);text-align:center;}
 .comm-card.featured{background:var(--navy);border-color:var(--navy);border-top-color:var(--orange);}
@@ -166,8 +155,6 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
 .goal-item:last-child{margin-bottom:0;}
 .goal-label{color:var(--gray-800);}
 .goal-val{font-weight:700;color:var(--orange);}
-
-/* ONBOARDING */
 .checklist{display:flex;flex-direction:column;gap:8px;}
 .check-item{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;border:1.5px solid var(--gray-200);border-radius:var(--radius);cursor:pointer;transition:all .15s;background:var(--white);}
 .check-item:hover:not(.done){border-color:var(--orange);background:var(--orange-pale);}
@@ -187,15 +174,11 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
 .prod-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-800);padding:7px 0;border-bottom:1px solid var(--gray-200);}
 .prod-item:last-child{border-bottom:none;}
 .prod-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);flex-shrink:0;}
-
-/* FOOTER */
 .portal-footer{background:var(--navy);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
 .pf-links{display:flex;gap:18px;}
 .pf-link{font-size:12px;color:rgba(255,255,255,.3);text-decoration:none;}
 .pf-link:hover{color:rgba(255,255,255,.6);}
 .pf-copy{font-size:11px;color:rgba(255,255,255,.2);}
-
-/* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:white;padding:13px 18px;border-radius:var(--radius-md);font-size:13px;font-weight:600;z-index:9999;transform:translateY(60px);opacity:0;transition:all .25s ease;display:flex;align-items:center;gap:9px;box-shadow:var(--shadow);border-left:3px solid var(--orange);max-width:320px;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast-dot{width:7px;height:7px;border-radius:50%;background:var(--orange);flex-shrink:0;}
@@ -203,7 +186,7 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ═══ LOGIN ═══ -->
 <div class="auth-screen" id="loginScreen">
   <div class="auth-card">
     <div class="auth-header">
@@ -219,16 +202,16 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
       </div>
       <div class="form-group">
         <label class="form-label">Password</label>
-        <input class="form-control" type="password" id="loginPassword" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" value="demo1234">
+        <input class="form-control" type="password" id="loginPassword" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" value="demo1234">
       </div>
       <button class="btn-primary" onclick="doLogin()">Sign In to Portal</button>
-      <p class="auth-switch">Not a partner yet? <a onclick="showRegister()">Apply to join &mdash; it's free &rarr;</a></p>
+      <p class="auth-switch">Not a partner yet? <a onclick="showRegister()">Apply to join &mdash; it&rsquo;s free &rarr;</a></p>
     </div>
-    <div class="auth-footer">888.975.6130 &middot; <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="31585f575e714245435045545d5456481f525e5c">[email&#160;protected]</a> &middot; stratelegy.com</div>
+    <div class="auth-footer">888.975.6130 &middot; info@stratelegy.com &middot; stratelegy.com</div>
   </div>
 </div>
 
-<!-- REGISTER -->
+<!-- ═══ REGISTER ═══ -->
 <div class="auth-screen" id="registerScreen" style="display:none;">
   <div class="auth-card" style="max-width:480px;">
     <div class="auth-header">
@@ -253,13 +236,15 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
       <button class="btn-primary" onclick="doRegister()">Submit Application</button>
       <p class="auth-switch">Already approved? <a onclick="showLogin()">Sign in &rarr;</a></p>
     </div>
-    <div class="auth-footer">888.975.6130 &middot; <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3c55525a537c4f484e5d485950595b45125f5351">[email&#160;protected]</a> &middot; stratelegy.com</div>
+    <div class="auth-footer">888.975.6130 &middot; info@stratelegy.com &middot; stratelegy.com</div>
   </div>
 </div>
 
-<!-- PORTAL -->
+<!-- ═══ PORTAL ═══ -->
 <div class="portal" id="portalApp">
 <div class="portal-layout">
+
+<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sidebar-logo">
     <img src="data:image/png;base64,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HTbedXF+hR6hVws5L1PPc5/NqGWbOCG4b3nYFFrf0rqNkVMDv67vAfisBUOp287ePwLvT6+NXL4hERZxfCIiAIiIAubZZWjDZHgdjiuCL1NrseNbOTnOccucXd5XFEXh6EREAREQBERAEREAREQBERAEREAREQBERAFy13YxrOxyyuKIAiIgCIiAIiID6CQcgkFHOc7eSe8r4iAIiICj0bFNNROY+KJ0jHbctBJB3Feq6WyKpptWGOOORpy0huM9il6WolpphLC/VcPj2Lcp9IYyAKiBwPNhz8CtjGyaJ1eHb5GVkY90bPEr8zOFmuBfq9AAOeuMKjtdGKKkEOQ5xOs4jiV5DfqHHyZj/aPzXkq9IHFpbTQ6p+s/8lJU8TGbnGW2cWLKyFxcdI56V1DdSOlacuzru7OSn1yle+WR0kji5zjkk8VxWVk3O6xzNKirwYKJ32+A1NZFDwc7b3cfgrYAAYGwKLt9W+iqOmYxj3apHW4L3S36qfG5giibrDGRnI+Ku4OTTRB8u7KeZj23TXHsjxXafzm4SyA5bnDe4bF5URZs5OcnJ+poQioxUV6BERcnQREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQH//Z" alt="Stratelegy" style="height:26px;width:auto;filter:brightness(0) invert(1);">
@@ -267,45 +252,24 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section">Main</div>
-    <div class="nav-item active" onclick="showPage('dashboard',this)">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      <span class="nav-label">Dashboard</span>
-    </div>
-    <div class="nav-item" onclick="showPage('deals',this)">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-      <span class="nav-label">My Deals</span>
-      <span class="nav-pill" id="dealPill">3</span>
-    </div>
-    <div class="nav-item" onclick="showPage('submit',this)">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      <span class="nav-label">Submit Deal</span>
-    </div>
-    <div class="nav-item" onclick="showPage('commissions',this)">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-      <span class="nav-label">Commissions</span>
-    </div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="nav-label">Dashboard</span></div>
+    <div class="nav-item" onclick="showPage('deals',this)"><svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span class="nav-label">My Deals</span><span class="nav-pill" id="dealPill">3</span></div>
+    <div class="nav-item" onclick="showPage('submit',this)"><svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span class="nav-label">Submit Deal</span></div>
+    <div class="nav-item" onclick="showPage('commissions',this)"><svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span class="nav-label">Commissions</span></div>
     <div class="nav-section" style="margin-top:6px;">Resources</div>
-    <div class="nav-item" onclick="showPage('onboarding',this)">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-      <span class="nav-label">Onboarding</span>
-    </div>
-    <div class="nav-item" onclick="window.open('https://stratelegy.com','_blank')">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-      <span class="nav-label">Stratelegy.com</span>
-    </div>
+    <div class="nav-item" onclick="showPage('onboarding',this)"><svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg><span class="nav-label">Onboarding</span></div>
+    <div class="nav-item" onclick="window.open('https://stratelegy.com','_blank')"><svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg><span class="nav-label">Stratelegy.com</span></div>
   </nav>
   <div class="sidebar-footer">
     <div class="agent-row">
       <div class="agent-avi" id="agentAvi">DA</div>
       <div><div class="agent-name" id="agentName">Demo Agent</div><div class="agent-role">Founding Partner</div></div>
     </div>
-    <button class="btn-signout" onclick="doLogout()">
-      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      Sign Out
-    </button>
+    <button class="btn-signout" onclick="doLogout()"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Sign Out</button>
   </div>
 </aside>
 
+<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <div class="topbar-left">
@@ -319,11 +283,9 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
     </div>
   </div>
 
+  <!-- DASHBOARD -->
   <div class="page active" id="page-dashboard">
-    <div class="notice">
-      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span><strong>Welcome to your Stratelegy Partner Portal.</strong> Complete your onboarding checklist to begin submitting deals and earning commissions.</span>
-    </div>
+    <div class="notice"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span><strong>Welcome to your Stratelegy Partner Portal.</strong> Complete your onboarding checklist to begin submitting deals and earning commissions.</span></div>
     <div class="stats-row">
       <div class="stat featured"><div class="stat-label">Commissions</div><div class="stat-val">Active</div><div class="stat-meta">Lifetime residual program</div></div>
       <div class="stat"><div class="stat-label">Active Deals</div><div class="stat-val" id="statDeals">3</div><div class="stat-meta">Currently in pipeline</div></div>
@@ -334,10 +296,7 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
       <div>
         <div class="card">
           <div class="card-top"></div>
-          <div class="card-head">
-            <span class="card-title">Recent Deals</span>
-            <a class="card-link" onclick="showPage('deals',document.querySelectorAll('.nav-item')[1])">View all &rarr;</a>
-          </div>
+          <div class="card-head"><span class="card-title">Recent Deals</span><a class="card-link" onclick="showPage('deals',document.querySelectorAll('.nav-item')[1])">View all &rarr;</a></div>
           <table class="tbl">
             <thead><tr><th>Company</th><th>Product</th><th>Users</th><th>Status</th></tr></thead>
             <tbody id="dashDealsBody">
@@ -353,22 +312,10 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
           <div class="card-top"></div>
           <div class="card-head"><span class="card-title">Quick Actions</span></div>
           <div class="qa-grid">
-            <button class="qa-btn" onclick="showPage('submit',document.querySelectorAll('.nav-item')[2])">
-              <div class="qa-icon"><svg width="14" height="14" fill="none" stroke="#E8612A" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
-              <span class="qa-label">Submit Deal</span>
-            </button>
-            <button class="qa-btn" onclick="showPage('commissions',document.querySelectorAll('.nav-item')[3])">
-              <div class="qa-icon"><svg width="14" height="14" fill="none" stroke="#E8612A" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-              <span class="qa-label">Commissions</span>
-            </button>
-            <button class="qa-btn" onclick="showPage('onboarding',document.querySelectorAll('.nav-item')[4])">
-              <div class="qa-icon"><svg width="14" height="14" fill="none" stroke="#E8612A" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
-              <span class="qa-label">Onboarding</span>
-            </button>
-            <button class="qa-btn" onclick="window.open('tel:8889756130')">
-              <div class="qa-icon"><svg width="14" height="14" fill="none" stroke="#E8612A" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2A19.79 19.79 0 0112 19c-2.67-1.3-5.05-3.2-6.82-5.56A19.72 19.72 0 012.1 5.2 2 2 0 014.11 3h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 10.9a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
-              <span class="qa-label">Call Support</span>
-            </button>
+            <button class="qa-btn" onclick="showPage('submit',document.querySelectorAll('.nav-item')[2])"><div class="qa-icon"><svg width="14" height="14" fill="none" stroke="#E8612A" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div><span class="qa-label">Submit Deal</span></button>
+            <button class="qa-btn" onclick="showPage('commissions',document.querySelectorAll('.nav-item')[3])"><div class="qa-icon"><svg width="14" height="14" fill="none" stroke="#E8612A" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><span class="qa-label">Commissions</span></button>
+            <button class="qa-btn" onclick="showPage('onboarding',document.querySelectorAll('.nav-item')[4])"><div class="qa-icon"><svg width="14" height="14" fill="none" stroke="#E8612A" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><span class="qa-label">Onboarding</span></button>
+            <button class="qa-btn" onclick="window.open('tel:8889756130')"><div class="qa-icon"><svg width="14" height="14" fill="none" stroke="#E8612A" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2A19.79 19.79 0 0112 19c-2.67-1.3-5.05-3.2-6.82-5.56A19.72 19.72 0 012.1 5.2 2 2 0 014.11 3h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 10.9a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div><span class="qa-label">Call Support</span></button>
           </div>
         </div>
         <div class="card">
@@ -382,13 +329,11 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
     </div>
   </div>
 
+  <!-- MY DEALS -->
   <div class="page" id="page-deals">
     <div class="pg-hd">
       <div><div class="pg-title">My Deals</div><div class="pg-sub">Track every deal you have submitted to Stratelegy.</div></div>
-      <button class="btn-orange" onclick="showPage('submit',document.querySelectorAll('.nav-item')[2])">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-        Submit New Deal
-      </button>
+      <button class="btn-orange" onclick="showPage('submit',document.querySelectorAll('.nav-item')[2])"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> Submit New Deal</button>
     </div>
     <div class="card">
       <div class="card-top"></div>
@@ -404,13 +349,14 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
     </div>
   </div>
 
+  <!-- SUBMIT DEAL -->
   <div class="page" id="page-submit">
     <div class="pg-hd"><div><div class="pg-title">Submit a Deal</div><div class="pg-sub">Register a new opportunity to protect your commission.</div></div></div>
     <div class="card">
       <div class="card-top"></div>
       <div class="deal-grid">
 
-        <!-- SECTION 1: CUSTOMER INFO -->
+        <!-- LEFT: Customer Info -->
         <div>
           <div class="sec-head"><div class="sec-num">1</div><div class="sec-title">Customer Information</div></div>
           <div class="form-group"><label class="form-label">Company Name <span class="req">*</span></label><input class="form-control" type="text" id="dealCompany" placeholder="Acme Corporation"></div>
@@ -423,119 +369,114 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
           <div class="form-group"><label class="form-label">Contact Phone</label><input class="form-control" type="tel" id="dealPhone" placeholder="(555) 000-0000"></div>
           <div class="form-row">
             <div class="form-group"><label class="form-label">City</label><input class="form-control" type="text" id="dealCity" placeholder="City"></div>
-            <div class="form-group"><label class="form-label">State</label>
-              <select class="form-control" id="dealState"><option value="">Select...</option><option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option><option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option><option selected>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option></select>
-            </div>
-          </div>
-          <div class="form-group"><label class="form-label">Decision Timeline</label>
-            <select class="form-control" id="dealTimeline"><option>Immediate (within 30 days)</option><option>30-60 days</option><option selected>60-90 days</option><option>3-6 months</option><option>6+ months / evaluating</option></select>
+            <div class="form-group"><label class="form-label">State</label><select class="form-control" id="dealState"><option value="">Select...</option><option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option><option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option><option  selected>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option></select></div>
           </div>
           <div class="form-group"><label class="form-label">Current Phone System</label>
             <select class="form-control" id="dealCurrent"><option value="">Unknown / Not sure</option><option>Avaya</option><option>Mitel</option><option>NEC</option><option>Cisco Call Manager</option><option>Toshiba IPedge</option><option>RingCentral</option><option>8x8</option><option>Vonage</option><option>Other hosted VoIP</option><option>Traditional landlines / POTS only</option><option>No current system</option></select>
           </div>
+          <div class="form-group"><label class="form-label">Decision Timeline</label>
+            <select class="form-control" id="dealTimeline"><option>Immediate (within 30 days)</option><option>30-60 days</option><option selected>60-90 days</option><option>3-6 months</option><option>6+ months / evaluating</option></select>
+          </div>
         </div>
 
-        <!-- SECTION 2: PRODUCTS -->
+        <!-- RIGHT: Products -->
         <div>
           <div class="sec-head"><div class="sec-num">2</div><div class="sec-title">Products &amp; Quantities</div></div>
 
-          <!-- UCaaS Plans -->
-          <div style="background:#F7F8FA;border:1px solid #DDE1E9;border-radius:8px;padding:16px;margin-bottom:16px;">
-            <div style="font-size:12px;font-weight:700;color:#1B3A6B;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">UCaaS &#x2014; Hosted Cloud Phone System</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 80px;gap:8px;align-items:end;margin-bottom:8px;">
-              <div style="font-size:11px;font-weight:700;color:#8E96A4;text-transform:uppercase;">Plan</div>
-              <div style="font-size:11px;font-weight:700;color:#8E96A4;text-transform:uppercase;">Phone Included</div>
-              <div style="font-size:11px;font-weight:700;color:#8E96A4;text-transform:uppercase;">Qty</div>
+          <!-- UCaaS -->
+          <div class="prod-box">
+            <div class="prod-box-title">UCaaS &mdash; Hosted Cloud Phone System</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 80px;gap:8px;padding-bottom:6px;">
+              <div style="font-size:10px;font-weight:700;color:#8E96A4;text-transform:uppercase;">Plan</div>
+              <div style="font-size:10px;font-weight:700;color:#8E96A4;text-transform:uppercase;">Phone Included</div>
+              <div style="font-size:10px;font-weight:700;color:#8E96A4;text-transform:uppercase;">Qty</div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 80px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #DDE1E9;">
-              <div><div style="font-size:13px;font-weight:700;color:#1B3A6B;">Basic</div><div style="font-size:11px;color:#8E96A4;">$19.95/mo per user</div></div>
-              <div style="font-size:12px;color:#525D6E;">Yealink T34</div>
-              <input class="form-control" type="number" id="ucaasBasic" placeholder="0" min="0" style="padding:8px;text-align:center;">
+            <div class="prod-row">
+              <div><div class="prod-name">Basic</div><div class="prod-price">$19.95/mo per user</div></div>
+              <div class="prod-phone">Yealink T34</div>
+              <input class="form-control qty-input" type="number" id="ucaasBasic" placeholder="0" min="0">
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 80px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #DDE1E9;">
-              <div><div style="font-size:13px;font-weight:700;color:#1B3A6B;">Premium</div><div style="font-size:11px;color:#8E96A4;">$24.95/mo per user</div></div>
-              <div style="font-size:12px;color:#525D6E;">Yealink T73</div>
-              <input class="form-control" type="number" id="ucaasPremium" placeholder="0" min="0" style="padding:8px;text-align:center;">
+            <div class="prod-row">
+              <div><div class="prod-name">Premium</div><div class="prod-price">$24.95/mo per user</div></div>
+              <div class="prod-phone">Yealink T73</div>
+              <input class="form-control qty-input" type="number" id="ucaasPremium" placeholder="0" min="0">
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 80px;gap:8px;align-items:center;padding:8px 0;">
-              <div><div style="font-size:13px;font-weight:700;color:#1B3A6B;">Executive</div><div style="font-size:11px;color:#8E96A4;">$29.95/mo per user</div></div>
-              <div style="font-size:12px;color:#525D6E;">Yealink T85 + Toll Free</div>
-              <input class="form-control" type="number" id="ucaasExecutive" placeholder="0" min="0" style="padding:8px;text-align:center;">
+            <div class="prod-row" style="border-bottom:none;">
+              <div><div class="prod-name">Executive</div><div class="prod-price">$29.95/mo per user</div></div>
+              <div class="prod-phone">Yealink T85 + Toll Free</div>
+              <input class="form-control qty-input" type="number" id="ucaasExecutive" placeholder="0" min="0">
             </div>
           </div>
 
           <!-- CCaaS -->
-          <div style="background:#F7F8FA;border:1px solid #DDE1E9;border-radius:8px;padding:16px;margin-bottom:16px;">
-            <div style="font-size:12px;font-weight:700;color:#1B3A6B;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">CCaaS &#x2014; Contact Center</div>
-            <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;align-items:center;">
-              <div style="font-size:13px;color:#525D6E;">Number of contact center agents</div>
-              <input class="form-control" type="number" id="ccaasQty" placeholder="0" min="0" style="padding:8px;text-align:center;">
+          <div class="prod-box">
+            <div class="prod-box-title">CCaaS &mdash; Contact Center</div>
+            <div class="prod-row-2" style="border-bottom:none;">
+              <div class="prod-name">Number of contact center agents</div>
+              <input class="form-control qty-input" type="number" id="ccaasQty" placeholder="0" min="0">
             </div>
           </div>
 
-          <!-- POTS Replacement -->
-          <div style="background:#F7F8FA;border:1px solid #DDE1E9;border-radius:8px;padding:16px;margin-bottom:16px;" id="potsSection">
-            <div style="font-size:12px;font-weight:700;color:#1B3A6B;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">POTS Replacement &#x2014; 4G LTE</div>
-            <div style="font-size:11px;color:#8E96A4;margin-bottom:12px;">Enter the number of lines needed for each type. Fire Panels require a primary AND secondary line.</div>
-
-            <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #DDE1E9;">
+          <!-- POTS -->
+          <div class="prod-box">
+            <div class="prod-box-title">POTS Replacement &mdash; 4G LTE</div>
+            <div class="prod-box-note">Enter the number of lines needed for each type.</div>
+            <div class="prod-row-2">
               <div>
-                <div style="font-size:13px;font-weight:700;color:#1B3A6B;">Fire Panel Alarm Line</div>
-                <div style="font-size:11px;color:#E8612A;font-weight:600;">&#x26A0; Fire Panels require 2 lines (primary + secondary)</div>
+                <div class="prod-name">Fire Panel Alarm Line</div>
+                <div class="prod-warn">&#x26A0; Fire Panels require 2 lines &mdash; primary + secondary</div>
               </div>
-              <input class="form-control" type="number" id="potsFirePanel" placeholder="0" min="0" style="padding:8px;text-align:center;">
+              <input class="form-control qty-input" type="number" id="potsFirePanel" placeholder="0" min="0">
             </div>
-            <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #DDE1E9;">
-              <div style="font-size:13px;font-weight:700;color:#1B3A6B;">Elevator Voice Line</div>
-              <input class="form-control" type="number" id="potsElevator" placeholder="0" min="0" style="padding:8px;text-align:center;">
+            <div class="prod-row-2">
+              <div class="prod-name">Elevator Voice Line</div>
+              <input class="form-control qty-input" type="number" id="potsElevator" placeholder="0" min="0">
             </div>
-            <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #DDE1E9;">
-              <div style="font-size:13px;font-weight:700;color:#1B3A6B;">Security Alarm Line</div>
-              <input class="form-control" type="number" id="potsSecurity" placeholder="0" min="0" style="padding:8px;text-align:center;">
+            <div class="prod-row-2">
+              <div class="prod-name">Security Alarm Line</div>
+              <input class="form-control qty-input" type="number" id="potsSecurity" placeholder="0" min="0">
             </div>
-            <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #DDE1E9;">
-              <div style="font-size:13px;font-weight:700;color:#1B3A6B;">Fax Line</div>
-              <input class="form-control" type="number" id="potsFax" placeholder="0" min="0" style="padding:8px;text-align:center;">
+            <div class="prod-row-2">
+              <div class="prod-name">Fax Line</div>
+              <input class="form-control qty-input" type="number" id="potsFax" placeholder="0" min="0">
             </div>
-            <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;align-items:center;padding:8px 0;">
-              <div style="font-size:13px;font-weight:700;color:#1B3A6B;">ATM / Point of Sale</div>
-              <input class="form-control" type="number" id="potsATM" placeholder="0" min="0" style="padding:8px;text-align:center;">
+            <div class="prod-row-2" style="border-bottom:none;">
+              <div class="prod-name">ATM / Point of Sale</div>
+              <input class="form-control qty-input" type="number" id="potsATM" placeholder="0" min="0">
             </div>
           </div>
 
           <!-- Additional Services -->
-          <div style="background:#F7F8FA;border:1px solid #DDE1E9;border-radius:8px;padding:16px;margin-bottom:16px;">
-            <div style="font-size:12px;font-weight:700;color:#1B3A6B;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Additional Services</div>
-            <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid #DDE1E9;">
-              <div style="font-size:13px;color:#525D6E;">Virtual Fax lines</div>
-              <input class="form-control" type="number" id="virtualFax" placeholder="0" min="0" style="padding:8px;text-align:center;">
+          <div class="prod-box">
+            <div class="prod-box-title">Additional Services</div>
+            <div class="prod-row-2">
+              <div class="prod-name">Virtual Fax lines</div>
+              <input class="form-control qty-input" type="number" id="virtualFax" placeholder="0" min="0">
             </div>
-            <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;align-items:center;padding:6px 0;">
-              <div style="font-size:13px;color:#525D6E;">Web Conferencing users</div>
-              <input class="form-control" type="number" id="confUsers" placeholder="0" min="0" style="padding:8px;text-align:center;">
+            <div class="prod-row-2" style="border-bottom:none;">
+              <div class="prod-name">Web Conferencing users</div>
+              <input class="form-control qty-input" type="number" id="confUsers" placeholder="0" min="0">
             </div>
           </div>
 
-          <div class="form-group"><label class="form-label">Notes for Stratelegy</label><textarea class="form-control" rows="4" id="dealNotes" placeholder="Any additional details, special requirements, or context that will help us prepare the best proposal..."></textarea></div>
+          <div class="form-group"><label class="form-label">Notes for Stratelegy</label><textarea class="form-control" rows="4" id="dealNotes" placeholder="Any additional details, special requirements, or context..."></textarea></div>
         </div>
 
         <div class="deal-footer">
           <button class="btn-ghost" onclick="clearDeal()">Clear Form</button>
-          <button class="btn-orange" onclick="submitDeal()">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            Submit Deal Registration
-          </button>
+          <button class="btn-orange" onclick="submitDeal()"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Submit Deal Registration</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- COMMISSIONS -->
   <div class="page" id="page-commissions">
     <div class="pg-hd"><div><div class="pg-title">My Commissions</div><div class="pg-sub">Track your residual earnings and payment history.</div></div></div>
     <div class="comm-summary">
       <div class="comm-card featured"><div class="cc-label">Monthly Residual</div><div class="cc-val">Active</div><div class="cc-sub">Paid on the 1st of each month</div></div>
       <div class="comm-card"><div class="cc-label">Total Commissions</div><div class="cc-val">On File</div><div class="cc-sub">Contact team for statement</div></div>
-      <div class="comm-card"><div class="cc-label">Next Payment</div><div class="cc-val">Apr 1</div><div class="cc-sub">Scheduled - April 1, 2026</div></div>
+      <div class="comm-card"><div class="cc-label">Next Payment</div><div class="cc-val">Apr 1</div><div class="cc-sub">Scheduled &mdash; April 1, 2026</div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 280px;gap:18px;">
       <div class="card">
@@ -575,6 +516,7 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
     </div>
   </div>
 
+  <!-- ONBOARDING -->
   <div class="page" id="page-onboarding">
     <div class="pg-hd"><div><div class="pg-title">Partner Onboarding</div><div class="pg-sub">Complete these steps to fully activate your Founding Partner account.</div></div></div>
     <div style="display:grid;grid-template-columns:1fr 280px;gap:18px;">
@@ -597,7 +539,7 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
           <div class="card-top"></div>
           <div class="card-head"><span class="card-title">Your Partner Team</span></div>
           <div class="card-body">
-            <div class="team-row"><div class="team-avi">JS</div><div><div class="t-name">James Stendeback</div><div class="t-role">COO - Partner Program Lead</div><div class="t-contact"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0861666e67487b7c7a697c6d646d6f71266b6765">[email&#160;protected]</a></div></div></div>
+            <div class="team-row"><div class="team-avi">JS</div><div><div class="t-name">James Stendeback</div><div class="t-role">COO &mdash; Partner Program Lead</div><div class="t-contact">info@stratelegy.com</div></div></div>
             <div style="padding-top:14px;"><div style="font-size:12px;font-weight:700;color:#1B3A6B;margin-bottom:5px;">Partner Support Line</div><div style="font-size:18px;font-weight:700;color:#E8612A;">888.975.6130</div><div style="font-size:11px;color:#8E96A4;margin-top:3px;">Mon-Fri 9am-6pm EST</div></div>
           </div>
         </div>
@@ -605,9 +547,9 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
           <div class="card-top"></div>
           <div class="card-head"><span class="card-title">Products You Represent</span></div>
           <div class="card-body" style="padding-top:12px;padding-bottom:12px;">
-            <div class="prod-item"><div class="prod-dot"></div>UCaaS - Hosted Cloud Phone System</div>
-            <div class="prod-item"><div class="prod-dot"></div>CCaaS - Unified Contact Center</div>
-            <div class="prod-item"><div class="prod-dot"></div>POTS Replacement - 4G LTE</div>
+            <div class="prod-item"><div class="prod-dot"></div>UCaaS &mdash; Hosted Cloud Phone System</div>
+            <div class="prod-item"><div class="prod-dot"></div>CCaaS &mdash; Unified Contact Center</div>
+            <div class="prod-item"><div class="prod-dot"></div>POTS Replacement &mdash; 4G LTE</div>
             <div class="prod-item"><div class="prod-dot"></div>Virtual Fax</div>
             <div class="prod-item"><div class="prod-dot"></div>Web Conferencing</div>
           </div>
@@ -616,15 +558,17 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
     </div>
   </div>
 
+  <!-- FOOTER -->
   <div class="portal-footer">
     <img src="data:image/png;base64,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HTbedXF+hR6hVws5L1PPc5/NqGWbOCG4b3nYFFrf0rqNkVMDv67vAfisBUOp287ePwLvT6+NXL4hERZxfCIiAIiIAubZZWjDZHgdjiuCL1NrseNbOTnOccucXd5XFEXh6EREAREQBERAEREAREQBERAEREAREQBERAFy13YxrOxyyuKIAiIgCIiAIiID6CQcgkFHOc7eSe8r4iAIiICj0bFNNROY+KJ0jHbctBJB3Feq6WyKpptWGOOORpy0huM9il6WolpphLC/VcPj2Lcp9IYyAKiBwPNhz8CtjGyaJ1eHb5GVkY90bPEr8zOFmuBfq9AAOeuMKjtdGKKkEOQ5xOs4jiV5DfqHHyZj/aPzXkq9IHFpbTQ6p+s/8lJU8TGbnGW2cWLKyFxcdI56V1DdSOlacuzru7OSn1yle+WR0kji5zjkk8VxWVk3O6xzNKirwYKJ32+A1NZFDwc7b3cfgrYAAYGwKLt9W+iqOmYxj3apHW4L3S36qfG5giibrDGRnI+Ku4OTTRB8u7KeZj23TXHsjxXafzm4SyA5bnDe4bF5URZs5OcnJ+poQioxUV6BERcnQREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQH//Z" alt="Stratelegy" style="height:18px;width:auto;filter:brightness(0) invert(1);opacity:0.6;">
     <div class="pf-links">
       <a class="pf-link" href="https://stratelegy.com" target="_blank">stratelegy.com</a>
-      <a class="pf-link" href="/cdn-cgi/l/email-protection#89e0e7efe6c9fafdfbe8fdece5eceef0a7eae6e4"><span class="__cf_email__" data-cfemail="254c4b434a655651574451404940425c0b464a48">[email&#160;protected]</span></a>
+      <a class="pf-link" href="mailto:info@stratelegy.com">info@stratelegy.com</a>
       <a class="pf-link" href="tel:8889756130">888.975.6130</a>
     </div>
     <div class="pf-copy">&copy; 2026 Stratelegy. All rights reserved.</div>
   </div>
+
 </div>
 </div>
 </div>
@@ -632,7 +576,8 @@ body{font-family:'Open Sans',sans-serif;background:var(--gray-50);color:var(--gr
 
 <div class="toast" id="toast"><div class="toast-dot"></div><span id="toastMsg"></span></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzI5y-cgQqtVXqrM-2Hs7A0lXqc7axBxcl2UpbM0qHCFoy6S6WTZI7VfzzE-0SlA-M/exec";
 var currentAgent = null;
 
@@ -655,7 +600,7 @@ function doLogin() {
         launchPortal(res.agent.firstName, ini, res.agent.firstName + " " + res.agent.lastName);
         loadDeals(res.agent.email);
         loadCommissions(res.agent.email);
-      } else { showToast(res.message || "Login failed."); }
+      } else { showToast(res.message || "Login failed. Please try again."); }
     })
     .catch(function() { showToast("Connection error. Please try again."); });
 }
@@ -688,48 +633,48 @@ function doRegister() {
 }
 
 function submitDeal() {
-  var co=document.getElementById("dealCompany").value.trim();
-  var fn=document.getElementById("dealFirst").value.trim();
-  var em=document.getElementById("dealEmail").value.trim();
-  var basicQty=parseInt(document.getElementById("ucaasBasic").value)||0;
-  var premQty=parseInt(document.getElementById("ucaasPremium").value)||0;
-  var execQty=parseInt(document.getElementById("ucaasExecutive").value)||0;
-  var ccQty=parseInt(document.getElementById("ccaasQty").value)||0;
-  var fireQty=parseInt(document.getElementById("potsFirePanel").value)||0;
-  var elevQty=parseInt(document.getElementById("potsElevator").value)||0;
-  var secQty=parseInt(document.getElementById("potsSecurity").value)||0;
-  var faxQty=parseInt(document.getElementById("potsFax").value)||0;
-  var atmQty=parseInt(document.getElementById("potsATM").value)||0;
-  var vfaxQty=parseInt(document.getElementById("virtualFax").value)||0;
-  var confQty=parseInt(document.getElementById("confUsers").value)||0;
-  var totalUsers = basicQty+premQty+execQty+ccQty;
-  if (!co||!fn||!em) { showToast("Please fill in all required fields."); return; }
-  if (totalUsers===0&&fireQty===0&&elevQty===0&&secQty===0&&faxQty===0&&atmQty===0&&vfaxQty===0&&confQty===0) {
+  var co = document.getElementById("dealCompany").value.trim();
+  var fn = document.getElementById("dealFirst").value.trim();
+  var em = document.getElementById("dealEmail").value.trim();
+  var basicQty  = parseInt(document.getElementById("ucaasBasic").value) || 0;
+  var premQty   = parseInt(document.getElementById("ucaasPremium").value) || 0;
+  var execQty   = parseInt(document.getElementById("ucaasExecutive").value) || 0;
+  var ccQty     = parseInt(document.getElementById("ccaasQty").value) || 0;
+  var fireQty   = parseInt(document.getElementById("potsFirePanel").value) || 0;
+  var elevQty   = parseInt(document.getElementById("potsElevator").value) || 0;
+  var secQty    = parseInt(document.getElementById("potsSecurity").value) || 0;
+  var potsFaxQty= parseInt(document.getElementById("potsFax").value) || 0;
+  var atmQty    = parseInt(document.getElementById("potsATM").value) || 0;
+  var vfaxQty   = parseInt(document.getElementById("virtualFax").value) || 0;
+  var confQty   = parseInt(document.getElementById("confUsers").value) || 0;
+  var totalUsers = basicQty + premQty + execQty + ccQty;
+  var totalPots  = fireQty + elevQty + secQty + potsFaxQty + atmQty;
+  if (!co || !fn || !em) { showToast("Please fill in Company, First Name, and Email."); return; }
+  if (totalUsers === 0 && totalPots === 0 && vfaxQty === 0 && confQty === 0) {
     showToast("Please enter at least one product quantity."); return;
   }
-  if (fireQty>0 && fireQty%2!==0) {
-    showToast("Fire Panel lines must be in pairs (primary + secondary). Please enter an even number.");
-    return;
+  if (fireQty > 0 && fireQty % 2 !== 0) {
+    showToast("Fire Panel lines must be in pairs (primary + secondary). Please enter an even number."); return;
   }
   showToast("Submitting deal...");
   var ae = currentAgent ? currentAgent.email : "agent@demo.com";
-  var estMRR = (basicQty*19.95)+(premQty*24.95)+(execQty*29.95);
+  var estMRR = ((basicQty * 19.95) + (premQty * 24.95) + (execQty * 29.95)).toFixed(2);
   fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({
-    action:"submitDeal", agentEmail:ae, company:co,
-    firstName:fn, lastName:document.getElementById("dealLast").value.trim(),
-    title:document.getElementById("dealTitle").value.trim(),
-    email:em, phone:document.getElementById("dealPhone").value.trim(),
-    city:document.getElementById("dealCity").value.trim(),
-    state:document.getElementById("dealState").value,
-    users:totalUsers,
-    ucaasBasicQty:basicQty, ucaasPremiumQty:premQty, ucaasExecutiveQty:execQty,
-    ccaasQty:ccQty, ucaasEstMRR:estMRR.toFixed(2),
-    potsFirePanel:fireQty, potsElevator:elevQty, potsSecurity:secQty,
-    potsFax:faxQty, potsATM:atmQty,
-    virtualFax:vfaxQty, confUsers:confQty,
-    currentSystem:document.getElementById("dealCurrent").value,
-    timeline:document.getElementById("dealTimeline").value,
-    notes:document.getElementById("dealNotes").value.trim()
+    action: "submitDeal", agentEmail: ae, company: co,
+    firstName: fn, lastName: document.getElementById("dealLast").value.trim(),
+    title: document.getElementById("dealTitle").value.trim(),
+    email: em, phone: document.getElementById("dealPhone").value.trim(),
+    city: document.getElementById("dealCity").value.trim(),
+    state: document.getElementById("dealState").value,
+    users: totalUsers,
+    ucaasBasicQty: basicQty, ucaasPremiumQty: premQty, ucaasExecutiveQty: execQty,
+    ccaasQty: ccQty, ucaasEstMRR: estMRR,
+    potsFirePanel: fireQty, potsElevator: elevQty, potsSecurity: secQty,
+    potsFax: potsFaxQty, potsATM: atmQty,
+    virtualFax: vfaxQty, confUsers: confQty,
+    currentSystem: document.getElementById("dealCurrent").value,
+    timeline: document.getElementById("dealTimeline").value,
+    notes: document.getElementById("dealNotes").value.trim()
   }) })
     .then(function(r) { return r.json(); })
     .then(function(res) {
@@ -747,17 +692,19 @@ function loadDeals(agentEmail) {
       var all = document.getElementById("allDealsBody");
       var dash = document.getElementById("dashDealsBody");
       var sc = { "Submitted":"b-sub","In Review":"b-rev","Approved":"b-app","Active Customer":"b-act" };
-      all.innerHTML = "";
-      res.deals.reverse().forEach(function(d) {
-        var s = sc[d.status] || "b-sub";
-        var dt = d.timestamp ? new Date(d.timestamp).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "";
-        all.innerHTML += "<tr><td><div class=\"td-main\">" + d.company + "</div><div class=\"td-sub\">" + (d.city||"") + " " + (d.state||"") + "</div></td><td>" + d.firstName + " " + d.lastName + "<div class=\"td-sub\">" + (d.title||"") + "</div></td><td>" + d.product + "</td><td>" + d.users + "</td><td>" + dt + "</td><td><span class=\"badge " + s + "\">" + d.status + "</span></td></tr>";
-      });
+      if (all) {
+        all.innerHTML = "";
+        res.deals.reverse().forEach(function(d) {
+          var s = sc[d.status] || "b-sub";
+          var dt = d.timestamp ? new Date(d.timestamp).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "";
+          all.innerHTML += "<tr><td><div class='td-main'>" + d.company + "</div><div class='td-sub'>" + (d.city||"") + " " + (d.state||"") + "</div></td><td>" + d.firstName + " " + d.lastName + "<div class='td-sub'>" + (d.title||"") + "</div></td><td>" + d.product + "</td><td>" + d.users + "</td><td>" + dt + "</td><td><span class='badge " + s + "'>" + d.status + "</span></td></tr>";
+        });
+      }
       if (dash) {
         dash.innerHTML = "";
         res.deals.slice(0,3).forEach(function(d) {
           var s = sc[d.status] || "b-sub";
-          dash.innerHTML += "<tr><td><div class=\"td-main\">" + d.company + "</div></td><td>" + d.product + "</td><td>" + d.users + "</td><td><span class=\"badge " + s + "\">" + d.status + "</span></td></tr>";
+          dash.innerHTML += "<tr><td><div class='td-main'>" + d.company + "</div></td><td>" + d.product + "</td><td>" + d.users + "</td><td><span class='badge " + s + "'>" + d.status + "</span></td></tr>";
         });
       }
       var pill = document.getElementById("dealPill");
@@ -779,7 +726,7 @@ function loadCommissions(agentEmail) {
         var mrr = c.customerMrr ? "$" + parseFloat(c.customerMrr).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) : "-";
         var mrc = c.amount ? "$" + parseFloat(c.amount).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) : "-";
         var dt = c.paymentDate ? new Date(c.paymentDate).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "";
-        tbody.innerHTML += "<tr><td><div class=\"td-main\">" + c.customer + "</div></td><td>" + c.product + "</td><td style=\"font-weight:600;color:#1B3A6B;\">" + mrr + "</td><td style=\"font-weight:700;color:#E8612A;\">" + mrc + "</td><td>" + dt + "</td><td><span class=\"badge " + sc + "\">" + c.status + "</span></td></tr>";
+        tbody.innerHTML += "<tr><td><div class='td-main'>" + c.customer + "</div></td><td>" + c.product + "</td><td style='font-weight:600;color:#1B3A6B;'>" + mrr + "</td><td style='font-weight:700;color:#E8612A;'>" + mrc + "</td><td>" + dt + "</td><td><span class='badge " + sc + "'>" + c.status + "</span></td></tr>";
       });
     })
     .catch(function() {});
@@ -813,4 +760,21 @@ function showPage(id, nav) {
 }
 
 function clearDeal() {
-  ["dealCompany","dealFirst","dealLast","dea
+  ["dealCompany","dealFirst","dealLast","dealTitle","dealEmail","dealPhone","dealCity","dealNotes",
+   "ucaasBasic","ucaasPremium","ucaasExecutive","ccaasQty",
+   "potsFirePanel","potsElevator","potsSecurity","potsFax","potsATM",
+   "virtualFax","confUsers"].forEach(function(id) { var el = document.getElementById(id); if (el) el.value = ""; });
+  ["dealState","dealCurrent"].forEach(function(id) { var el = document.getElementById(id); if (el) el.selectedIndex = 0; });
+  var t = document.getElementById("dealTimeline"); if (t) t.selectedIndex = 2;
+}
+
+function showToast(msg) {
+  var t = document.getElementById("toast");
+  document.getElementById("toastMsg").textContent = msg;
+  t.classList.add("show");
+  setTimeout(function() { t.classList.remove("show"); }, 3500);
+}
+
+</script>
+</body>
+</html>
