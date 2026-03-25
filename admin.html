@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stratelegy Admin Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B3A6B;
+    --navy-dark: #122849;
+    --navy-light: #234d8f;
+    --orange: #E8612A;
+    --orange-light: #f0784a;
+    --white: #ffffff;
+    --gray-50: #f8f9fa;
+    --gray-100: #f0f2f5;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --success: #16a34a;
+    --success-bg: #dcfce7;
+    --warning: #d97706;
+    --warning-bg: #fef3c7;
+    --blue: #2563eb;
+    --blue-bg: #dbeafe;
+    --purple: #7c3aed;
+    --purple-bg: #ede9fe;
+    --red: #dc2626;
+    --red-bg: #fee2e2;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: var(--gray-100);
+    color: var(--gray-800);
+    min-height: 100vh;
+  }
+
+  /* ── LOGIN ── */
+  #loginScreen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 50%, var(--navy-light) 100%);
+  }
+
+  .login-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 48px 44px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+  }
+
+  .login-badge {
+    display: inline-block;
+    background: var(--orange);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  .login-card h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .login-card p {
+    color: var(--gray-500);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+
+  .form-group { margin-bottom: 18px; text-align: left; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-600); margin-bottom: 6px; }
+
+  .form-group input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--gray-800);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .form-group input:focus { border-color: var(--navy); }
+
+  .btn-primary {
+    width: 100%;
+    padding: 13px;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 6px;
+  }
+
+  .btn-primary:hover { background: var(--navy-light); }
+
+  #loginError {
+    display: none;
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: var(--red-bg);
+    color: var(--red);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* ── LAYOUT ── */
+  #appScreen { display: none; min-height: 100vh; }
+
+  .topbar {
+    background: var(--navy);
+    color: var(--white);
+    padding: 0 28px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .topbar-left { display: flex; align-items: center; gap: 14px; }
+
+  .topbar-logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+
+  .topbar-logo span { color: var(--orange); }
+
+  .admin-tag {
+    background: var(--orange);
+    color: var(--white);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+
+  .topbar-user { font-size: 13px; color: rgba(255,255,255,0.8); }
+
+  .btn-logout {
+    background: rgba(255,255,255,0.12);
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 7px 16px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn-logout:hover { background: rgba(255,255,255,0.22); }
+
+  .main-layout { display: flex; min-height: calc(100vh - 60px); }
+
+  .sidebar {
+    width: 220px;
+    background: var(--navy-dark);
+    padding: 24px 0;
+    flex-shrink: 0;
+  }
+
+  .sidebar-section { padding: 0 14px; margin-bottom: 8px; }
+  .sidebar-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.35); letter-spacing: 1.2px; text-transform: uppercase; padding: 0 10px; margin-bottom: 6px; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: rgba(255,255,255,0.65);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,0.08); color: var(--white); }
+  .nav-item.active { background: var(--orange); color: var(--white); }
+  .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+
+  .content { flex: 1; padding: 28px 32px; overflow-y: auto; }
+
+  /* ── PAGES ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .page-header { margin-bottom: 24px; }
+  .page-header h2 { font-size: 22px; font-weight: 700; color: var(--navy); }
+  .page-header p { color: var(--gray-500); font-size: 14px; margin-top: 4px; }
+
+  /* ── STAT CARDS ── */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+
+  .stat-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid transparent;
+  }
+
+  .stat-card.navy { border-left-color: var(--navy); }
+  .stat-card.orange { border-left-color: var(--orange); }
+  .stat-card.green { border-left-color: var(--success); }
+  .stat-card.purple { border-left-color: var(--purple); }
+
+  .stat-label { font-size: 12px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-value { font-size: 28px; font-weight: 700; color: var(--navy); margin-top: 6px; }
+  .stat-sub { font-size: 12px; color: var(--gray-400); margin-top: 4px; }
+
+  /* ── TABLES ── */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .card-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-header h3 { font-size: 15px; font-weight: 700; color: var(--navy); }
+
+  .card-body { padding: 0; }
+
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .data-table th {
+    background: var(--gray-50);
+    color: var(--gray-500);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 11px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .data-table td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-700);
+    vertical-align: middle;
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--gray-50); }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .badge-blue { background: var(--blue-bg); color: var(--blue); }
+  .badge-amber { background: var(--warning-bg); color: var(--warning); }
+  .badge-green { background: var(--success-bg); color: var(--success); }
+  .badge-purple { background: var(--purple-bg); color: var(--purple); }
+  .badge-gray { background: var(--gray-100); color: var(--gray-500); }
+  .badge-orange { background: #fde8d8; color: var(--orange); }
+  .badge-red { background: var(--red-bg); color: var(--red); }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+
+  .btn-navy { background: var(--navy); color: var(--white); }
+  .btn-navy:hover { background: var(--navy-light); }
+  .btn-orange { background: var(--orange); color: var(--white); }
+  .btn-orange:hover { background: var(--orange-light); }
+  .btn-success { background: var(--success); color: var(--white); }
+  .btn-success:hover { background: #15803d; }
+  .btn-ghost { background: var(--gray-100); color: var(--gray-700); }
+  .btn-ghost:hover { background: var(--gray-200); }
+  .btn-danger { background: var(--red-bg); color: var(--red); }
+  .btn-danger:hover { background: #fecaca; }
+  .btn-sm { padding: 5px 11px; font-size: 12px; }
+
+  /* ── FORMS ── */
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-full { margin-bottom: 16px; }
+
+  .field label { display: block; font-size: 12px; font-weight: 600; color: var(--gray-600); margin-bottom: 6px; }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 13.5px;
+    color: var(--gray-800);
+    outline: none;
+    transition: border-color 0.2s;
+    background: var(--white);
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--navy); }
+
+  .form-actions { display: flex; gap: 10px; justify-content: flex-end; padding-top: 8px; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .modal h3 { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 20px; }
+
+  /* ── ALERT ── */
+  .alert { padding: 12px 16px; border-radius: 8px; font-size: 13.5px; font-weight: 600; margin-bottom: 18px; display: none; }
+  .alert-success { background: var(--success-bg); color: var(--success); display: block; }
+  .alert-error { background: var(--red-bg); color: var(--red); display: block; }
+
+  /* ── FILTERS ── */
+  .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .filter-select {
+    padding: 8px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--gray-700);
+    outline: none;
+    background: var(--white);
+    cursor: pointer;
+  }
+  .filter-select:focus { border-color: var(--navy); }
+
+  .search-input {
+    padding: 8px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--gray-700);
+    outline: none;
+    min-width: 220px;
+  }
+  .search-input:focus { border-color: var(--navy); }
+
+  /* ── COMMISSION CALC ── */
+  .calc-preview {
+    background: var(--navy);
+    color: var(--white);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 16px 0;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .calc-item label { font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+  .calc-item .value { font-size: 22px; font-weight: 700; }
+  .calc-item .value.orange { color: var(--orange); }
+
+  /* ── LOADING ── */
+  .loading { text-align: center; padding: 40px; color: var(--gray-400); font-size: 14px; }
+  .empty { text-align: center; padding: 40px; color: var(--gray-400); font-size: 14px; }
+
+  .spinner {
+    display: inline-block;
+    width: 20px; height: 20px;
+    border: 2px solid var(--gray-200);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .sidebar { width: 180px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ LOGIN ══════════════════════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-badge">Admin Access</div>
+    <h1>Stratelegy</h1>
+    <p>Partner Portal Administration</p>
+
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="adminEmail" placeholder="james@stratelegy.com">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="adminPassword" placeholder="••••••••">
+    </div>
+    <button class="btn-primary" onclick="adminLogin()">Sign In</button>
+    <div id="loginError">Invalid credentials. Please try again.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ APP ══════════════════════════════════════════ -->
+<div id="appScreen">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">Strate<span>legy</span></div>
+      <span class="admin-tag">Admin</span>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-user">James Stendeback</span>
+      <button class="btn-logout" onclick="adminLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Overview</div>
+        <div class="nav-item active" onclick="showPage('dashboard', this)">
+          <span class="icon">📊</span> Dashboard
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Management</div>
+        <div class="nav-item" onclick="showPage('agents', this)">
+          <span class="icon">👥</span> Agents
+        </div>
+        <div class="nav-item" onclick="showPage('deals', this)">
+          <span class="icon">📋</span> Deals
+        </div>
+        <div class="nav-item" onclick="showPage('commissions', this)">
+          <span class="icon">💰</span> Commissions
+        </div>
+        <div class="nav-item" onclick="showPage('applications', this)">
+          <span class="icon">📝</span> Applications
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- ── DASHBOARD ── -->
+      <div id="page-dashboard" class="page active">
+        <div class="page-header">
+          <h2>Admin Dashboard</h2>
+          <p>Full pipeline overview — live from Google Sheets</p>
+        </div>
+        <div class="stat-grid" id="dashStats">
+          <div class="stat-card navy"><div class="stat-label">Total Agents</div><div class="stat-value" id="statAgents">—</div><div class="stat-sub">Active partners</div></div>
+          <div class="stat-card orange"><div class="stat-label">Total Deals</div><div class="stat-value" id="statDeals">—</div><div class="stat-sub">All submitted</div></div>
+          <div class="stat-card green"><div class="stat-label">Active Customers</div><div class="stat-value" id="statActive">—</div><div class="stat-sub">Live accounts</div></div>
+          <div class="stat-card purple"><div class="stat-label">Total MRR</div><div class="stat-value" id="statMRR">—</div><div class="stat-sub">Monthly recurring</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>Recent Deals</h3></div>
+          <div class="card-body">
+            <table class="data-table">
+              <thead><tr><th>Company</th><th>Agent</th><th>Product</th><th>MRR</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody id="dashDealsTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>Top Agents by MRR</h3></div>
+          <div class="card-body">
+            <table class="data-table">
+              <thead><tr><th>Agent</th><th>Company</th><th>Active Accounts</th><th>Total MRR</th><th>Commissions Paid</th></tr></thead>
+              <tbody id="topAgentsTable"><tr><td colspan="5" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── AGENTS ── -->
+      <div id="page-agents" class="page">
+        <div class="page-header">
+          <h2>Agent Management</h2>
+          <p>Approve applications, manage active agents, set commission rates</p>
+        </div>
+
+        <div class="filters">
+          <input class="search-input" id="agentSearch" placeholder="Search agents..." oninput="filterAgents()">
+          <select class="filter-select" id="agentStatusFilter" onchange="filterAgents()">
+            <option value="">All Statuses</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+          <button class="btn btn-orange" onclick="openAddAgentModal()">+ Add Agent</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>All Agents</h3></div>
+          <div class="card-body">
+            <table class="data-table">
+              <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Company</th><th>Commission Rate</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="agentsTable"><tr><td colspan="7" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DEALS ── -->
+      <div id="page-deals" class="page">
+        <div class="page-header">
+          <h2>Deal Management</h2>
+          <p>View all deals, update statuses, track pipeline</p>
+        </div>
+
+        <div class="filters">
+          <input class="search-input" id="dealSearch" placeholder="Search deals..." oninput="filterDeals()">
+          <select class="filter-select" id="dealStatusFilter" onchange="filterDeals()">
+            <option value="">All Statuses</option>
+            <option value="Submitted">Submitted</option>
+            <option value="In Review">In Review</option>
+            <option value="Approved">Approved</option>
+            <option value="Active Customer">Active Customer</option>
+          </select>
+          <select class="filter-select" id="dealAgentFilter" onchange="filterDeals()">
+            <option value="">All Agents</option>
+          </select>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>All Deals</h3></div>
+          <div class="card-body">
+            <table class="data-table">
+              <thead><tr><th>Company</th><th>Contact</th><th>Agent</th><th>Product</th><th>UCaaS MRR</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+              <tbody id="dealsTable"><tr><td colspan="8" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── COMMISSIONS ── -->
+      <div id="page-commissions" class="page">
+        <div class="page-header">
+          <h2>Commission Management</h2>
+          <p>Calculate, enter, and track agent commissions</p>
+        </div>
+
+        <!-- Commission Entry Form -->
+        <div class="card" style="margin-bottom:24px;">
+          <div class="card-header"><h3>➕ Enter New Commission</h3></div>
+          <div class="card-body" style="padding:22px;">
+            <div class="form-row">
+              <div class="field">
+                <label>Agent *</label>
+                <select id="commAgent">
+                  <option value="">Select agent...</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Customer / Deal *</label>
+                <select id="commDeal">
+                  <option value="">Select agent first...</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row-3">
+              <div class="field">
+                <label>Customer MRR ($) *</label>
+                <input type="number" id="commMRR" placeholder="0.00" oninput="calcCommission()">
+              </div>
+              <div class="field">
+                <label>Commission Rate (%) *</label>
+                <input type="number" id="commRate" placeholder="8" oninput="calcCommission()">
+              </div>
+              <div class="field">
+                <label>Payment Date *</label>
+                <input type="date" id="commDate">
+              </div>
+            </div>
+
+            <!-- Live Preview -->
+            <div class="calc-preview">
+              <div class="calc-item">
+                <label>Customer MRR</label>
+                <div class="value" id="previewMRR">$0.00</div>
+              </div>
+              <div style="color:rgba(255,255,255,0.3);font-size:24px;">×</div>
+              <div class="calc-item">
+                <label>Commission Rate</label>
+                <div class="value" id="previewRate">0%</div>
+              </div>
+              <div style="color:rgba(255,255,255,0.3);font-size:24px;">=</div>
+              <div class="calc-item">
+                <label>Commission Amount</label>
+                <div class="value orange" id="previewAmount">$0.00</div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label>Product</label>
+                <input type="text" id="commProduct" placeholder="e.g. UCaaS Premium">
+              </div>
+              <div class="field">
+                <label>Status</label>
+                <select id="commStatus">
+                  <option value="Pending">Pending</option>
+                  <option value="Paid">Paid</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="commAlert"></div>
+            <div class="form-actions">
+              <button class="btn btn-navy" onclick="submitCommission()">Save Commission</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Commission History -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Commission History</h3>
+            <div style="display:flex;gap:10px;">
+              <select class="filter-select" id="commAgentFilter" onchange="filterCommissions()">
+                <option value="">All Agents</option>
+              </select>
+              <select class="filter-select" id="commStatusFilter" onchange="filterCommissions()">
+                <option value="">All Statuses</option>
+                <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-body">
+            <table class="data-table">
+              <thead><tr><th>ID</th><th>Agent</th><th>Customer</th><th>Product</th><th>MRR</th><th>Rate</th><th>Commission</th><th>Payment Date</th><th>Status</th></tr></thead>
+              <tbody id="commissionsTable"><tr><td colspan="9" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── APPLICATIONS ── -->
+      <div id="page-applications" class="page">
+        <div class="page-header">
+          <h2>Partner Applications</h2>
+          <p>Review and approve incoming partner applications</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Pending Applications</h3>
+            <select class="filter-select" id="appStatusFilter" onchange="filterApplications()">
+              <option value="">All</option>
+              <option value="Pending Review">Pending Review</option>
+              <option value="Approved">Approved</option>
+            </select>
+          </div>
+          <div class="card-body">
+            <table class="data-table">
+              <thead><tr><th>Name</th><th>Email</th><th>Company</th><th>Phone</th><th>Experience</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="applicationsTable"><tr><td colspan="8" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main-layout -->
+</div><!-- /appScreen -->
+
+<!-- ══════════════════════════════════════════ MODALS ══════════════════════════════════════════ -->
+
+<!-- Update Deal Status Modal -->
+<div class="modal-overlay" id="dealModal">
+  <div class="modal">
+    <h3>Update Deal Status</h3>
+    <div id="dealModalInfo" style="margin-bottom:16px;padding:12px;background:var(--gray-50);border-radius:8px;font-size:13px;color:var(--gray-600);"></div>
+    <div class="field" style="margin-bottom:20px;">
+      <label>New Status</label>
+      <select id="dealNewStatus">
+        <option value="Submitted">Submitted</option>
+        <option value="In Review">In Review</option>
+        <option value="Approved">Approved</option>
+        <option value="Active Customer">Active Customer</option>
+      </select>
+    </div>
+    <input type="hidden" id="dealModalRow">
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('dealModal')">Cancel</button>
+      <button class="btn btn-navy" onclick="saveDealStatus()">Update Status</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Agent Modal -->
+<div class="modal-overlay" id="addAgentModal">
+  <div class="modal">
+    <h3>Add New Agent</h3>
+    <div class="form-row">
+      <div class="field"><label>First Name *</label><input type="text" id="newAgentFirst"></div>
+      <div class="field"><label>Last Name *</label><input type="text" id="newAgentLast"></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Email *</label><input type="email" id="newAgentEmail"></div>
+      <div class="field"><label>Phone</label><input type="text" id="newAgentPhone"></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Company</label><input type="text" id="newAgentCompany"></div>
+      <div class="field"><label>Agent ID *</label><input type="text" id="newAgentID" placeholder="AGT001"></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Password *</label><input type="text" id="newAgentPass"></div>
+      <div class="field"><label>Commission Rate (%) *</label><input type="number" id="newAgentComm" placeholder="8"></div>
+    </div>
+    <div id="addAgentAlert"></div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('addAgentModal')">Cancel</button>
+      <button class="btn btn-orange" onclick="saveNewAgent()">Add Agent</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ JS ══════════════════════════════════════════ -->
+<script>
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7twQrTsg1PCtVWSjRGy3HBzJ44EqHD24KmD8WXnb01Ed3lwlPslbQoW5DzaFVWBM/exec';
+
+  // ── Admin credentials (hardcoded) ──
+  var ADMIN_CREDENTIALS = [
+    { email: 'james@stratelegy.com', password: 'Strat2024!' },
+    { email: 'admin@stratelegy.com', password: 'Admin2024!' }
+  ];
+
+  // ── Global data store ──
+  var allAgents = [];
+  var allDeals = [];
+  var allCommissions = [];
+  var allApplications = [];
+
+  // ════════════════════════ AUTH ════════════════════════
+
+  function adminLogin() {
+    var email = document.getElementById('adminEmail').value.trim().toLowerCase();
+    var password = document.getElementById('adminPassword').value;
+    var valid = false;
+    for (var i = 0; i < ADMIN_CREDENTIALS.length; i++) {
+      if (ADMIN_CREDENTIALS[i].email === email && ADMIN_CREDENTIALS[i].password === password) {
+        valid = true;
+        break;
+      }
+    }
+    if (valid) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('appScreen').style.display = 'block';
+      loadAllData();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+
+  function adminLogout() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('appScreen').style.display = 'none';
+    document.getElementById('adminEmail').value = '';
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('loginError').style.display = 'none';
+  }
+
+  document.getElementById('adminPassword').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') adminLogin();
+  });
+
+  // ════════════════════════ NAVIGATION ════════════════════════
+
+  function showPage(pageId, navEl) {
+    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+    document.getElementById('page-' + pageId).classList.add('active');
+    navEl.classList.add('active');
+  }
+
+  // ════════════════════════ DATA LOADING ════════════════════════
+
+  function loadAllData() {
+    loadAgents();
+    loadDeals();
+    loadCommissions();
+    loadApplications();
+  }
+
+  function apiFetch(action, params) {
+    var url = APPS_SCRIPT_URL + '?action=' + action;
+    if (params) {
+      Object.keys(params).forEach(function(k) { url += '&' + k + '=' + encodeURIComponent(params[k]); });
+    }
+    return fetch(url).then(function(r) { return r.json(); });
+  }
+
+  function loadAgents() {
+    apiFetch('getAdminAgents').then(function(data) {
+      allAgents = data.agents || [];
+      renderAgents(allAgents);
+      populateAgentDropdowns();
+      updateDashboardStats();
+    }).catch(function() {
+      document.getElementById('agentsTable').innerHTML = '<tr><td colspan="7" class="empty">Could not load agents from Google Sheets.</td></tr>';
+    });
+  }
+
+  function loadDeals() {
+    apiFetch('getAdminDeals').then(function(data) {
+      allDeals = data.deals || [];
+      renderDeals(allDeals);
+      renderDashboardDeals(allDeals);
+      populateDealAgentFilter();
+      updateDashboardStats();
+    }).catch(function() {
+      document.getElementById('dealsTable').innerHTML = '<tr><td colspan="8" class="empty">Could not load deals from Google Sheets.</td></tr>';
+    });
+  }
+
+  function loadCommissions() {
+    apiFetch('getAdminCommissions').then(function(data) {
+      allCommissions = data.commissions || [];
+      renderCommissions(allCommissions);
+      updateDashboardStats();
+    }).catch(function() {
+      document.getElementById('commissionsTable').innerHTML = '<tr><td colspan="9" class="empty">Could not load commissions from Google Sheets.</td></tr>';
+    });
+  }
+
+  function loadApplications() {
+    apiFetch('getAdminApplications').then(function(data) {
+      allApplications = data.applications || [];
+      renderApplications(allApplications);
+    }).catch(function() {
+      document.getElementById('applicationsTable').innerHTML = '<tr><td colspan="8" class="empty">Could not load applications from Google Sheets.</td></tr>';
+    });
+  }
+
+  // ════════════════════════ DASHBOARD ════════════════════════
+
+  function updateDashboardStats() {
+    var activeAgents = allAgents.filter(function(a) { return a.status === 'Active'; }).length;
+    document.getElementById('statAgents').textContent = activeAgents || allAgents.length || '—';
+    document.getElementById('statDeals').textContent = allDeals.length || '—';
+
+    var activeCustomers = allDeals.filter(function(d) { return d.status === 'Active Customer'; }).length;
+    document.getElementById('statActive').textContent = activeCustomers || '0';
+
+    var totalMRR = 0;
+    allDeals.forEach(function(d) {
+      if (d.status === 'Active Customer') {
+        totalMRR += parseFloat(d.ucaasMRR || d.mrc || 0);
+      }
+    });
+    document.getElementById('statMRR').textContent = totalMRR > 0 ? '$' + totalMRR.toLocaleString() : '—';
+
+    renderTopAgents();
+  }
+
+  function renderDashboardDeals(deals) {
+    var tbody = document.getElementById('dashDealsTable');
+    if (!deals.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">No deals yet.</td></tr>'; return; }
+    var recent = deals.slice(0, 10);
+    tbody.innerHTML = recent.map(function(d) {
+      return '<tr>' +
+        '<td><strong>' + esc(d.companyName || d.company || '') + '</strong></td>' +
+        '<td>' + esc(d.agentEmail || '') + '</td>' +
+        '<td>' + esc(d.product || '') + '</td>' +
+        '<td>' + (d.ucaasMRR ? '$' + parseFloat(d.ucaasMRR).toFixed(2) : '—') + '</td>' +
+        '<td>' + statusBadge(d.status) + '</td>' +
+        '<td>' + esc(d.timestamp ? d.timestamp.substring(0, 10) : '') + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function renderTopAgents() {
+    var tbody = document.getElementById('topAgentsTable');
+    if (!allAgents.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty">No agents yet.</td></tr>'; return; }
+
+    var agentStats = {};
+    allAgents.forEach(function(a) {
+      agentStats[a.email] = { name: a.firstName + ' ' + a.lastName, company: a.company, mrr: 0, accounts: 0, commissions: 0 };
+    });
+
+    allDeals.forEach(function(d) {
+      if (d.status === 'Active Customer' && agentStats[d.agentEmail]) {
+        agentStats[d.agentEmail].mrr += parseFloat(d.ucaasMRR || 0);
+        agentStats[d.agentEmail].accounts++;
+      }
+    });
+
+    allCommissions.forEach(function(c) {
+      if (c.status === 'Paid' && agentStats[c.agentEmail]) {
+        agentStats[c.agentEmail].commissions += parseFloat(c.commissionAmount || 0);
+      }
+    });
+
+    var sorted = Object.values(agentStats).sort(function(a, b) { return b.mrr - a.mrr; }).slice(0, 8);
+    tbody.innerHTML = sorted.map(function(a) {
+      return '<tr>' +
+        '<td><strong>' + esc(a.name) + '</strong></td>' +
+        '<td>' + esc(a.company) + '</td>' +
+        '<td>' + a.accounts + '</td>' +
+        '<td>' + (a.mrr > 0 ? '$' + a.mrr.toFixed(2) : '$0.00') + '</td>' +
+        '<td>' + (a.commissions > 0 ? '$' + a.commissions.toFixed(2) : '$0.00') + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  // ════════════════════════ AGENTS ════════════════════════
+
+  function renderAgents(agents) {
+    var tbody = document.getElementById('agentsTable');
+    if (!agents.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">No agents found.</td></tr>'; return; }
+    tbody.innerHTML = agents.map(function(a, i) {
+      var statusBadgeHtml = a.status === 'Active' ? '<span class="badge badge-green">Active</span>' : '<span class="badge badge-gray">Inactive</span>';
+      return '<tr>' +
+        '<td><code>' + esc(a.agentId || '') + '</code></td>' +
+        '<td><strong>' + esc((a.firstName || '') + ' ' + (a.lastName || '')) + '</strong></td>' +
+        '<td>' + esc(a.email || '') + '</td>' +
+        '<td>' + esc(a.company || '') + '</td>' +
+        '<td><strong>' + (a.commissionRate ? a.commissionRate + '%' : '—') + '</strong></td>' +
+        '<td>' + statusBadgeHtml + '</td>' +
+        '<td><button class="btn btn-ghost btn-sm" onclick="toggleAgentStatus(' + i + ')">Toggle Status</button></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterAgents() {
+    var search = document.getElementById('agentSearch').value.toLowerCase();
+    var status = document.getElementById('agentStatusFilter').value;
+    var filtered = allAgents.filter(function(a) {
+      var matchSearch = !search || (a.firstName + ' ' + a.lastName + ' ' + a.email + ' ' + a.company).toLowerCase().includes(search);
+      var matchStatus = !status || a.status === status;
+      return matchSearch && matchStatus;
+    });
+    renderAgents(filtered);
+  }
+
+  function toggleAgentStatus(index) {
+    var agent = allAgents[index];
+    var newStatus = agent.status === 'Active' ? 'Inactive' : 'Active';
+    apiFetch('updateAgentStatus', { email: agent.email, status: newStatus }).then(function() {
+      allAgents[index].status = newStatus;
+      renderAgents(allAgents);
+    }).catch(function() { alert('Failed to update status. Please check the Google Sheet directly.'); });
+  }
+
+  function openAddAgentModal() {
+    document.getElementById('addAgentModal').classList.add('open');
+    document.getElementById('addAgentAlert').innerHTML = '';
+  }
+
+  function saveNewAgent() {
+    var first = document.getElementById('newAgentFirst').value.trim();
+    var last = document.getElementById('newAgentLast').value.trim();
+    var email = document.getElementById('newAgentEmail').value.trim();
+    var phone = document.getElementById('newAgentPhone').value.trim();
+    var company = document.getElementById('newAgentCompany').value.trim();
+    var agentId = document.getElementById('newAgentID').value.trim();
+    var pass = document.getElementById('newAgentPass').value.trim();
+    var comm = document.getElementById('newAgentComm').value.trim();
+
+    if (!first || !last || !email || !agentId || !pass || !comm) {
+      document.getElementById('addAgentAlert').innerHTML = '<div class="alert alert-error">Please fill in all required fields.</div>';
+      return;
+    }
+
+    apiFetch('addAgent', {
+      firstName: first, lastName: last, email: email, phone: phone,
+      company: company, agentId: agentId, password: pass, commissionRate: comm
+    }).then(function() {
+      closeModal('addAgentModal');
+      loadAgents();
+    }).catch(function() {
+      document.getElementById('addAgentAlert').innerHTML = '<div class="alert alert-error">Failed to add agent. Check the Apps Script.</div>';
+    });
+  }
+
+  function populateAgentDropdowns() {
+    var selects = ['commAgent', 'dealAgentFilter', 'commAgentFilter'];
+    selects.forEach(function(id) {
+      var sel = document.getElementById(id);
+      if (!sel) return;
+      var current = sel.value;
+      while (sel.options.length > 1) sel.remove(1);
+      allAgents.forEach(function(a) {
+        var opt = document.createElement('option');
+        opt.value = a.email;
+        opt.textContent = (a.firstName || '') + ' ' + (a.lastName || '') + ' (' + a.email + ')';
+        sel.appendChild(opt);
+      });
+      sel.value = current;
+    });
+  }
+
+  // ════════════════════════ DEALS ════════════════════════
+
+  function renderDeals(deals) {
+    var tbody = document.getElementById('dealsTable');
+    if (!deals.length) { tbody.innerHTML = '<tr><td colspan="8" class="empty">No deals found.</td></tr>'; return; }
+    tbody.innerHTML = deals.map(function(d, i) {
+      var mrr = d.ucaasMRR ? '$' + parseFloat(d.ucaasMRR).toFixed(2) : '—';
+      return '<tr>' +
+        '<td><strong>' + esc(d.companyName || d.company || '') + '</strong></td>' +
+        '<td>' + esc((d.firstName || '') + ' ' + (d.lastName || '')) + '</td>' +
+        '<td>' + esc(d.agentEmail || '') + '</td>' +
+        '<td>' + esc(d.product || '') + '</td>' +
+        '<td>' + mrr + '</td>' +
+        '<td>' + statusBadge(d.status) + '</td>' +
+        '<td>' + esc(d.timestamp ? d.timestamp.substring(0, 10) : '') + '</td>' +
+        '<td><button class="btn btn-ghost btn-sm" onclick="openDealModal(' + i + ')">Update</button></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterDeals() {
+    var search = document.getElementById('dealSearch').value.toLowerCase();
+    var status = document.getElementById('dealStatusFilter').value;
+    var agent = document.getElementById('dealAgentFilter').value;
+    var filtered = allDeals.filter(function(d) {
+      var matchSearch = !search || ((d.companyName || d.company || '') + ' ' + (d.agentEmail || '')).toLowerCase().includes(search);
+      var matchStatus = !status || d.status === status;
+      var matchAgent = !agent || d.agentEmail === agent;
+      return matchSearch && matchStatus && matchAgent;
+    });
+    renderDeals(filtered);
+  }
+
+  function populateDealAgentFilter() {
+    var sel = document.getElementById('dealAgentFilter');
+    while (sel.options.length > 1) sel.remove(1);
+    var emails = {};
+    allDeals.forEach(function(d) { if (d.agentEmail) emails[d.agentEmail] = true; });
+    Object.keys(emails).forEach(function(e) {
+      var opt = document.createElement('option');
+      opt.value = e; opt.textContent = e;
+      sel.appendChild(opt);
+    });
+  }
+
+  function openDealModal(index) {
+    var d = allDeals[index];
+    document.getElementById('dealModalInfo').innerHTML =
+      '<strong>' + esc(d.companyName || d.company || '') + '</strong> — ' + esc(d.agentEmail || '') +
+      '<br>Product: ' + esc(d.product || '') + ' | Current Status: ' + statusBadge(d.status);
+    document.getElementById('dealNewStatus').value = d.status || 'Submitted';
+    document.getElementById('dealModalRow').value = index;
+    document.getElementById('dealModal').classList.add('open');
+  }
+
+  function saveDealStatus() {
+    var index = parseInt(document.getElementById('dealModalRow').value);
+    var newStatus = document.getElementById('dealNewStatus').value;
+    var deal = allDeals[index];
+
+    apiFetch('updateDealStatus', { agentEmail: deal.agentEmail, company: deal.companyName || deal.company, status: newStatus, rowIndex: deal.rowIndex || '' })
+      .then(function() {
+        allDeals[index].status = newStatus;
+        renderDeals(allDeals);
+        renderDashboardDeals(allDeals);
+        updateDashboardStats();
+        closeModal('dealModal');
+      }).catch(function() { alert('Could not update status. Please update directly in Google Sheets.'); });
+  }
+
+  // ════════════════════════ COMMISSIONS ════════════════════════
+
+  function calcCommission() {
+    var mrr = parseFloat(document.getElementById('commMRR').value) || 0;
+    var rate = parseFloat(document.getElementById('commRate').value) || 0;
+    var amount = mrr * (rate / 100);
+    document.getElementById('previewMRR').textContent = '$' + mrr.toFixed(2);
+    document.getElementById('previewRate').textContent = rate + '%';
+    document.getElementById('previewAmount').textContent = '$' + amount.toFixed(2);
+  }
+
+  document.getElementById('commAgent').addEventListener('change', function() {
+    var email = this.value;
+    var dealSel = document.getElementById('commDeal');
+    while (dealSel.options.length > 1) dealSel.remove(1);
+    if (!email) { dealSel.options[0].textContent = 'Select agent first...'; return; }
+    dealSel.options[0].textContent = 'Select deal...';
+
+    var rate = '';
+    allAgents.forEach(function(a) { if (a.email === email) rate = a.commissionRate || ''; });
+    if (rate) document.getElementById('commRate').value = rate;
+    calcCommission();
+
+    var agentDeals = allDeals.filter(function(d) { return d.agentEmail === email; });
+    agentDeals.forEach(function(d) {
+      var opt = document.createElement('option');
+      opt.value = d.companyName || d.company;
+      opt.textContent = (d.companyName || d.company) + ' — ' + (d.product || '');
+      if (d.ucaasMRR) opt.dataset.mrr = d.ucaasMRR;
+      dealSel.appendChild(opt);
+    });
+  });
+
+  document.getElementById('commDeal').addEventListener('change', function() {
+    var sel = this.options[this.selectedIndex];
+    if (sel && sel.dataset.mrr) {
+      document.getElementById('commMRR').value = parseFloat(sel.dataset.mrr).toFixed(2);
+      calcCommission();
+    }
+  });
+
+  function submitCommission() {
+    var agent = document.getElementById('commAgent').value;
+    var deal = document.getElementById('commDeal').value;
+    var mrr = document.getElementById('commMRR').value;
+    var rate = document.getElementById('commRate').value;
+    var date = document.getElementById('commDate').value;
+    var product = document.getElementById('commProduct').value;
+    var status = document.getElementById('commStatus').value;
+    var alertEl = document.getElementById('commAlert');
+
+    if (!agent || !deal || !mrr || !rate || !date) {
+      alertEl.innerHTML = '<div class="alert alert-error">Please fill in all required fields.</div>';
+      return;
+    }
+
+    var amount = (parseFloat(mrr) * parseFloat(rate) / 100).toFixed(2);
+
+    apiFetch('addCommission', {
+      agentEmail: agent, customer: deal, product: product,
+      customerMRR: mrr, commissionRate: rate, commissionAmount: amount,
+      paymentDate: date, status: status
+    }).then(function() {
+      alertEl.innerHTML = '<div class="alert alert-success">Commission of $' + amount + ' saved successfully!</div>';
+      loadCommissions();
+      setTimeout(function() { alertEl.innerHTML = ''; }, 3000);
+    }).catch(function() {
+      alertEl.innerHTML = '<div class="alert alert-error">Failed to save commission. Check Apps Script.</div>';
+    });
+  }
+
+  function renderCommissions(comms) {
+    var tbody = document.getElementById('commissionsTable');
+    if (!comms.length) { tbody.innerHTML = '<tr><td colspan="9" class="empty">No commissions yet.</td></tr>'; return; }
+    tbody.innerHTML = comms.map(function(c) {
+      var statusBadgeHtml = c.status === 'Paid'
+        ? '<span class="badge badge-green">Paid</span>'
+        : '<span class="badge badge-amber">Pending</span>';
+      return '<tr>' +
+        '<td><code style="font-size:11px;">' + esc(c.commissionId || '') + '</code></td>' +
+        '<td>' + esc(c.agentEmail || '') + '</td>' +
+        '<td><strong>' + esc(c.customer || '') + '</strong></td>' +
+        '<td>' + esc(c.product || '') + '</td>' +
+        '<td>$' + parseFloat(c.customerMRR || 0).toFixed(2) + '</td>' +
+        '<td>' + (c.commissionRate || '') + '%</td>' +
+        '<td><strong style="color:var(--success)">$' + parseFloat(c.commissionAmount || 0).toFixed(2) + '</strong></td>' +
+        '<td>' + esc(c.paymentDate || '') + '</td>' +
+        '<td>' + statusBadgeHtml + '</td>' +
+      '</tr>';
+    }).join('');
+
+    // populate commission filters
+    var sel = document.getElementById('commAgentFilter');
+    var emails = {};
+    comms.forEach(function(c) { if (c.agentEmail) emails[c.agentEmail] = true; });
+    while (sel.options.length > 1) sel.remove(1);
+    Object.keys(emails).forEach(function(e) {
+      var opt = document.createElement('option');
+      opt.value = e; opt.textContent = e;
+      sel.appendChild(opt);
+    });
+  }
+
+  function filterCommissions() {
+    var agent = document.getElementById('commAgentFilter').value;
+    var status = document.getElementById('commStatusFilter').value;
+    var filtered = allCommissions.filter(function(c) {
+      var matchAgent = !agent || c.agentEmail === agent;
+      var matchStatus = !status || c.status === status;
+      return matchAgent && matchStatus;
+    });
+    renderCommissions(filtered);
+  }
+
+  // ════════════════════════ APPLICATIONS ════════════════════════
+
+  function renderApplications(apps) {
+    var tbody = document.getElementById('applicationsTable');
+    if (!apps.length) { tbody.innerHTML = '<tr><td colspan="8" class="empty">No applications found.</td></tr>'; return; }
+    tbody.innerHTML = apps.map(function(a, i) {
+      var statusHtml = a.status === 'Approved'
+        ? '<span class="badge badge-green">Approved</span>'
+        : '<span class="badge badge-amber">Pending Review</span>';
+      var actionHtml = a.status !== 'Approved'
+        ? '<button class="btn btn-success btn-sm" onclick="approveApplication(' + i + ')">Approve</button>'
+        : '<span style="color:var(--gray-400);font-size:12px;">Done</span>';
+      return '<tr>' +
+        '<td><strong>' + esc((a.firstName || '') + ' ' + (a.lastName || '')) + '</strong></td>' +
+        '<td>' + esc(a.email || '') + '</td>' +
+        '<td>' + esc(a.company || '') + '</td>' +
+        '<td>' + esc(a.phone || '') + '</td>' +
+        '<td>' + esc(a.yearsExperience || '') + ' yrs</td>' +
+        '<td>' + esc(a.timestamp ? a.timestamp.substring(0, 10) : '') + '</td>' +
+        '<td>' + statusHtml + '</td>' +
+        '<td>' + actionHtml + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterApplications() {
+    var status = document.getElementById('appStatusFilter').value;
+    var filtered = !status ? allApplications : allApplications.filter(function(a) { return a.status === status; });
+    renderApplications(filtered);
+  }
+
+  function approveApplication(index) {
+    var app = allApplications[index];
+    apiFetch('approveApplication', { email: app.email }).then(function() {
+      allApplications[index].status = 'Approved';
+      renderApplications(allApplications);
+    }).catch(function() { alert('Could not approve. Please update directly in Google Sheets.'); });
+  }
+
+  // ════════════════════════ HELPERS ════════════════════════
+
+  function statusBadge(status) {
+    var map = {
+      'Submitted': 'badge-blue',
+      'In Review': 'badge-amber',
+      'Approved': 'badge-green',
+      'Active Customer': 'badge-purple'
+    };
+    return '<span class="badge ' + (map[status] || 'badge-gray') + '">' + esc(status || '—') + '</span>';
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+
+  function esc(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) overlay.classList.remove('open');
+    });
+  });
+
+  // Set today's date on commission date field
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('commDate').value = today;
+</script>
+</body>
+</html>
