@@ -253,6 +253,7 @@
       <div class="sidebar-section">
         <div class="sidebar-label">Account</div>
         <div class="nav-item" onclick="showPage('onboarding', this)"><span class="icon">✅</span> Onboarding</div>
+        <div class="nav-item" onclick="showPage('changepassword', this)"><span class="icon">🔒</span> Change Password</div>
       </div>
       <div class="sidebar-footer">
         <img id="logoSidebar" src="" alt="Stratelegy">
@@ -426,7 +427,7 @@
           <div class="card">
             <div class="card-header"><h3>📞 Your Stratelegy Contacts</h3></div>
             <div style="padding:16px 20px;">
-              <div style="margin-bottom:16px;"><div style="font-weight:700;color:var(--navy);font-size:14px;">James Stendeback</div><div style="font-size:13px;color:var(--gray-500);">COO — Partner Relations</div><div style="font-size:13px;color:var(--gray-600);margin-top:4px;">📞 888.975.6130</div><div style="font-size:13px;color:var(--gray-600);">✉️ info@stratelegy.com</div></div>
+              <div style="margin-bottom:16px;"><div style="font-weight:700;color:var(--navy);font-size:14px;">James Stendeback</div><div style="font-size:13px;color:var(--gray-500);">COO — Partner Relations</div><div style="font-size:13px;color:var(--gray-600);margin-top:4px;">📞 888.975.6130</div><div style="font-size:13px;color:var(--gray-600);">✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c4adaaa2ab84b7b0b6a5b0a1a8a1a3bdeaa7aba9">[email&#160;protected]</a></div></div>
               <div style="padding-top:14px;border-top:1px solid var(--gray-100);"><div style="font-size:13px;color:var(--gray-600);">🌐 stratelegy.com</div><div style="font-size:13px;color:var(--gray-600);">🛠 support.stratelegy.com</div></div>
             </div>
           </div>
@@ -445,6 +446,19 @@
     </div>
   </div>
 </div>
+
+<!-- CHANGE PASSWORD PAGE -->
+      <div id="page-changepassword" class="page">
+        <div class="page-header"><h2>Change Password</h2><p>Update your portal login password</p></div>
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:24px;max-width:480px;">
+          <h3 style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid var(--gray-100);">Update Your Password</h3>
+          <div style="margin-bottom:16px;"><label style="display:block;font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:6px;">Current Password *</label><input type="password" id="pwCurrent" placeholder="Enter current password" style="width:100%;padding:9px 12px;border:1.5px solid var(--gray-200);border-radius:7px;font-family:inherit;font-size:13.5px;outline:none;"></div>
+          <div style="margin-bottom:16px;"><label style="display:block;font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:6px;">New Password *</label><input type="password" id="pwNew" placeholder="Enter new password" style="width:100%;padding:9px 12px;border:1.5px solid var(--gray-200);border-radius:7px;font-family:inherit;font-size:13.5px;outline:none;"></div>
+          <div style="margin-bottom:16px;"><label style="display:block;font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:6px;">Confirm New Password *</label><input type="password" id="pwConfirm" placeholder="Re-enter new password" style="width:100%;padding:9px 12px;border:1.5px solid var(--gray-200);border-radius:7px;font-family:inherit;font-size:13.5px;outline:none;"></div>
+          <div id="pwAlert"></div>
+          <button class="btn btn-navy" onclick="doChangePassword()">Update Password</button>
+        </div>
+      </div>
 
 <!-- ADD AGENT MODAL -->
 <div class="modal-overlay" id="addAgentModal">
@@ -472,7 +486,7 @@
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7twQrTsg1PCtVWSjRGy3HBzJ44EqHD24KmD8WXnb01Ed3lwlPslbQoW5DzaFVWBM/exec';
 var DEMO_EMAIL = 'agent@demo.com';
 var DEMO_PASSWORD = 'demo1234';
@@ -487,6 +501,17 @@ window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('logoLogin').src = 'data:image/png;base64,' + LOGO_MEDIUM;
   document.getElementById('logoTopbar').src = 'data:image/png;base64,' + LOGO_ORANGE;
   document.getElementById('logoSidebar').src = 'data:image/png;base64,' + LOGO_ORANGE;
+
+  // Restore session if available
+  var saved = sessionStorage.getItem('stratelegyPartner');
+  if (saved) {
+    try {
+      currentAgent = JSON.parse(saved);
+      launchApp();
+    } catch(e) {
+      sessionStorage.removeItem('stratelegyPartner');
+    }
+  }
 });
 
 // AUTH
@@ -737,6 +762,30 @@ function doAddAgent() {
       if(data.success){closeModal('addAgentModal');loadMyAgents();}
       else{alertEl.innerHTML='<div class="alert alert-error">'+(data.error||'Failed to add agent.')+'</div>';}
     }).catch(function(){alertEl.innerHTML='<div class="alert alert-error">Connection error. Please try again.</div>';});
+}
+
+// CHANGE PASSWORD
+function doChangePassword() {
+  var current = document.getElementById('pwCurrent').value.trim();
+  var newPw   = document.getElementById('pwNew').value.trim();
+  var confirm = document.getElementById('pwConfirm').value.trim();
+  var alertEl = document.getElementById('pwAlert');
+  if (!current||!newPw||!confirm) { alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">Please fill in all fields.</div>'; return; }
+  if (newPw !== confirm) { alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">New passwords do not match.</div>'; return; }
+  if (newPw.length < 6) { alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">Password must be at least 6 characters.</div>'; return; }
+  alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--blue-bg);color:var(--blue);">Updating password...</div>';
+  fetch(APPS_SCRIPT_URL+'?action=changePassword&email='+encodeURIComponent(currentAgent.email)+'&currentPassword='+encodeURIComponent(current)+'&newPassword='+encodeURIComponent(newPw))
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(data.success){
+        alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--success-bg);color:var(--success);">Password updated successfully!</div>';
+        document.getElementById('pwCurrent').value='';
+        document.getElementById('pwNew').value='';
+        document.getElementById('pwConfirm').value='';
+      } else {
+        alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">'+(data.error||'Failed to update password.')+'</div>';
+      }
+    }).catch(function(){ alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">Connection error. Please try again.</div>'; });
 }
 
 // HELPERS
