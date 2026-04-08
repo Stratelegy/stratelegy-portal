@@ -844,4 +844,10 @@ function doChangePassword() {
 // HELPERS
 function statusBadge(status) {
   var map={'Submitted':'badge-blue','In Review':'badge-amber','Approved':'badge-green','Active Customer':'badge-purple'};
- 
+   return '<span class="badge '+(map[status]||'badge-gray')+'">'+esc(status||'—')+'</span>';
+}
+function esc(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+document.querySelectorAll('.modal-overlay').forEach(function(o){o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('open');});});
+</script>
+</body>
+</html>
