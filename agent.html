@@ -298,11 +298,11 @@
 
         <div class="card">
           <div class="card-header"><h3>Recent Deals</h3></div>
-          <table class="data-table"><thead><tr><th>Company</th><th>Contact</th><th>Product</th><th>Est. MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="dashDealsTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
+          <table class="data-table"><thead><tr><th>Customer</th><th>Contact</th><th>Product</th><th>Est. MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="dashDealsTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
         </div>
         <div class="card">
           <div class="card-header"><h3>Active Accounts</h3></div>
-          <table class="data-table"><thead><tr><th>Company</th><th>Contact</th><th>Product</th><th>MRR</th><th>Since</th></tr></thead><tbody id="dashAccountsTable"><tr><td colspan="5" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
+          <table class="data-table"><thead><tr><th>Customer</th><th>Contact</th><th>Product</th><th>MRR</th><th>Since</th></tr></thead><tbody id="dashAccountsTable"><tr><td colspan="5" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
         </div>
         <div class="card">
           <div class="card-header"><h3>Commission History</h3></div>
@@ -315,7 +315,7 @@
         <div class="page-header"><h2>My Deals</h2><p>Track all your submitted deals and their current status</p></div>
         <div class="card">
           <div class="card-header"><h3>All Deals</h3></div>
-          <table class="data-table"><thead><tr><th>Company</th><th>Contact</th><th>Product</th><th>Users</th><th>Est. MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="dealsTable"><tr><td colspan="7" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
+          <table class="data-table"><thead><tr><th>Customer</th><th>Contact</th><th>Product</th><th>Users</th><th>Est. MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="dealsTable"><tr><td colspan="7" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
         </div>
       </div>
 
@@ -653,7 +653,7 @@ function renderDashDeals(deals) {
   var tbody = document.getElementById('dashDealsTable');
   if (!deals.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">No deals yet. Submit your first deal!</td></tr>'; return; }
   tbody.innerHTML = deals.slice(0,8).map(function(d) {
-    return '<tr><td><strong>'+esc(d.companyName||'')+'</strong></td><td>'+esc((d.firstName||'')+' '+(d.lastName||''))+'</td><td>'+esc(d.product||'')+'</td><td>'+(d.ucaasEstMrr?'$'+parseFloat(d.ucaasEstMrr).toFixed(2):'—')+'</td><td>'+statusBadge(d.status)+'</td><td>'+esc((d.timestamp||'').substring(0,10))+'</td></tr>';
+    return '<tr><td><strong>'+esc(d.customerName||d.companyName||'')+'</strong></td><td>'+esc((d.firstName||'')+' '+(d.lastName||''))+'</td><td>'+esc(d.product||'')+'</td><td>'+(d.ucaasEstMrr?'$'+parseFloat(d.ucaasEstMrr).toFixed(2):'—')+'</td><td>'+statusBadge(d.status)+'</td><td>'+esc((d.timestamp||'').substring(0,10))+'</td></tr>';
   }).join('');
 }
 
@@ -662,7 +662,7 @@ function renderDashAccounts(deals) {
   var active = deals.filter(function(d){ return d.status==='Active Customer'; });
   if (!active.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty">No active accounts yet.</td></tr>'; return; }
   tbody.innerHTML = active.map(function(d) {
-    return '<tr><td><strong>'+esc(d.companyName||'')+'</strong></td><td>'+esc((d.firstName||'')+' '+(d.lastName||''))+'</td><td>'+esc(d.product||'')+'</td><td>'+(d.ucaasEstMrr?'$'+parseFloat(d.ucaasEstMrr).toFixed(2):'—')+'</td><td>'+esc((d.timestamp||'').substring(0,10))+'</td></tr>';
+    return '<tr><td><strong>'+esc(d.customerName||d.companyName||'')+'</strong></td><td>'+esc((d.firstName||'')+' '+(d.lastName||''))+'</td><td>'+esc(d.product||'')+'</td><td>'+(d.ucaasEstMrr?'$'+parseFloat(d.ucaasEstMrr).toFixed(2):'—')+'</td><td>'+esc((d.timestamp||'').substring(0,10))+'</td></tr>';
   }).join('');
 }
 
@@ -678,7 +678,7 @@ function renderDealsTable(deals) {
   var tbody = document.getElementById('dealsTable');
   if (!deals.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">No deals submitted yet.</td></tr>'; return; }
   tbody.innerHTML = deals.map(function(d) {
-    return '<tr><td><strong>'+esc(d.companyName||'')+'</strong></td><td>'+esc((d.firstName||'')+' '+(d.lastName||''))+'</td><td>'+esc(d.product||'')+'</td><td>'+esc(d.users||'')+'</td><td>'+(d.ucaasEstMrr?'$'+parseFloat(d.ucaasEstMrr).toFixed(2):'—')+'</td><td>'+statusBadge(d.status)+'</td><td>'+esc((d.timestamp||'').substring(0,10))+'</td></tr>';
+    return '<tr><td><strong>'+esc(d.customerName||d.companyName||'')+'</strong></td><td>'+esc((d.firstName||'')+' '+(d.lastName||''))+'</td><td>'+esc(d.product||'')+'</td><td>'+esc(d.users||'')+'</td><td>'+(d.ucaasEstMrr?'$'+parseFloat(d.ucaasEstMrr).toFixed(2):'—')+'</td><td>'+statusBadge(d.status)+'</td><td>'+esc((d.timestamp||'').substring(0,10))+'</td></tr>';
   }).join('');
 }
 
