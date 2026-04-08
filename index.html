@@ -298,15 +298,15 @@
 
         <div class="card">
           <div class="card-header"><h3>Recent Deals</h3></div>
-          <table class="data-table"><thead><tr><th>Customer</th><th>Contact</th><th>Product</th><th>Est. MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="dashDealsTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
+          <table class="data-table"><thead><tr><th>Customer Name</th><th>Contact</th><th>Product</th><th>Est. MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="dashDealsTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
         </div>
         <div class="card">
           <div class="card-header"><h3>Active Accounts</h3></div>
-          <table class="data-table"><thead><tr><th>Customer</th><th>Contact</th><th>Product</th><th>MRR</th><th>Since</th></tr></thead><tbody id="dashAccountsTable"><tr><td colspan="5" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
+          <table class="data-table"><thead><tr><th>Customer Name</th><th>Contact</th><th>Product</th><th>MRR</th><th>Since</th></tr></thead><tbody id="dashAccountsTable"><tr><td colspan="5" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
         </div>
         <div class="card">
           <div class="card-header"><h3>Commission History</h3></div>
-          <table class="data-table"><thead><tr><th>Customer</th><th>MRR</th><th>Commission</th><th>Type</th><th>Date</th><th>Status</th></tr></thead><tbody id="dashCommTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
+          <table class="data-table"><thead><tr><th>Customer Name</th><th>MRR</th><th>Commission</th><th>Type</th><th>Date</th><th>Status</th></tr></thead><tbody id="dashCommTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
         </div>
       </div>
 
@@ -315,7 +315,7 @@
         <div class="page-header"><h2>My Deals</h2><p>Track all your submitted deals and their current status</p></div>
         <div class="card">
           <div class="card-header"><h3>All Deals</h3></div>
-          <table class="data-table"><thead><tr><th>Customer</th><th>Contact</th><th>Product</th><th>Users</th><th>Est. MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="dealsTable"><tr><td colspan="7" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
+          <table class="data-table"><thead><tr><th>Customer Name</th><th>Contact</th><th>Product</th><th>Users</th><th>Est. MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="dealsTable"><tr><td colspan="7" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
         </div>
       </div>
 
@@ -397,11 +397,11 @@
         </div>
         <div class="card">
           <div class="card-header"><h3>Direct Commission History</h3></div>
-          <table class="data-table"><thead><tr><th>Customer</th><th>Product</th><th>MRR</th><th>Rate</th><th>Commission</th><th>Date</th><th>Status</th></tr></thead><tbody id="directCommTable"><tr><td colspan="7" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
+          <table class="data-table"><thead><tr><th>Customer Name</th><th>Product</th><th>MRR</th><th>Rate</th><th>Commission</th><th>Date</th><th>Status</th></tr></thead><tbody id="directCommTable"><tr><td colspan="7" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
         </div>
         <div class="card" id="overrideCommCard" style="display:none;">
           <div class="card-header"><h3>Override Commission History <span style="font-size:12px;color:var(--gray-400);font-weight:400;">— 2% on your recruited agents' MRR</span></h3></div>
-          <table class="data-table"><thead><tr><th>Customer</th><th>Agent</th><th>MRR</th><th>Rate</th><th>Override Amt</th><th>Date</th><th>Status</th></tr></thead><tbody id="overrideCommTable"><tr><td colspan="7" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
+          <table class="data-table"><thead><tr><th>Customer Name</th><th>Agent</th><th>MRR</th><th>Rate</th><th>Override Amt</th><th>Date</th><th>Status</th></tr></thead><tbody id="overrideCommTable"><tr><td colspan="7" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
         </div>
       </div>
 
@@ -415,11 +415,11 @@
         </div>
         <div class="card">
           <div class="card-header"><h3>Recruited Agents</h3><button class="btn btn-orange btn-sm" onclick="openAddAgentModal()">+ Add Agent</button></div>
-          <table class="data-table"><thead><tr><th>Agent ID</th><th>Name</th><th>Email</th><th>Customer</th><th>Comm Rate</th><th>Status</th></tr></thead><tbody id="myAgentsTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
+          <table class="data-table"><thead><tr><th>Agent ID</th><th>Name</th><th>Email</th><th>Customer Name</th><th>Comm Rate</th><th>Status</th></tr></thead><tbody id="myAgentsTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
         </div>
         <div class="card">
           <div class="card-header"><h3>My Agents' Deals</h3></div>
-          <table class="data-table"><thead><tr><th>Customer</th><th>Agent</th><th>Product</th><th>Est. MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="myAgentsDealsTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
+          <table class="data-table"><thead><tr><th>Customer Name</th><th>Agent</th><th>Product</th><th>Est. MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="myAgentsDealsTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
         </div>
       </div>
 
@@ -743,7 +743,7 @@ function doSubmitDeal() {
   if ((parseInt(document.getElementById('ccaasQty').value)||0)>0) productParts.push('CCaaS');
   if (firePanel>0) productParts.push('POTS Fire Panel x'+firePanel);
   alertEl.innerHTML = '<div class="alert" style="background:var(--blue-bg);color:var(--blue);">Submitting deal...</div>';
-  fetch(APPS_SCRIPT_URL+'?action=submitDeal&agentEmail='+encodeURIComponent(currentAgent.email)+'&agentId='+encodeURIComponent(currentAgent.agentId)+'&agentType='+encodeURIComponent(currentAgent.agentType)+'&companyName='+encodeURIComponent(company)+'&firstName='+encodeURIComponent(first)+'&lastName='+encodeURIComponent(last)+'&title='+encodeURIComponent(document.getElementById('dealTitle').value)+'&email='+encodeURIComponent(document.getElementById('dealEmail').value)+'&phone='+encodeURIComponent(document.getElementById('dealPhone').value)+'&city='+encodeURIComponent(document.getElementById('dealCity').value)+'&state='+encodeURIComponent(document.getElementById('dealState').value)+'&users='+encodeURIComponent(document.getElementById('dealUsers').value)+'&product='+encodeURIComponent(productParts.join(', '))+'&currentSystem='+encodeURIComponent(document.getElementById('dealCurrentSystem').value)+'&timeline='+encodeURIComponent(document.getElementById('dealTimeline').value)+'&notes='+encodeURIComponent(document.getElementById('dealNotes').value)+'&ucaasBasicQty='+basic+'&ucaasPremiumQty='+premium+'&ucaasExecQty='+exec+'&ccaasQty='+(parseInt(document.getElementById('ccaasQty').value)||0)+'&potsFirePanel='+firePanel+'&potsElevator='+(parseInt(document.getElementById('potsElevator').value)||0)+'&potsSecurity='+(parseInt(document.getElementById('potsSecurity').value)||0)+'&potsFax='+(parseInt(document.getElementById('potsFax').value)||0)+'&potsAtm='+(parseInt(document.getElementById('potsAtm').value)||0)+'&virtualFax='+(parseInt(document.getElementById('virtualFax').value)||0)+'&confUsers='+(parseInt(document.getElementById('confUsers').value)||0))
+  fetch(APPS_SCRIPT_URL+'?action=submitDeal&agentEmail='+encodeURIComponent(currentAgent.email)+'&agentId='+encodeURIComponent(currentAgent.agentId)+'&agentType='+encodeURIComponent(currentAgent.agentType)+'&customerName='+encodeURIComponent(company)+'&customerId='+(document.getElementById('dealCustomerId')?encodeURIComponent(document.getElementById('dealCustomerId').value):'')+'&firstName='+encodeURIComponent(first)+'&lastName='+encodeURIComponent(last)+'&title='+encodeURIComponent(document.getElementById('dealTitle').value)+'&email='+encodeURIComponent(document.getElementById('dealEmail').value)+'&phone='+encodeURIComponent(document.getElementById('dealPhone').value)+'&city='+encodeURIComponent(document.getElementById('dealCity').value)+'&state='+encodeURIComponent(document.getElementById('dealState').value)+'&users='+encodeURIComponent(document.getElementById('dealUsers').value)+'&product='+encodeURIComponent(productParts.join(', '))+'&currentSystem='+encodeURIComponent(document.getElementById('dealCurrentSystem').value)+'&timeline='+encodeURIComponent(document.getElementById('dealTimeline').value)+'&notes='+encodeURIComponent(document.getElementById('dealNotes').value)+'&ucaasBasicQty='+basic+'&ucaasPremiumQty='+premium+'&ucaasExecQty='+exec+'&ccaasQty='+(parseInt(document.getElementById('ccaasQty').value)||0)+'&potsFirePanel='+firePanel+'&potsElevator='+(parseInt(document.getElementById('potsElevator').value)||0)+'&potsSecurity='+(parseInt(document.getElementById('potsSecurity').value)||0)+'&potsFax='+(parseInt(document.getElementById('potsFax').value)||0)+'&potsAtm='+(parseInt(document.getElementById('potsAtm').value)||0)+'&virtualFax='+(parseInt(document.getElementById('virtualFax').value)||0)+'&confUsers='+(parseInt(document.getElementById('confUsers').value)||0))
     .then(function(r){return r.json();})
     .then(function(data){
       if(data.success){alertEl.innerHTML='<div class="alert alert-success">Deal submitted successfully! You can track it in My Deals.</div>';resetDealForm();loadDeals();loadDashboard();}
