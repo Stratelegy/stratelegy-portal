@@ -492,7 +492,7 @@
       <span class="admin-tag">Admin</span>
     </div>
     <div class="topbar-right">
-      <span class="topbar-user">James Stendeback</span>
+      <span class="topbar-user" id="topbarUser">Admin</span>
       <button class="btn-logout" onclick="adminLogout()">Sign Out</button>
     </div>
   </div>
@@ -519,6 +519,9 @@
         </div>
         <div class="nav-item" onclick="showPage('applications', this)">
           <span class="icon">📝</span> Applications
+        </div>
+        <div class="nav-item" onclick="showPage('revio', this)">
+          <span class="icon">📤</span> Rev.io Import
         </div>
       </div>
       <div class="sidebar-section">
@@ -761,6 +764,122 @@
     </div><!-- /content -->
   </div><!-- /main-layout -->
 
+
+      <!-- REV.IO IMPORT PAGE -->
+      <div id="page-revio" class="page" style="display:none;padding:26px 30px;">
+        <div style="margin-bottom:22px;">
+          <h2 style="font-size:22px;font-weight:700;color:var(--navy);">Rev.io Import</h2>
+          <p style="color:var(--gray-500);font-size:14px;margin-top:3px;">Upload monthly Rev.io commission report to process agent commissions</p>
+        </div>
+
+        <!-- Upload Section -->
+        <div style="background:var(--white);border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08);padding:24px;margin-bottom:22px;">
+          <h3 style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid var(--gray-100);">Upload Rev.io Commission Report</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr 2fr;gap:16px;align-items:end;margin-bottom:16px;">
+            <div>
+              <label style="display:block;font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:6px;">Period Month *</label>
+              <select id="revioMonth" style="width:100%;padding:9px 12px;border:1.5px solid var(--gray-200);border-radius:7px;font-family:inherit;font-size:13.5px;outline:none;">
+                <option value="">Select...</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block;font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:6px;">Period Year *</label>
+              <select id="revioYear" style="width:100%;padding:9px 12px;border:1.5px solid var(--gray-200);border-radius:7px;font-family:inherit;font-size:13.5px;outline:none;">
+                <option value="">Select...</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block;font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:6px;">Rev.io CSV File *</label>
+              <input type="file" id="revioFile" accept=".csv" style="width:100%;padding:8px 12px;border:1.5px solid var(--gray-200);border-radius:7px;font-family:inherit;font-size:13px;outline:none;background:var(--white);">
+            </div>
+          </div>
+          <button onclick="previewRevio()" style="display:inline-block;padding:9px 20px;border-radius:6px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border:none;background:var(--navy);color:var(--white);">Preview Report</button>
+          <div id="revioUploadAlert" style="margin-top:12px;"></div>
+        </div>
+
+        <!-- Preview Section -->
+        <div id="revioPreviewSection" style="display:none;">
+          <div style="background:var(--white);border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:22px;overflow:hidden;">
+            <div style="padding:16px 20px;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <h3 style="font-size:14px;font-weight:700;color:var(--navy);">Matched Accounts</h3>
+                <p style="font-size:12px;color:var(--gray-500);margin-top:2px;">Review before processing</p>
+              </div>
+              <button id="processBtn" onclick="processRevio()" style="display:inline-block;padding:9px 20px;border-radius:6px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border:none;background:var(--orange);color:var(--white);">✓ Process Commissions</button>
+            </div>
+            <table style="width:100%;border-collapse:collapse;font-size:13px;">
+              <thead>
+                <tr>
+                  <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Customer Name</th>
+                  <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Customer ID</th>
+                  <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Total Charges</th>
+                  <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Agent</th>
+                  <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Comm Rate</th>
+                  <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Commission</th>
+                  <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Status</th>
+                </tr>
+              </thead>
+              <tbody id="revioPreviewTable"></tbody>
+            </table>
+          </div>
+
+          <!-- Unmatched Section -->
+          <div id="revioUnmatchedSection" style="display:none;background:var(--white);border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:22px;overflow:hidden;">
+            <div style="padding:16px 20px;border-bottom:1px solid var(--gray-100);">
+              <h3 style="font-size:14px;font-weight:700;color:var(--red);">⚠️ Unmatched Accounts</h3>
+              <p style="font-size:12px;color:var(--gray-500);margin-top:2px;">These Customer IDs were not found in the Deals tab</p>
+            </div>
+            <table style="width:100%;border-collapse:collapse;font-size:13px;">
+              <thead>
+                <tr>
+                  <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Customer Name</th>
+                  <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Customer ID</th>
+                </tr>
+              </thead>
+              <tbody id="revioUnmatchedTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Payment History Section -->
+        <div style="background:var(--white);border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08);overflow:hidden;">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;">
+            <h3 style="font-size:14px;font-weight:700;color:var(--navy);">Payment History</h3>
+            <select id="historyPeriod" onchange="loadHistory()" style="padding:7px 12px;border:1.5px solid var(--gray-200);border-radius:7px;font-family:inherit;font-size:13px;outline:none;">
+              <option value="">Select period...</option>
+            </select>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:13px;">
+            <thead>
+              <tr>
+                <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Customer</th>
+                <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Agent</th>
+                <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Charges</th>
+                <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Commission</th>
+                <th style="background:var(--gray-50);color:var(--gray-500);font-size:11px;font-weight:700;text-transform:uppercase;padding:10px 16px;text-align:left;border-bottom:1px solid var(--gray-100);">Status</th>
+              </tr>
+            </thead>
+            <tbody id="historyTable"><tr><td colspan="5" style="text-align:center;padding:36px;color:var(--gray-400);font-size:14px;">Select a period to view history</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
 <!-- CHANGE PASSWORD PAGE -->
 <div id="page-changepassword" class="page" style="display:none;padding:26px 30px;">
   <div style="margin-bottom:22px;">
@@ -851,6 +970,7 @@
     var email    = document.getElementById('adminEmail').value.trim().toLowerCase();
     var password = document.getElementById('adminPassword').value.trim();
     document.getElementById('loginError').style.display = 'none';
+    sessionStorage.removeItem('stratelegyAdmin');
     fetch(APPS_SCRIPT_URL + '?action=loginAdmin&email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password))
       .then(function(r) { return r.json(); })
       .then(function(data) {
@@ -859,7 +979,9 @@
           sessionStorage.setItem('stratelegyAdmin', JSON.stringify(currentAdmin));
           document.getElementById('loginScreen').style.display = 'none';
           document.getElementById('appScreen').style.display = 'block';
+          document.getElementById('topbarUser').textContent = (data.admin.firstName||'') + ' ' + (data.admin.lastName||'');
           loadAllData();
+          loadHistoryPeriods();
         } else {
           document.getElementById('loginError').style.display = 'block';
         }
@@ -889,6 +1011,7 @@
         currentAdmin = JSON.parse(saved);
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('appScreen').style.display = 'block';
+        document.getElementById('topbarUser').textContent = (currentAdmin.firstName||'') + ' ' + (currentAdmin.lastName||'');
         loadAllData();
       } catch(e) {
         sessionStorage.removeItem('stratelegyAdmin');
@@ -1384,6 +1507,167 @@
   function closeModal(id) {
     document.getElementById(id).classList.remove('open');
   }
+
+  // ════════════════════════ REV.IO IMPORT ════════════════════════
+
+  var revioPreviewData = null;
+  var MONTHS = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function previewRevio() {
+    var month   = document.getElementById('revioMonth').value;
+    var year    = document.getElementById('revioYear').value;
+    var fileEl  = document.getElementById('revioFile');
+    var alertEl = document.getElementById('revioUploadAlert');
+    if (!month || !year) { alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--red-bg);color:var(--red);">Please select a period month and year.</div>'; return; }
+    if (!fileEl.files || !fileEl.files[0]) { alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--red-bg);color:var(--red);">Please select a CSV file.</div>'; return; }
+    alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--blue-bg);color:var(--blue);">Reading file...</div>';
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var csv = e.target.result;
+      var records = parseRevioCSV(csv);
+      if (!records.length) { alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--red-bg);color:var(--red);">No valid records found in file.</div>'; return; }
+      var customerTotals = {};
+      records.forEach(function(r) {
+        if (!r.customerId) return;
+        if (!customerTotals[r.customerId]) { customerTotals[r.customerId] = { customerId: r.customerId, customerName: r.customerName, totalCharges: 0 }; }
+        customerTotals[r.customerId].totalCharges += r.charges;
+      });
+      var matched = []; var unmatched = [];
+      Object.values(customerTotals).forEach(function(c) {
+        var matchedDeal = null;
+        allDeals.forEach(function(d) { if (String(d.customerId||'').trim() === c.customerId) matchedDeal = d; });
+        if (matchedDeal) {
+          var agentEmail = String(matchedDeal.agentEmail||'').trim().toLowerCase();
+          var commRate = 0;
+          allAgents.forEach(function(a) { if (String(a.email||'').toLowerCase() === agentEmail) commRate = parseFloat(a.commissionRate||0); });
+          matched.push({ customerId: c.customerId, customerName: c.customerName, totalCharges: c.totalCharges, agentEmail: agentEmail, commissionRate: commRate, commissionAmount: c.totalCharges * (commRate/100) });
+        } else {
+          unmatched.push({ customerId: c.customerId, customerName: c.customerName });
+        }
+      });
+      revioPreviewData = { matched: matched, unmatched: unmatched, month: month, year: year, records: records };
+      renderRevioPreview(matched, unmatched);
+      alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--success-bg);color:var(--success);">Found ' + records.length + ' line items — ' + matched.length + ' accounts matched, ' + unmatched.length + ' unmatched.</div>';
+    };
+    reader.readAsText(fileEl.files[0]);
+  }
+
+  function parseRevioCSV(csv) {
+    var lines = csv.split(/\r?\n/);
+    var headers = parseCSVLine(lines[0]);
+    var records = [];
+    for (var i = 1; i < lines.length; i++) {
+      if (!lines[i].trim()) continue;
+      var cols = parseCSVLine(lines[i]);
+      var record = {};
+      headers.forEach(function(h, idx) { record[h.trim().replace(/"/g,'')] = (cols[idx]||'').trim().replace(/"/g,''); });
+      if (record['Customer Id'] || record['Customer ID']) {
+        records.push({ customerName: record['Customer Name']||'', customerId: record['Customer Id']||record['Customer ID']||'', product: record['Product']||'', charges: parseFloat(record['Charges']||0) });
+      }
+    }
+    return records;
+  }
+
+  function parseCSVLine(line) {
+    var result = []; var current = ''; var inQuotes = false;
+    for (var i = 0; i < line.length; i++) {
+      var ch = line[i];
+      if (ch === '"') { inQuotes = !inQuotes; }
+      else if (ch === ',' && !inQuotes) { result.push(current); current = ''; }
+      else { current += ch; }
+    }
+    result.push(current);
+    return result;
+  }
+
+  function renderRevioPreview(matched, unmatched) {
+    var tbody = document.getElementById('revioPreviewTable');
+    if (!matched.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:36px;color:var(--gray-400);">No matching accounts found.</td></tr>';
+    } else {
+      tbody.innerHTML = matched.map(function(r) {
+        return '<tr><td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><strong>' + esc(r.customerName) + '</strong></td>' +
+          '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><code>' + esc(r.customerId) + '</code></td>' +
+          '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);">$' + parseFloat(r.totalCharges).toFixed(2) + '</td>' +
+          '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);">' + esc(r.agentEmail) + '</td>' +
+          '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);">' + r.commissionRate + '%</td>' +
+          '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><strong style="color:var(--success);">$' + parseFloat(r.commissionAmount).toFixed(2) + '</strong></td>' +
+          '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><span style="display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--success-bg);color:var(--success);">Matched</span></td></tr>';
+      }).join('');
+    }
+    var us = document.getElementById('revioUnmatchedSection');
+    if (unmatched.length) {
+      us.style.display = 'block';
+      document.getElementById('revioUnmatchedTable').innerHTML = unmatched.map(function(r) {
+        return '<tr><td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);">' + esc(r.customerName) + '</td><td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><code>' + esc(r.customerId) + '</code></td></tr>';
+      }).join('');
+    } else { us.style.display = 'none'; }
+    document.getElementById('revioPreviewSection').style.display = 'block';
+  }
+
+  function processRevio() {
+    if (!revioPreviewData) return;
+    var alertEl = document.getElementById('revioUploadAlert');
+    var btn = document.getElementById('processBtn');
+    btn.disabled = true; btn.textContent = 'Processing...';
+    alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--blue-bg);color:var(--blue);">Processing commissions — please wait...</div>';
+    var recordsToSend = revioPreviewData.records.map(function(r) { return { customerId: r.customerId, customerName: r.customerName, charges: r.charges }; });
+    fetch(APPS_SCRIPT_URL + '?action=processRevioUpload&periodMonth=' + encodeURIComponent(revioPreviewData.month) + '&periodYear=' + encodeURIComponent(revioPreviewData.year) + '&records=' + encodeURIComponent(JSON.stringify(recordsToSend)))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--success-bg);color:var(--success);">✅ Successfully processed ' + (data.processed||[]).length + ' commissions for ' + MONTHS[parseInt(revioPreviewData.month)] + ' ' + revioPreviewData.year + '!</div>';
+          document.getElementById('revioPreviewSection').style.display = 'none';
+          revioPreviewData = null; btn.disabled = false; btn.textContent = '✓ Process Commissions';
+          loadHistoryPeriods(); loadAllData();
+        } else {
+          alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--red-bg);color:var(--red);">' + (data.error||'Processing failed.') + '</div>';
+          btn.disabled = false; btn.textContent = '✓ Process Commissions';
+        }
+      }).catch(function() {
+        alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--red-bg);color:var(--red);">Connection error. Please try again.</div>';
+        btn.disabled = false; btn.textContent = '✓ Process Commissions';
+      });
+  }
+
+  function loadHistoryPeriods() {
+    fetch(APPS_SCRIPT_URL + '?action=getPaymentHistory')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var sel = document.getElementById('historyPeriod');
+        if (!sel) return;
+        while (sel.options.length > 1) sel.remove(1);
+        (data.periods||[]).forEach(function(p) {
+          var opt = document.createElement('option');
+          opt.value = p.month + '_' + p.year;
+          opt.textContent = MONTHS[parseInt(p.month)] + ' ' + p.year;
+          sel.appendChild(opt);
+        });
+      }).catch(function() {});
+  }
+
+  function loadHistory() {
+    var val = document.getElementById('historyPeriod').value;
+    if (!val) return;
+    var parts = val.split('_'); var month = parts[0]; var year = parts[1];
+    fetch(APPS_SCRIPT_URL + '?action=getPaymentHistory&periodMonth=' + month + '&periodYear=' + year)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var tbody = document.getElementById('historyTable');
+        var rows = data.history || [];
+        if (!rows.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:36px;color:var(--gray-400);">No records for this period.</td></tr>'; return; }
+        tbody.innerHTML = rows.map(function(r) {
+          var sc = r.status==='Processed'?'var(--success)':r.status==='Not Paid'?'var(--red)':r.status==='Override'?'var(--orange)':'var(--gray-500)';
+          var sb = r.status==='Processed'?'var(--success-bg)':r.status==='Not Paid'?'var(--red-bg)':r.status==='Override'?'#fde8d8':'var(--gray-100)';
+          return '<tr><td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><strong>' + esc(r.customerName||'') + '</strong></td>' +
+            '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);color:var(--gray-600);">' + esc(r.agentEmail||'—') + '</td>' +
+            '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);">' + (parseFloat(r.totalCharges||0)>0?'$'+parseFloat(r.totalCharges).toFixed(2):'—') + '</td>' +
+            '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><strong style="color:var(--success);">' + (parseFloat(r.commissionAmount||0)>0?'$'+parseFloat(r.commissionAmount).toFixed(2):'—') + '</strong></td>' +
+            '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><span style="display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;background:'+sb+';color:'+sc+';">' + esc(r.status||'') + '</span></td></tr>';
+        }).join('');
+      }).catch(function() {});
+  }
+
 
   function esc(str) {
     return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');

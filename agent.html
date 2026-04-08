@@ -286,6 +286,16 @@
           <div class="stat-card green"><div class="stat-label">Last Month MRC</div><div class="stat-value" id="statLastMRC">—</div><div class="stat-sub">Commission paid</div></div>
           <div class="stat-card purple"><div class="stat-label">Projected Payout</div><div class="stat-value" id="statProjected">—</div><div class="stat-sub">This month est.</div></div>
         </div>
+        <!-- PAYMENT NOTIFICATIONS -->
+        <div id="notificationsSection" style="display:none;margin-bottom:22px;">
+          <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;">
+            <div style="padding:16px 20px;border-bottom:1px solid var(--gray-100);">
+              <h3 style="font-size:14px;font-weight:700;color:var(--navy);">🔔 Commission Notifications</h3>
+            </div>
+            <div id="notificationsList" style="padding:8px 0;"></div>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-header"><h3>Recent Deals</h3></div>
           <table class="data-table"><thead><tr><th>Company</th><th>Contact</th><th>Product</th><th>Est. MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="dashDealsTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
@@ -424,7 +434,7 @@
           <div class="card">
             <div class="card-header"><h3>📞 Stratelegy Contacts</h3></div>
             <div style="padding:16px 20px;">
-              <div style="margin-bottom:16px;"><div style="font-weight:700;color:var(--navy);font-size:14px;">James Stendeback</div><div style="font-size:13px;color:var(--gray-500);">COO — Partner Relations</div><div style="font-size:13px;color:var(--gray-600);margin-top:4px;">📞 888.975.6130</div><div style="font-size:13px;color:var(--gray-600);">✉️ info@stratelegy.com</div></div>
+              <div style="margin-bottom:16px;"><div style="font-weight:700;color:var(--navy);font-size:14px;">James Stendeback</div><div style="font-size:13px;color:var(--gray-500);">COO — Partner Relations</div><div style="font-size:13px;color:var(--gray-600);margin-top:4px;">📞 888.975.6130</div><div style="font-size:13px;color:var(--gray-600);">✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c7aea9a1a887b4b3b5a6b3a2aba2a0bee9a4a8aa">[email&#160;protected]</a></div></div>
               <div style="padding-top:14px;border-top:1px solid var(--gray-100);"><div style="font-size:13px;color:var(--gray-600);">🌐 stratelegy.com</div><div style="font-size:13px;color:var(--gray-600);">🛠 support.stratelegy.com</div></div>
             </div>
           </div>
@@ -460,7 +470,7 @@
   </div><!-- /main-layout -->
 </div><!-- /appScreen -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7twQrTsg1PCtVWSjRGy3HBzJ44EqHD24KmD8WXnb01Ed3lwlPslbQoW5DzaFVWBM/exec';
 var currentAgent = null;
 
@@ -562,6 +572,7 @@ function launchApp() {
   loadDashboard();
   loadDeals();
   loadCommissions();
+  loadNotifications();
 }
 
 function doLogout() {
@@ -770,6 +781,36 @@ function resetDealForm() {
   calcDeal();
 }
 
+// NOTIFICATIONS
+function loadNotifications() {
+  fetch(APPS_SCRIPT_URL + '?action=getAgentNotifications&agentEmail=' + encodeURIComponent(currentAgent.email) + '&agentId=' + encodeURIComponent(currentAgent.agentId))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var notifications = data.notifications || [];
+      if (!notifications.length) return;
+      var section = document.getElementById('notificationsSection');
+      var list    = document.getElementById('notificationsList');
+      var MONTHS  = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+      list.innerHTML = notifications.map(function(n) {
+        var paid    = n.status === 'Processed';
+        var icon    = paid ? '✅' : '⏳';
+        var color   = paid ? 'var(--success)' : 'var(--warning)';
+        var bg      = paid ? 'var(--success-bg)' : 'var(--warning-bg)';
+        var label   = paid ? 'Payment received — Commission $' + parseFloat(n.commissionAmount||0).toFixed(2) + ' processed' : 'Payment not yet received';
+        var period  = MONTHS[parseInt(n.periodMonth)] + ' ' + n.periodYear;
+        return '<div style="display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--gray-100);">' +
+          '<span style="font-size:18px;">' + icon + '</span>' +
+          '<div style="flex:1;">' +
+            '<div style="font-weight:600;font-size:13.5px;color:var(--gray-800);">' + esc(n.customerName||'') + '</div>' +
+            '<div style="font-size:12px;color:var(--gray-500);margin-top:2px;">' + period + '</div>' +
+          '</div>' +
+          '<span style="display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;background:' + bg + ';color:' + color + ';">' + label + '</span>' +
+        '</div>';
+      }).join('');
+      section.style.display = 'block';
+    }).catch(function() {});
+}
+
 // CHANGE PASSWORD
 function doChangePassword() {
   var current = document.getElementById('pwCurrent').value.trim();
@@ -803,9 +844,4 @@ function doChangePassword() {
 // HELPERS
 function statusBadge(status) {
   var map={'Submitted':'badge-blue','In Review':'badge-amber','Approved':'badge-green','Active Customer':'badge-purple'};
-  return '<span class="badge '+(map[status]||'badge-gray')+'">'+esc(status||'—')+'</span>';
-}
-function esc(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-</script>
-</body>
-</html>
+ 

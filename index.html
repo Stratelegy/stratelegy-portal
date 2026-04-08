@@ -280,6 +280,22 @@
             <div class="stat-card green"><div class="stat-label">Override Payout Est.</div><div class="stat-value" id="statOverridePayout">—</div><div class="stat-sub">2% of team MRR</div></div>
           </div>
         </div>
+        <!-- PAYMENT NOTIFICATIONS -->
+        <div id="notificationsSection" style="display:none;margin-bottom:22px;">
+          <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;">
+            <div style="padding:16px 20px;border-bottom:1px solid var(--gray-100);">
+              <h3 style="font-size:14px;font-weight:700;color:var(--navy);">🔔 Commission Notifications</h3>
+            </div>
+            <div id="notificationsList" style="padding:8px 0;"></div>
+            <div id="teamNotificationsSection" style="display:none;">
+              <div style="padding:12px 20px;background:var(--gray-50);border-top:1px solid var(--gray-100);border-bottom:1px solid var(--gray-100);">
+                <span style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;">Your Agents' Accounts</span>
+              </div>
+              <div id="teamNotificationsList" style="padding:8px 0;"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-header"><h3>Recent Deals</h3></div>
           <table class="data-table"><thead><tr><th>Company</th><th>Contact</th><th>Product</th><th>Est. MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="dashDealsTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
@@ -567,7 +583,7 @@ function launchApp() {
     document.getElementById('overrideCommCard').style.display = 'block';
   }
   document.getElementById('calcRate').textContent = (currentAgent.commissionRate || 0) + '%';
-  loadDashboard(); loadDeals(); loadCommissions();
+  loadDashboard(); loadDeals(); loadCommissions(); loadNotifications();
   if (currentAgent.agentType === 'Partner') { loadMyAgents(); }
 }
 
@@ -762,6 +778,50 @@ function doAddAgent() {
       if(data.success){closeModal('addAgentModal');loadMyAgents();}
       else{alertEl.innerHTML='<div class="alert alert-error">'+(data.error||'Failed to add agent.')+'</div>';}
     }).catch(function(){alertEl.innerHTML='<div class="alert alert-error">Connection error. Please try again.</div>';});
+}
+
+// NOTIFICATIONS
+function loadNotifications() {
+  var action = currentAgent.agentType === 'Partner' ? 'getPartnerNotifications' : 'getAgentNotifications';
+  fetch(APPS_SCRIPT_URL + '?action=' + action + '&agentEmail=' + encodeURIComponent(currentAgent.email) + '&agentId=' + encodeURIComponent(currentAgent.agentId))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var MONTHS = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+      function renderNotifs(notifs, listId) {
+        var list = document.getElementById(listId);
+        if (!list) return;
+        list.innerHTML = notifs.map(function(n) {
+          var paid   = n.status === 'Processed';
+          var icon   = paid ? '✅' : '⏳';
+          var color  = paid ? 'var(--success)' : 'var(--warning)';
+          var bg     = paid ? 'var(--success-bg)' : 'var(--warning-bg)';
+          var label  = paid ? 'Payment received — Commission $' + parseFloat(n.commissionAmount||0).toFixed(2) + ' processed' : 'Payment not yet received';
+          var period = MONTHS[parseInt(n.periodMonth)] + ' ' + n.periodYear;
+          var agentLabel = n.agentName ? '<span style="font-size:11px;color:var(--gray-400);margin-left:6px;">(' + esc(n.agentName) + ')</span>' : '';
+          return '<div style="display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--gray-100);">' +
+            '<span style="font-size:18px;">' + icon + '</span>' +
+            '<div style="flex:1;">' +
+              '<div style="font-weight:600;font-size:13.5px;color:var(--gray-800);">' + esc(n.customerName||'') + agentLabel + '</div>' +
+              '<div style="font-size:12px;color:var(--gray-500);margin-top:2px;">' + period + '</div>' +
+            '</div>' +
+            '<span style="display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;background:' + bg + ';color:' + color + ';">' + label + '</span>' +
+          '</div>';
+        }).join('');
+      }
+
+      var ownNotifs  = data.notifications || data.ownNotifications || [];
+      var teamNotifs = data.teamNotifications || [];
+      var section    = document.getElementById('notificationsSection');
+
+      if (ownNotifs.length || teamNotifs.length) {
+        renderNotifs(ownNotifs, 'notificationsList');
+        if (teamNotifs.length) {
+          renderNotifs(teamNotifs, 'teamNotificationsList');
+          document.getElementById('teamNotificationsSection').style.display = 'block';
+        }
+        section.style.display = 'block';
+      }
+    }).catch(function() {});
 }
 
 // CHANGE PASSWORD
