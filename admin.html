@@ -971,7 +971,7 @@
     var password = document.getElementById('adminPassword').value.trim();
     document.getElementById('loginError').style.display = 'none';
     sessionStorage.removeItem('stratelegyAdmin');
-    fetch(APPS_SCRIPT_URL + '?action=loginAdmin&email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password))
+    fetch(APPS_SCRIPT_URL + '?action=loginAdmin&email=' + encodeURIComponent(email) + '&password=' + btoa(unescape(encodeURIComponent(password))))
       .then(function(r) { return r.json(); })
       .then(function(data) {
         if (data.success) {
@@ -1038,7 +1038,7 @@
     if (newPw !== confirm) { alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">New passwords do not match.</div>'; return; }
     if (newPw.length < 6) { alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">Password must be at least 6 characters.</div>'; return; }
     alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--blue-bg);color:var(--blue);">Updating password...</div>';
-    fetch(APPS_SCRIPT_URL+'?action=changeAdminPassword&email='+encodeURIComponent(currentAdmin.email)+'&currentPassword='+encodeURIComponent(current)+'&newPassword='+encodeURIComponent(newPw))
+    fetch(APPS_SCRIPT_URL+'?action=changeAdminPassword&email='+encodeURIComponent(currentAdmin.email)+'&currentPassword='+btoa(unescape(encodeURIComponent(current)))+'&newPassword='+btoa(unescape(encodeURIComponent(newPw))))
       .then(function(r){return r.json();})
       .then(function(data){
         if(data.success){

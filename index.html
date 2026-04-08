@@ -546,7 +546,7 @@ function doLogin() {
     currentAgent = { agentId: 'DEMO001', firstName: 'Demo', lastName: 'Agent', email: DEMO_EMAIL, company: 'Demo Company', commissionRate: 8, agentType: 'Partner', assignedPartnerAgentId: '' };
     launchApp(); return;
   }
-  fetch(APPS_SCRIPT_URL + '?action=loginAgent&email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password))
+  fetch(APPS_SCRIPT_URL + '?action=loginAgent&email=' + encodeURIComponent(email) + '&password=' + btoa(unescape(encodeURIComponent(password))))
     .then(function(r) { return r.json(); })
     .then(function(data) { if (data.success) { currentAgent = data.agent; launchApp(); } else { document.getElementById('loginError').style.display = 'block'; } })
     .catch(function() { document.getElementById('loginError').style.display = 'block'; });
@@ -834,7 +834,7 @@ function doChangePassword() {
   if (newPw !== confirm) { alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">New passwords do not match.</div>'; return; }
   if (newPw.length < 6) { alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">Password must be at least 6 characters.</div>'; return; }
   alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--blue-bg);color:var(--blue);">Updating password...</div>';
-  fetch(APPS_SCRIPT_URL+'?action=changePassword&email='+encodeURIComponent(currentAgent.email)+'&currentPassword='+encodeURIComponent(current)+'&newPassword='+encodeURIComponent(newPw))
+  fetch(APPS_SCRIPT_URL+'?action=changePassword&email='+encodeURIComponent(currentAgent.email)+'&currentPassword='+btoa(unescape(encodeURIComponent(current)))+'&newPassword='+btoa(unescape(encodeURIComponent(newPw))))
     .then(function(r){return r.json();})
     .then(function(data){
       if(data.success){
