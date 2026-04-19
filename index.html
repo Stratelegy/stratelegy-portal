@@ -315,20 +315,24 @@
         <div class="page-header"><h2>My Deals</h2><p>Track all your submitted deals and their current status</p></div>
         <div class="card">
           <div class="card-header"><h3>All Deals</h3></div>
-          <table class="data-table"><thead><tr><th>Customer Name</th><th>Contact</th><th>Product</th><th>Users</th><th>Est. MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="dealsTable"><tr><td colspan="7" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
+          <table class="data-table"><thead><tr><th>Customer Name</th><th>Contact</th><th>Products &amp; Commissionable MRR</th><th>Total MRR</th><th>Status</th><th>Date</th></tr></thead><tbody id="dealsTable"><tr><td colspan="7" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody></table>
         </div>
       </div>
 
       <!-- SUBMIT DEAL -->
       <div id="page-submit" class="page">
         <div class="page-header"><h2>Submit a Deal</h2><p>Fill in customer details and product selection</p></div>
+
+        <!-- Commission Calculator Banner -->
         <div class="calc-banner">
-          <div class="calc-item"><div class="c-label">Est. Monthly MRR</div><div class="c-value" id="calcMRR">$0.00</div></div>
+          <div class="calc-item"><div class="c-label">Total Commissionable MRR</div><div class="c-value" id="calcMRR">$0.00</div></div>
           <div class="calc-divider">×</div>
           <div class="calc-item"><div class="c-label">Your Rate</div><div class="c-value" id="calcRate">0%</div></div>
           <div class="calc-divider">=</div>
           <div class="calc-item"><div class="c-label">Your Commission</div><div class="c-value orange" id="calcComm">$0.00</div></div>
         </div>
+
+        <!-- Section 1: Customer Info -->
         <div class="form-section">
           <h3>Section 1 — Customer Information</h3>
           <div class="field-row">
@@ -349,36 +353,234 @@
             <div class="field"><label>State</label><input type="text" id="dealState"></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>Decision Timeline</label><select id="dealTimeline"><option value="">Select...</option><option>Immediately</option><option>30 days</option><option>60 days</option><option>90 days</option><option>6 months</option></select></div>
-            <div class="field"><label>Notes</label><input type="text" id="dealNotes"></div>
+            <div class="field"><label>Total Users</label><input type="number" id="dealUsers" min="0"></div>
+            <div class="field"><label>Decision Timeline</label>
+              <select id="dealTimeline"><option value="">Select...</option><option>Immediately</option><option>30 days</option><option>60 days</option><option>90 days</option><option>6 months</option></select>
+            </div>
+          </div>
+          <div class="field"><label>Notes</label><input type="text" id="dealNotes"></div>
+        </div>
+
+        <!-- Section 2: Hosted Phone & UCaaS -->
+        <div class="form-section">
+          <h3>Section 2 — Hosted Phone &amp; UCaaS</h3>
+          <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden;margin-bottom:8px;">
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;background:var(--gray-50);padding:8px 14px;font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--gray-100);">
+              <div>Plan</div><div>Price/Seat</div><div>Phone</div><div>Qty</div><div>Comm. MRR</div>
+            </div>
+
+            <!-- Basic Hosted -->
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--gray-100);">
+              <div>
+                <div style="font-size:13.5px;font-weight:700;color:var(--navy);">Basic Hosted</div>
+                <div style="font-size:11px;color:var(--gray-400);margin-top:2px;">Includes Yealink T34</div>
+              </div>
+              <div>
+                <select id="basicPrice" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="19.95">$19.95</option>
+                  <option value="24.95">$24.95</option>
+                </select>
+              </div>
+              <div>
+                <select id="basicPhone" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="T34">T34 (incl.)</option>
+                  <option value="T73">T73 (+$1.00)</option>
+                  <option value="T85">T85 (+$2.00)</option>
+                </select>
+              </div>
+              <div>
+                <input type="number" id="basicQty" min="0" value="0" oninput="calcDeal()" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--navy);" id="basicMRRDisplay">$0.00</div>
+            </div>
+
+            <!-- Premium UCaaS -->
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--gray-100);">
+              <div>
+                <div style="font-size:13.5px;font-weight:700;color:var(--navy);">Premium UCaaS</div>
+                <div style="font-size:11px;color:var(--gray-400);margin-top:2px;">Includes Yealink T73</div>
+              </div>
+              <div>
+                <select id="premiumPrice" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="29.95">$29.95</option>
+                  <option value="34.95">$34.95</option>
+                </select>
+              </div>
+              <div>
+                <select id="premiumPhone" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="T73">T73 (incl.)</option>
+                  <option value="T85">T85 (+$2.00)</option>
+                </select>
+              </div>
+              <div>
+                <input type="number" id="premiumQty" min="0" value="0" oninput="calcDeal()" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--navy);" id="premiumMRRDisplay">$0.00</div>
+            </div>
+
+            <!-- Executive UCaaS -->
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 14px;">
+              <div>
+                <div style="font-size:13.5px;font-weight:700;color:var(--navy);">Executive UCaaS</div>
+                <div style="font-size:11px;color:var(--gray-400);margin-top:2px;">Includes Yealink T85</div>
+              </div>
+              <div>
+                <select id="execPrice" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="39.95">$39.95</option>
+                  <option value="44.95">$44.95</option>
+                </select>
+              </div>
+              <div style="font-size:12px;color:var(--gray-400);">T85 (incl.)</div>
+              <div>
+                <input type="number" id="execQty" min="0" value="0" oninput="calcDeal()" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--navy);" id="execMRRDisplay">$0.00</div>
+            </div>
           </div>
         </div>
+
+        <!-- Section 3: CCaaS & OmniChannel -->
         <div class="form-section">
-          <h3>Section 2 — Products &amp; Quantities</h3>
-          <p style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px;">UCaaS — Hosted Cloud Phone</p>
-          <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden;margin-bottom:18px;">
-            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:0;background:var(--gray-50);padding:8px 14px;font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;"><div>Plan</div><div>Price</div><div>Hardware</div><div>Qty</div></div>
-            <div class="ucaas-row" style="padding:10px 14px;"><div><div class="ucaas-plan-name">Basic</div></div><div class="ucaas-plan-price">$19.95/mo</div><div class="ucaas-plan-hw">Yealink T34</div><div><input type="number" id="ucaasBasic" min="0" value="0" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;" oninput="calcDeal()"></div></div>
-            <div class="ucaas-row" style="padding:10px 14px;"><div><div class="ucaas-plan-name">Premium</div></div><div class="ucaas-plan-price">$24.95/mo</div><div class="ucaas-plan-hw">Yealink T73</div><div><input type="number" id="ucaasPremium" min="0" value="0" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;" oninput="calcDeal()"></div></div>
-            <div class="ucaas-row" style="padding:10px 14px;"><div><div class="ucaas-plan-name">Executive</div></div><div class="ucaas-plan-price">$29.95/mo</div><div class="ucaas-plan-hw">Yealink T85 + Toll Free</div><div><input type="number" id="ucaasExec" min="0" value="0" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;" oninput="calcDeal()"></div></div>
+          <h3>Section 3 — CCaaS &amp; OmniChannel</h3>
+          <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden;margin-bottom:8px;">
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;background:var(--gray-50);padding:8px 14px;font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--gray-100);">
+              <div>Plan</div><div>Price/Seat</div><div>Phone</div><div>Qty</div><div>Comm. MRR</div>
+            </div>
+
+            <!-- OmniResponse -->
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--gray-100);">
+              <div>
+                <div style="font-size:13.5px;font-weight:700;color:var(--navy);">OmniResponse</div>
+                <div style="font-size:11px;color:var(--gray-400);margin-top:2px;">Digital — No phone</div>
+              </div>
+              <div>
+                <select id="omniRespPrice" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="89.95">$89.95</option>
+                  <option value="119.95">$119.95</option>
+                </select>
+              </div>
+              <div style="font-size:12px;color:var(--gray-400);">No phone</div>
+              <div>
+                <input type="number" id="omniRespQty" min="0" value="0" oninput="calcDeal()" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--navy);" id="omniRespMRRDisplay">$0.00</div>
+            </div>
+
+            <!-- OmniChannel -->
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--gray-100);">
+              <div>
+                <div style="font-size:13.5px;font-weight:700;color:var(--navy);">OmniChannel</div>
+                <div style="font-size:11px;color:var(--gray-400);margin-top:2px;">Voice + Digital</div>
+              </div>
+              <div>
+                <select id="omniChanPrice" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="134.95">$134.95</option>
+                  <option value="164.95">$164.95</option>
+                </select>
+              </div>
+              <div>
+                <select id="omniChanPhone" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="T85">T85 (incl.)</option>
+                  <option value="Softphone">Softphone (-$5.00)</option>
+                </select>
+              </div>
+              <div>
+                <input type="number" id="omniChanQty" min="0" value="0" oninput="calcDeal()" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--navy);" id="omniChanMRRDisplay">$0.00</div>
+            </div>
+
+            <!-- OmniEnterprise -->
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 14px;">
+              <div>
+                <div style="font-size:13.5px;font-weight:700;color:var(--navy);">OmniEnterprise</div>
+                <div style="font-size:11px;color:var(--gray-400);margin-top:2px;">Full CX</div>
+              </div>
+              <div>
+                <select id="omniEntPrice" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="179.95">$179.95</option>
+                  <option value="209.95">$209.95</option>
+                </select>
+              </div>
+              <div>
+                <select id="omniEntPhone" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="T85">T85 (incl.)</option>
+                  <option value="Softphone">Softphone (-$5.00)</option>
+                </select>
+              </div>
+              <div>
+                <input type="number" id="omniEntQty" min="0" value="0" oninput="calcDeal()" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--navy);" id="omniEntMRRDisplay">$0.00</div>
+            </div>
           </div>
-          <div class="field-row">
-            <div class="field"><label>CCaaS — Contact Center (seats)</label><input type="number" id="ccaasQty" min="0" value="0" oninput="calcDeal()"></div>
-            <div class="field"><label>Total Users (all plans combined)</label><input type="number" id="dealUsers" min="0"></div>
+        </div>
+
+        <!-- Section 4: LTE POTS -->
+        <div class="form-section">
+          <h3>Section 4 — LTE POTS Replacement</h3>
+          <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden;margin-bottom:8px;">
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;background:var(--gray-50);padding:8px 14px;font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--gray-100);">
+              <div>Type</div><div>Price/Line</div><div>Lines</div><div>MRR</div>
+            </div>
+
+            <!-- Fire Panel -->
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--gray-100);">
+              <div>
+                <div style="font-size:13.5px;font-weight:700;color:var(--navy);">🔥 Fire Panel Lines</div>
+                <div style="font-size:11px;color:var(--gray-400);margin-top:2px;">Always 2 lines (primary + backup)</div>
+              </div>
+              <div>
+                <select id="firePanelPrice" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="29.95">$29.95</option>
+                  <option value="39.95">$39.95</option>
+                  <option value="48.95">$48.95</option>
+                </select>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <input type="number" id="firePanelLines" min="0" value="0" step="2" oninput="validateFirePanel();calcDeal();" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--navy);" id="firePanelMRRDisplay">$0.00</div>
+            </div>
+            <div id="firePanelError" style="display:none;padding:6px 14px;color:var(--red);font-size:12px;font-weight:600;background:var(--red-bg);">⚠️ Fire Panel requires an even number of lines</div>
+
+            <!-- Elevator -->
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--gray-100);">
+              <div>
+                <div style="font-size:13.5px;font-weight:700;color:var(--navy);">🛗 Elevator Lines</div>
+              </div>
+              <div>
+                <select id="elevatorPrice" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="29.95">$29.95</option>
+                  <option value="39.95">$39.95</option>
+                  <option value="48.95">$48.95</option>
+                </select>
+              </div>
+              <div>
+                <input type="number" id="elevatorLines" min="0" value="0" oninput="calcDeal()" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--navy);" id="elevatorMRRDisplay">$0.00</div>
+            </div>
+
+            <!-- Emergency Call Box -->
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 14px;">
+              <div>
+                <div style="font-size:13.5px;font-weight:700;color:var(--navy);">🆘 Emergency Call Box</div>
+              </div>
+              <div>
+                <select id="callBoxPrice" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="29.95">$29.95</option>
+                  <option value="39.95">$39.95</option>
+                  <option value="48.95">$48.95</option>
+                </select>
+              </div>
+              <div>
+                <input type="number" id="callBoxLines" min="0" value="0" oninput="calcDeal()" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--navy);" id="callBoxMRRDisplay">$0.00</div>
+            </div>
           </div>
-          <p style="font-size:13px;font-weight:700;color:var(--navy);margin:14px 0 10px;">POTS Replacement Lines</p>
-          <div class="pots-grid" style="margin-bottom:16px;">
-            <div class="field"><label>🔥 Fire Panel Alarm (enter even #)</label><input type="number" id="potsFirePanel" min="0" value="0" oninput="validateFirePanel()"></div>
-            <div class="field"><label>🛗 Elevator Voice Line</label><input type="number" id="potsElevator" min="0" value="0"></div>
-            <div class="field"><label>🔒 Security Alarm Line</label><input type="number" id="potsSecurity" min="0" value="0"></div>
-            <div class="field"><label>📠 Fax Line</label><input type="number" id="potsFax" min="0" value="0"></div>
-            <div class="field"><label>💳 ATM / Point of Sale</label><input type="number" id="potsAtm" min="0" value="0"></div>
-          </div>
-          <div id="firePanelError" style="display:none;color:var(--red);font-size:12px;font-weight:600;margin-bottom:10px;">⚠️ Fire Panel requires an even number of lines (primary + secondary)</div>
-          <div class="field-row">
-            <div class="field"><label>Virtual Fax Lines</label><input type="number" id="virtualFax" min="0" value="0"></div>
-            <div class="field"><label>Web Conferencing Users</label><input type="number" id="confUsers" min="0" value="0"></div>
-          </div>
+
           <div id="dealAlert"></div>
           <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px;">
             <button class="btn btn-ghost" onclick="resetDealForm()">Clear Form</button>
@@ -387,7 +589,7 @@
         </div>
       </div>
 
-      <!-- MY COMMISSIONS -->
+
       <div id="page-commissions" class="page">
         <div class="page-header"><h2>My Commissions</h2><p>Direct earnings and override commissions</p></div>
         <div class="stat-grid-3">
@@ -663,13 +865,13 @@ function loadMyAgents() {
 function renderDashDeals(deals) {
   var tbody = document.getElementById('dashDealsTable');
   if (!deals.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">No deals yet. Submit your first deal!</td></tr>'; return; }
-  tbody.innerHTML = deals.slice(0,8).map(function(d) { return '<tr><td><strong>' + esc(d.customerName||d.companyName||'') + '</strong></td><td>' + esc((d.firstName||'')+' '+(d.lastName||'')) + '</td><td>' + esc(d.product||'') + '</td><td>' + (d.ucaasEstMrr ? '$'+parseFloat(d.ucaasEstMrr).toFixed(2) : '—') + '</td><td>' + statusBadge(d.status) + '</td><td>' + esc((d.timestamp||'').substring(0,10)) + '</td></tr>'; }).join('');
+  tbody.innerHTML = deals.slice(0,8).map(function(d) { return '<tr><td><strong>' + esc(d.customerName||d.companyName||'') + '</strong></td><td>' + esc((d.firstName||'')+' '+(d.lastName||'')) + '</td><td>' + esc(d.product||'') + '</td><td>' + (parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0)>0 ? '$'+parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0).toFixed(2) : '—') + '</td><td>' + statusBadge(d.status) + '</td><td>' + esc((d.timestamp||'').substring(0,10)) + '</td></tr>'; }).join('');
 }
 function renderDashAccounts(deals) {
   var tbody = document.getElementById('dashAccountsTable');
   var active = deals.filter(function(d) { return d.status === 'Active Customer'; });
   if (!active.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty">No active accounts yet.</td></tr>'; return; }
-  tbody.innerHTML = active.map(function(d) { return '<tr><td><strong>' + esc(d.customerName||d.companyName||'') + '</strong></td><td>' + esc((d.firstName||'')+' '+(d.lastName||'')) + '</td><td>' + esc(d.product||'') + '</td><td>' + (d.ucaasEstMrr ? '$'+parseFloat(d.ucaasEstMrr).toFixed(2) : '—') + '</td><td>' + esc((d.timestamp||'').substring(0,10)) + '</td></tr>'; }).join('');
+  tbody.innerHTML = active.map(function(d) { return '<tr><td><strong>' + esc(d.customerName||d.companyName||'') + '</strong></td><td>' + esc((d.firstName||'')+' '+(d.lastName||'')) + '</td><td>' + esc(d.product||'') + '</td><td>' + (parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0)>0 ? '$'+parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0).toFixed(2) : '—') + '</td><td>' + esc((d.timestamp||'').substring(0,10)) + '</td></tr>'; }).join('');
 }
 function renderDashComm(direct, overrides) {
   var tbody = document.getElementById('dashCommTable');
@@ -682,8 +884,86 @@ function renderDashComm(direct, overrides) {
 }
 function renderDealsTable(deals) {
   var tbody = document.getElementById('dealsTable');
-  if (!deals.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">No deals submitted yet.</td></tr>'; return; }
-  tbody.innerHTML = deals.map(function(d) { return '<tr><td><strong>' + esc(d.customerName||d.companyName||'') + '</strong></td><td>' + esc((d.firstName||'')+' '+(d.lastName||'')) + '</td><td>' + esc(d.product||'') + '</td><td>' + esc(d.users||'') + '</td><td>' + (d.ucaasEstMrr ? '$'+parseFloat(d.ucaasEstMrr).toFixed(2) : '—') + '</td><td>' + statusBadge(d.status) + '</td><td>' + esc((d.timestamp||'').substring(0,10)) + '</td></tr>'; }).join('');
+  if (!deals.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">No deals submitted yet.</td></tr>'; return; }
+  tbody.innerHTML = deals.map(function(d) {
+    var breakdown = buildMRRBreakdown(d);
+    var totalMRR  = parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0);
+    return '<tr>' +
+      '<td><strong>'+esc(d.customerName||d.companyName||'')+'</strong><br><span style="font-size:11px;color:var(--gray-400);">'+esc((d.firstName||'')+' '+(d.lastName||''))+'</span></td>' +
+      '<td style="font-size:12px;">'+breakdown+'</td>' +
+      '<td><strong style="color:var(--navy);">'+(totalMRR>0?'$'+totalMRR.toFixed(2):'—')+'</strong></td>' +
+      '<td>'+statusBadge(d.status)+'</td>' +
+      '<td>'+esc((d.timestamp||'').substring(0,10))+'</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function buildMRRBreakdown(d) {
+  var T34_DED=2.84; var T73_DED=3.85; var T85_DED=5.72;
+  var lines = [];
+  // Basic Hosted
+  var bQty = parseInt(d.basicHostedQty||0);
+  if(bQty>0) {
+    var bPrice=parseFloat(d.basicHostedPrice||19.95); var bPhone=d.basicHostedPhone||'T34';
+    var bActual=bPhone==='T73'?bPrice+1:bPhone==='T85'?bPrice+2:bPrice;
+    var bDeduct=bPhone==='T85'?T85_DED:bPhone==='T73'?T73_DED:T34_DED;
+    var bMRR=(bActual-bDeduct)*bQty;
+    lines.push('Basic Hosted x'+bQty+' ('+bPhone+'): <strong>$'+bMRR.toFixed(2)+'</strong>');
+  }
+  // Premium UCaaS
+  var pQty = parseInt(d.premiumUcaasQty||0);
+  if(pQty>0) {
+    var pPrice=parseFloat(d.premiumUcaasPrice||29.95); var pPhone=d.premiumUcaasPhone||'T73';
+    var pActual=pPhone==='T85'?pPrice+2:pPrice;
+    var pDeduct=pPhone==='T85'?T85_DED:T73_DED;
+    var pMRR=(pActual-pDeduct)*pQty;
+    lines.push('Premium UCaaS x'+pQty+' ('+pPhone+'): <strong>$'+pMRR.toFixed(2)+'</strong>');
+  }
+  // Executive UCaaS
+  var eQty = parseInt(d.executiveUcaasQty||0);
+  if(eQty>0) {
+    var ePrice=parseFloat(d.executiveUcaasPrice||39.95);
+    var eMRR=(ePrice-T85_DED)*eQty;
+    lines.push('Executive UCaaS x'+eQty+': <strong>$'+eMRR.toFixed(2)+'</strong>');
+  }
+  // OmniResponse
+  var orQty = parseInt(d.omniResponseQty||d.omniresponseQty||0);
+  if(orQty>0) {
+    var orPrice=parseFloat(d.omniResponsePrice||d.omniresponsePrice||89.95);
+    lines.push('OmniResponse x'+orQty+': <strong>$'+(orPrice*orQty).toFixed(2)+'</strong>');
+  }
+  // OmniChannel
+  var ocQty = parseInt(d.omniChannelQty||d.omnichannelQty||0);
+  if(ocQty>0) {
+    var ocPrice=parseFloat(d.omniChannelPrice||d.omnichannelPrice||134.95);
+    var ocPhone=d.omniChannelPhone||d.omnichannelPhone||'T85';
+    var ocActual=ocPhone==='Softphone'?ocPrice-5:ocPrice;
+    var ocDeduct=ocPhone==='Softphone'?0:T85_DED;
+    var ocMRR=(ocActual-ocDeduct)*ocQty;
+    lines.push('OmniChannel x'+ocQty+' ('+ocPhone+'): <strong>$'+ocMRR.toFixed(2)+'</strong>');
+  }
+  // OmniEnterprise
+  var oeQty = parseInt(d.omniEnterpriseQty||d.omnienterpriseQty||0);
+  if(oeQty>0) {
+    var oePrice=parseFloat(d.omniEnterprisePrice||d.omnienterprisePrice||179.95);
+    var oePhone=d.omniEnterprisePhone||d.omnienterprisePhone||'T85';
+    var oeActual=oePhone==='Softphone'?oePrice-5:oePrice;
+    var oeDeduct=oePhone==='Softphone'?0:T85_DED;
+    var oeMRR=(oeActual-oeDeduct)*oeQty;
+    lines.push('OmniEnterprise x'+oeQty+' ('+oePhone+'): <strong>$'+oeMRR.toFixed(2)+'</strong>');
+  }
+  // POTS
+  var fpLines=parseInt(d.firePanelLines||0);
+  if(fpLines>0) { var fpPrice=parseFloat(d.firePanelPrice||29.95); lines.push('Fire Panel x'+fpLines+': <strong>$'+(fpLines*fpPrice).toFixed(2)+'</strong>'); }
+  var elLines=parseInt(d.elevatorLines||0);
+  if(elLines>0) { var elPrice=parseFloat(d.elevatorPrice||29.95); lines.push('Elevator x'+elLines+': <strong>$'+(elLines*elPrice).toFixed(2)+'</strong>'); }
+  var cbLines=parseInt(d.callBoxLines||d.emergencyCallBoxLines||0);
+  if(cbLines>0) { var cbPrice=parseFloat(d.callBoxPrice||d.emergencyCallBoxPrice||29.95); lines.push('Emergency Call Box x'+cbLines+': <strong>$'+(cbLines*cbPrice).toFixed(2)+'</strong>'); }
+
+  if(!lines.length && d.product) {
+    return '<span style="color:var(--gray-500);">'+esc(d.product)+'</span>';
+  }
+  return lines.length ? lines.join('<br>') : '—';
 }
 function renderDirectComm(comms) {
   var tbody = document.getElementById('directCommTable');
@@ -707,56 +987,189 @@ function renderMyAgentsTable(agents) {
 function renderMyAgentsDeals(deals) {
   var tbody = document.getElementById('myAgentsDealsTable');
   if (!deals.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">No deals from your agents yet.</td></tr>'; return; }
-  tbody.innerHTML = deals.map(function(d) { return '<tr><td><strong>' + esc(d.customerName||d.companyName||'') + '</strong></td><td>' + esc(d.agentEmail||'') + '</td><td>' + esc(d.product||'') + '</td><td>' + (d.ucaasEstMrr ? '$'+parseFloat(d.ucaasEstMrr).toFixed(2) : '—') + '</td><td>' + statusBadge(d.status) + '</td><td>' + esc((d.timestamp||'').substring(0,10)) + '</td></tr>'; }).join('');
+  tbody.innerHTML = deals.map(function(d) { return '<tr><td><strong>' + esc(d.customerName||d.companyName||'') + '</strong></td><td>' + esc(d.agentEmail||'') + '</td><td>' + esc(d.product||'') + '</td><td>' + (parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0)>0 ? '$'+parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0).toFixed(2) : '—') + '</td><td>' + statusBadge(d.status) + '</td><td>' + esc((d.timestamp||'').substring(0,10)) + '</td></tr>'; }).join('');
 }
 
 // SUBMIT DEAL
+// CALC DEAL
 function calcDeal() {
-  var basic = parseFloat(document.getElementById('ucaasBasic').value)||0;
-  var premium = parseFloat(document.getElementById('ucaasPremium').value)||0;
-  var exec = parseFloat(document.getElementById('ucaasExec').value)||0;
-  var mrr = (basic*19.95) + (premium*24.95) + (exec*29.95);
-  var rate = parseFloat(currentAgent ? currentAgent.commissionRate : 0)||0;
-  document.getElementById('calcMRR').textContent = '$' + mrr.toFixed(2);
-  document.getElementById('calcRate').textContent = rate + '%';
-  document.getElementById('calcComm').textContent = '$' + (mrr*(rate/100)).toFixed(2);
+  var T34_DED = 2.84; var T73_DED = 3.85; var T85_DED = 5.72;
+
+  // Basic Hosted
+  var basicQty   = parseInt(document.getElementById('basicQty').value)||0;
+  var basicPrice = parseFloat(document.getElementById('basicPrice').value)||19.95;
+  var basicPhone = document.getElementById('basicPhone').value;
+  var basicActualPrice = basicPhone==='T73' ? basicPrice+1 : basicPhone==='T85' ? basicPrice+2 : basicPrice;
+  var basicDeduct = basicPhone==='T85' ? T85_DED : basicPhone==='T73' ? T73_DED : T34_DED;
+  var basicMRR = basicQty>0 ? (basicActualPrice - basicDeduct)*basicQty : 0;
+  document.getElementById('basicMRRDisplay').textContent = '$'+basicMRR.toFixed(2);
+
+  // Premium UCaaS
+  var premiumQty   = parseInt(document.getElementById('premiumQty').value)||0;
+  var premiumPrice = parseFloat(document.getElementById('premiumPrice').value)||29.95;
+  var premiumPhone = document.getElementById('premiumPhone').value;
+  var premiumActualPrice = premiumPhone==='T85' ? premiumPrice+2 : premiumPrice;
+  var premiumDeduct = premiumPhone==='T85' ? T85_DED : T73_DED;
+  var premiumMRR = premiumQty>0 ? (premiumActualPrice - premiumDeduct)*premiumQty : 0;
+  document.getElementById('premiumMRRDisplay').textContent = '$'+premiumMRR.toFixed(2);
+
+  // Executive UCaaS
+  var execQty   = parseInt(document.getElementById('execQty').value)||0;
+  var execPrice = parseFloat(document.getElementById('execPrice').value)||39.95;
+  var execMRR   = execQty>0 ? (execPrice - T85_DED)*execQty : 0;
+  document.getElementById('execMRRDisplay').textContent = '$'+execMRR.toFixed(2);
+
+  // OmniResponse
+  var omniRespQty   = parseInt(document.getElementById('omniRespQty').value)||0;
+  var omniRespPrice = parseFloat(document.getElementById('omniRespPrice').value)||89.95;
+  var omniRespMRR   = omniRespQty>0 ? omniRespPrice*omniRespQty : 0;
+  document.getElementById('omniRespMRRDisplay').textContent = '$'+omniRespMRR.toFixed(2);
+
+  // OmniChannel
+  var omniChanQty   = parseInt(document.getElementById('omniChanQty').value)||0;
+  var omniChanPrice = parseFloat(document.getElementById('omniChanPrice').value)||134.95;
+  var omniChanPhone = document.getElementById('omniChanPhone').value;
+  var omniChanActual = omniChanPhone==='Softphone' ? omniChanPrice-5 : omniChanPrice;
+  var omniChanDeduct = omniChanPhone==='Softphone' ? 0 : T85_DED;
+  var omniChanMRR = omniChanQty>0 ? (omniChanActual-omniChanDeduct)*omniChanQty : 0;
+  document.getElementById('omniChanMRRDisplay').textContent = '$'+omniChanMRR.toFixed(2);
+
+  // OmniEnterprise
+  var omniEntQty   = parseInt(document.getElementById('omniEntQty').value)||0;
+  var omniEntPrice = parseFloat(document.getElementById('omniEntPrice').value)||179.95;
+  var omniEntPhone = document.getElementById('omniEntPhone').value;
+  var omniEntActual = omniEntPhone==='Softphone' ? omniEntPrice-5 : omniEntPrice;
+  var omniEntDeduct = omniEntPhone==='Softphone' ? 0 : T85_DED;
+  var omniEntMRR = omniEntQty>0 ? (omniEntActual-omniEntDeduct)*omniEntQty : 0;
+  document.getElementById('omniEntMRRDisplay').textContent = '$'+omniEntMRR.toFixed(2);
+
+  // POTS
+  var firePanelLines = parseInt(document.getElementById('firePanelLines').value)||0;
+  var firePanelPrice = parseFloat(document.getElementById('firePanelPrice').value)||29.95;
+  var elevatorLines  = parseInt(document.getElementById('elevatorLines').value)||0;
+  var elevatorPrice  = parseFloat(document.getElementById('elevatorPrice').value)||29.95;
+  var callBoxLines   = parseInt(document.getElementById('callBoxLines').value)||0;
+  var callBoxPrice   = parseFloat(document.getElementById('callBoxPrice').value)||29.95;
+  var fireMRR    = firePanelLines*firePanelPrice;
+  var elevMRR    = elevatorLines*elevatorPrice;
+  var callBoxMRR = callBoxLines*callBoxPrice;
+  document.getElementById('firePanelMRRDisplay').textContent = '$'+fireMRR.toFixed(2);
+  document.getElementById('elevatorMRRDisplay').textContent  = '$'+elevMRR.toFixed(2);
+  document.getElementById('callBoxMRRDisplay').textContent   = '$'+callBoxMRR.toFixed(2);
+
+  // Total
+  var totalMRR = basicMRR+premiumMRR+execMRR+omniRespMRR+omniChanMRR+omniEntMRR+fireMRR+elevMRR+callBoxMRR;
+  var rate     = parseFloat(currentAgent?currentAgent.commissionRate:0)||0;
+  document.getElementById('calcMRR').textContent  = '$'+totalMRR.toFixed(2);
+  document.getElementById('calcRate').textContent = rate+'%';
+  document.getElementById('calcComm').textContent = '$'+(totalMRR*(rate/100)).toFixed(2);
 }
+
 function validateFirePanel() {
-  var val = parseInt(document.getElementById('potsFirePanel').value)||0;
-  document.getElementById('firePanelError').style.display = (val%2!==0 && val>0) ? 'block' : 'none';
+  var val = parseInt(document.getElementById('firePanelLines').value)||0;
+  document.getElementById('firePanelError').style.display = (val%2!==0&&val>0)?'block':'none';
 }
+
 function doSubmitDeal() {
   var company = document.getElementById('dealCompany').value.trim();
-  var first = document.getElementById('dealFirst').value.trim();
-  var last = document.getElementById('dealLast').value.trim();
+  var first   = document.getElementById('dealFirst').value.trim();
+  var last    = document.getElementById('dealLast').value.trim();
   var alertEl = document.getElementById('dealAlert');
-  if (!company||!first||!last) { alertEl.innerHTML = '<div class="alert alert-error">Please fill in Company Name, First Name, and Last Name.</div>'; return; }
-  var firePanel = parseInt(document.getElementById('potsFirePanel').value)||0;
-  if (firePanel%2!==0 && firePanel>0) { alertEl.innerHTML = '<div class="alert alert-error">Fire Panel requires an even number of lines.</div>'; return; }
-  var basic = parseInt(document.getElementById('ucaasBasic').value)||0;
-  var premium = parseInt(document.getElementById('ucaasPremium').value)||0;
-  var exec = parseInt(document.getElementById('ucaasExec').value)||0;
-  var productParts = [];
-  if (basic>0) productParts.push('UCaaS Basic x'+basic);
-  if (premium>0) productParts.push('UCaaS Premium x'+premium);
-  if (exec>0) productParts.push('UCaaS Executive x'+exec);
-  if ((parseInt(document.getElementById('ccaasQty').value)||0)>0) productParts.push('CCaaS');
-  if (firePanel>0) productParts.push('POTS Fire Panel x'+firePanel);
-  alertEl.innerHTML = '<div class="alert" style="background:var(--blue-bg);color:var(--blue);">Submitting deal...</div>';
-  fetch(APPS_SCRIPT_URL+'?action=submitDeal&agentEmail='+encodeURIComponent(currentAgent.email)+'&agentId='+encodeURIComponent(currentAgent.agentId)+'&agentType='+encodeURIComponent(currentAgent.agentType)+'&customerName='+encodeURIComponent(company)+'&customerId='+(document.getElementById('dealCustomerId')?encodeURIComponent(document.getElementById('dealCustomerId').value):'')+'&firstName='+encodeURIComponent(first)+'&lastName='+encodeURIComponent(last)+'&title='+encodeURIComponent(document.getElementById('dealTitle').value)+'&email='+encodeURIComponent(document.getElementById('dealEmail').value)+'&phone='+encodeURIComponent(document.getElementById('dealPhone').value)+'&city='+encodeURIComponent(document.getElementById('dealCity').value)+'&state='+encodeURIComponent(document.getElementById('dealState').value)+'&users='+encodeURIComponent(document.getElementById('dealUsers').value)+'&product='+encodeURIComponent(productParts.join(', '))+'&currentSystem='+encodeURIComponent(document.getElementById('dealCurrentSystem').value)+'&timeline='+encodeURIComponent(document.getElementById('dealTimeline').value)+'&notes='+encodeURIComponent(document.getElementById('dealNotes').value)+'&ucaasBasicQty='+basic+'&ucaasPremiumQty='+premium+'&ucaasExecQty='+exec+'&ccaasQty='+(parseInt(document.getElementById('ccaasQty').value)||0)+'&potsFirePanel='+firePanel+'&potsElevator='+(parseInt(document.getElementById('potsElevator').value)||0)+'&potsSecurity='+(parseInt(document.getElementById('potsSecurity').value)||0)+'&potsFax='+(parseInt(document.getElementById('potsFax').value)||0)+'&potsAtm='+(parseInt(document.getElementById('potsAtm').value)||0)+'&virtualFax='+(parseInt(document.getElementById('virtualFax').value)||0)+'&confUsers='+(parseInt(document.getElementById('confUsers').value)||0))
+  if (!company||!first||!last) { alertEl.innerHTML='<div class="alert alert-error">Please fill in Customer Name, First Name, and Last Name.</div>'; return; }
+  var firePanel = parseInt(document.getElementById('firePanelLines').value)||0;
+  if (firePanel%2!==0&&firePanel>0) { alertEl.innerHTML='<div class="alert alert-error">Fire Panel requires an even number of lines.</div>'; return; }
+
+  var basicQty      = parseInt(document.getElementById('basicQty').value)||0;
+  var basicPrice    = parseFloat(document.getElementById('basicPrice').value)||19.95;
+  var basicPhone    = document.getElementById('basicPhone').value;
+  var premiumQty    = parseInt(document.getElementById('premiumQty').value)||0;
+  var premiumPrice  = parseFloat(document.getElementById('premiumPrice').value)||29.95;
+  var premiumPhone  = document.getElementById('premiumPhone').value;
+  var execQty       = parseInt(document.getElementById('execQty').value)||0;
+  var execPrice     = parseFloat(document.getElementById('execPrice').value)||39.95;
+  var omniRespQty   = parseInt(document.getElementById('omniRespQty').value)||0;
+  var omniRespPrice = parseFloat(document.getElementById('omniRespPrice').value)||89.95;
+  var omniChanQty   = parseInt(document.getElementById('omniChanQty').value)||0;
+  var omniChanPrice = parseFloat(document.getElementById('omniChanPrice').value)||134.95;
+  var omniChanPhone = document.getElementById('omniChanPhone').value;
+  var omniEntQty    = parseInt(document.getElementById('omniEntQty').value)||0;
+  var omniEntPrice  = parseFloat(document.getElementById('omniEntPrice').value)||179.95;
+  var omniEntPhone  = document.getElementById('omniEntPhone').value;
+  var firePanelPrice= parseFloat(document.getElementById('firePanelPrice').value)||29.95;
+  var elevatorLines = parseInt(document.getElementById('elevatorLines').value)||0;
+  var elevatorPrice = parseFloat(document.getElementById('elevatorPrice').value)||29.95;
+  var callBoxLines  = parseInt(document.getElementById('callBoxLines').value)||0;
+  var callBoxPrice  = parseFloat(document.getElementById('callBoxPrice').value)||29.95;
+
+  // Build product summary
+  var T34_DED=2.84; var T73_DED=3.85; var T85_DED=5.72;
+  var productParts=[];
+  if(basicQty>0)    productParts.push('Basic Hosted x'+basicQty+' ('+basicPhone+') @$'+basicPrice.toFixed(2));
+  if(premiumQty>0)  productParts.push('Premium UCaaS x'+premiumQty+' ('+premiumPhone+') @$'+premiumPrice.toFixed(2));
+  if(execQty>0)     productParts.push('Executive UCaaS x'+execQty+' @$'+execPrice.toFixed(2));
+  if(omniRespQty>0) productParts.push('OmniResponse x'+omniRespQty+' @$'+omniRespPrice.toFixed(2));
+  if(omniChanQty>0) productParts.push('OmniChannel x'+omniChanQty+' ('+omniChanPhone+') @$'+omniChanPrice.toFixed(2));
+  if(omniEntQty>0)  productParts.push('OmniEnterprise x'+omniEntQty+' ('+omniEntPhone+') @$'+omniEntPrice.toFixed(2));
+  if(firePanel>0)   productParts.push('Fire Panel x'+firePanel+' @$'+firePanelPrice.toFixed(2));
+  if(elevatorLines>0) productParts.push('Elevator x'+elevatorLines+' @$'+elevatorPrice.toFixed(2));
+  if(callBoxLines>0)  productParts.push('Emergency Call Box x'+callBoxLines+' @$'+callBoxPrice.toFixed(2));
+
+  if(!productParts.length) { alertEl.innerHTML='<div class="alert alert-error">Please select at least one product.</div>'; return; }
+
+  alertEl.innerHTML='<div class="alert" style="background:var(--blue-bg);color:var(--blue);">Submitting deal...</div>';
+
+  var custId = document.getElementById('dealCustomerId') ? document.getElementById('dealCustomerId').value : '';
+
+  fetch(APPS_SCRIPT_URL+'?action=submitDeal'+
+    '&agentEmail='+encodeURIComponent(currentAgent.email)+
+    '&agentId='+encodeURIComponent(currentAgent.agentId)+
+    '&agentType='+encodeURIComponent(currentAgent.agentType)+
+    '&customerName='+encodeURIComponent(company)+
+    '&customerId='+encodeURIComponent(custId)+
+    '&firstName='+encodeURIComponent(first)+
+    '&lastName='+encodeURIComponent(last)+
+    '&title='+encodeURIComponent(document.getElementById('dealTitle').value)+
+    '&email='+encodeURIComponent(document.getElementById('dealEmail').value)+
+    '&phone='+encodeURIComponent(document.getElementById('dealPhone').value)+
+    '&city='+encodeURIComponent(document.getElementById('dealCity').value)+
+    '&state='+encodeURIComponent(document.getElementById('dealState').value)+
+    '&users='+encodeURIComponent(document.getElementById('dealUsers').value||0)+
+    '&product='+encodeURIComponent(productParts.join(' | '))+
+    '&currentSystem='+encodeURIComponent(document.getElementById('dealCurrentSystem').value)+
+    '&timeline='+encodeURIComponent(document.getElementById('dealTimeline').value)+
+    '&notes='+encodeURIComponent(document.getElementById('dealNotes').value)+
+    '&basicHostedQty='+basicQty+'&basicHostedPrice='+basicPrice+'&basicHostedPhone='+encodeURIComponent(basicPhone)+
+    '&premiumUcaasQty='+premiumQty+'&premiumUcaasPrice='+premiumPrice+'&premiumUcaasPhone='+encodeURIComponent(premiumPhone)+
+    '&executiveUcaasQty='+execQty+'&executiveUcaasPrice='+execPrice+
+    '&omniResponseQty='+omniRespQty+'&omniResponsePrice='+omniRespPrice+
+    '&omniChannelQty='+omniChanQty+'&omniChannelPrice='+omniChanPrice+'&omniChannelPhone='+encodeURIComponent(omniChanPhone)+
+    '&omniEnterpriseQty='+omniEntQty+'&omniEnterprisePrice='+omniEntPrice+'&omniEnterprisePhone='+encodeURIComponent(omniEntPhone)+
+    '&firePanelLines='+firePanel+'&firePanelPrice='+firePanelPrice+
+    '&elevatorLines='+elevatorLines+'&elevatorPrice='+elevatorPrice+
+    '&callBoxLines='+callBoxLines+'&callBoxPrice='+callBoxPrice)
     .then(function(r){return r.json();})
     .then(function(data){
-      if(data.success){alertEl.innerHTML='<div class="alert alert-success">Deal submitted successfully! You can track it in My Deals.</div>';resetDealForm();loadDeals();loadDashboard();}
-      else{alertEl.innerHTML='<div class="alert alert-error">Submission failed. Please try again.</div>';}
-    }).catch(function(){alertEl.innerHTML='<div class="alert alert-error">Connection error. Please try again.</div>';});
+      if(data.success){
+        alertEl.innerHTML='<div class="alert alert-success">Deal submitted successfully! You can track it in My Deals.</div>';
+        resetDealForm(); loadDeals(); loadDashboard();
+      } else {
+        alertEl.innerHTML='<div class="alert alert-error">Submission failed. Please try again.</div>';
+      }
+    }).catch(function(){ alertEl.innerHTML='<div class="alert alert-error">Connection error. Please try again.</div>'; });
 }
+
 function resetDealForm() {
-  ['dealCompany','dealCurrentSystem','dealFirst','dealLast','dealTitle','dealEmail','dealPhone','dealCity','dealState','dealNotes','dealUsers','ucaasBasic','ucaasPremium','ucaasExec','ccaasQty','potsFirePanel','potsElevator','potsSecurity','potsFax','potsAtm','virtualFax','confUsers'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=el.type==='number'?'0':'';});
+  ['dealCompany','dealCurrentSystem','dealFirst','dealLast','dealTitle','dealEmail','dealPhone','dealCity','dealState','dealNotes','dealUsers'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  ['basicQty','premiumQty','execQty','omniRespQty','omniChanQty','omniEntQty','firePanelLines','elevatorLines','callBoxLines'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='0';});
+  ['basicPrice','premiumPrice','execPrice','omniRespPrice','omniChanPrice','omniEntPrice','firePanelPrice','elevatorPrice','callBoxPrice'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0;});
+  ['basicPhone','premiumPhone','omniChanPhone','omniEntPhone'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0;});
   document.getElementById('dealTimeline').value='';
   document.getElementById('dealAlert').innerHTML='';
   document.getElementById('firePanelError').style.display='none';
+  ['basicMRRDisplay','premiumMRRDisplay','execMRRDisplay','omniRespMRRDisplay','omniChanMRRDisplay','omniEntMRRDisplay','firePanelMRRDisplay','elevatorMRRDisplay','callBoxMRRDisplay'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent='$0.00';});
   calcDeal();
 }
+
 
 // ADD AGENT
 function openAddAgentModal() {
