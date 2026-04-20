@@ -571,6 +571,110 @@
             </table>
           </div>
         </div>
+
+        <!-- ══ PERIOD STATS SECTIONS ══ -->
+
+        <!-- Agent Filter -->
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
+          <span style="font-size:13px;font-weight:700;color:var(--navy);">Filter by Agent:</span>
+          <select id="periodAgentFilter" onchange="loadPeriodStats()" style="padding:8px 12px;border:1.5px solid var(--gray-200);border-radius:7px;font-family:inherit;font-size:13px;outline:none;min-width:220px;">
+            <option value="">All Agents</option>
+          </select>
+        </div>
+
+        <!-- Current Period -->
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:20px;">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--gray-100);background:linear-gradient(135deg,var(--navy-dark),var(--navy));">
+            <h3 style="font-size:14px;font-weight:700;color:var(--white);">📅 Current Commission Period — <span id="currentPeriodLabel">—</span></h3>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;">
+            <div style="padding:18px 20px;border-right:1px solid var(--gray-100);">
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;">Active Accounts</div>
+              <div style="font-size:26px;font-weight:700;color:var(--navy);margin-top:5px;" id="cpActiveAccounts">—</div>
+              <div style="font-size:11px;color:var(--gray-400);margin-top:3px;">Live customers</div>
+            </div>
+            <div style="padding:18px 20px;border-right:1px solid var(--gray-100);">
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;">Active MRR</div>
+              <div style="font-size:26px;font-weight:700;color:var(--navy);margin-top:5px;" id="cpActiveMRR">—</div>
+              <div style="font-size:11px;color:var(--gray-400);margin-top:3px;">Commissionable</div>
+            </div>
+            <div style="padding:18px 20px;border-right:1px solid var(--gray-100);">
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;">Paid Accounts</div>
+              <div style="font-size:26px;font-weight:700;color:var(--success);margin-top:5px;" id="cpPaidCount">—</div>
+              <div style="font-size:11px;color:var(--gray-400);margin-top:3px;" id="cpPaidMRR">MRR: —</div>
+            </div>
+            <div style="padding:18px 20px;">
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;">Unpaid Accounts</div>
+              <div style="font-size:26px;font-weight:700;color:var(--red);margin-top:5px;" id="cpUnpaidCount">—</div>
+              <div style="font-size:11px;color:var(--gray-400);margin-top:3px;">Late payment</div>
+            </div>
+          </div>
+          <div style="padding:14px 20px;border-top:1px solid var(--gray-100);background:var(--gray-50);display:flex;gap:24px;">
+            <div><span style="font-size:12px;color:var(--gray-500);">Commissions Paid This Period: </span><strong style="color:var(--success);" id="cpPaidComm">—</strong></div>
+            <div><span style="font-size:12px;color:var(--gray-500);">Projected Total Commission: </span><strong style="color:var(--navy);" id="cpProjComm">—</strong></div>
+          </div>
+        </div>
+
+        <!-- Previous Period -->
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:20px;">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--gray-100);">
+            <h3 style="font-size:14px;font-weight:700;color:var(--navy);">📆 Previous Commission Period — <span id="prevPeriodLabel">—</span></h3>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;">
+            <div style="padding:18px 20px;border-right:1px solid var(--gray-100);">
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;">Paid Accounts</div>
+              <div style="font-size:26px;font-weight:700;color:var(--success);margin-top:5px;" id="ppPaidCount">—</div>
+            </div>
+            <div style="padding:18px 20px;border-right:1px solid var(--gray-100);">
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;">Unpaid Accounts</div>
+              <div style="font-size:26px;font-weight:700;color:var(--red);margin-top:5px;" id="ppUnpaidCount">—</div>
+            </div>
+            <div style="padding:18px 20px;border-right:1px solid var(--gray-100);">
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;">Total MRR Processed</div>
+              <div style="font-size:26px;font-weight:700;color:var(--navy);margin-top:5px;" id="ppMRR">—</div>
+            </div>
+            <div style="padding:18px 20px;">
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;">Commissions Paid</div>
+              <div style="font-size:26px;font-weight:700;color:var(--success);margin-top:5px;" id="ppComm">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- New Deal Projections -->
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:20px;">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--gray-100);">
+            <h3 style="font-size:14px;font-weight:700;color:var(--navy);">🚀 New Commission Projections — This Month</h3>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;">
+            <div style="padding:18px 20px;border-right:1px solid var(--gray-100);">
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;">New Deals Submitted</div>
+              <div style="font-size:26px;font-weight:700;color:var(--navy);margin-top:5px;" id="npNewDeals">—</div>
+              <div style="font-size:11px;color:var(--gray-400);margin-top:3px;">Submitted/Approved</div>
+            </div>
+            <div style="padding:18px 20px;border-right:1px solid var(--gray-100);">
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;">Projected New MRR</div>
+              <div style="font-size:26px;font-weight:700;color:var(--navy);margin-top:5px;" id="npNewMRR">—</div>
+              <div style="font-size:11px;color:var(--gray-400);margin-top:3px;">If all deals close</div>
+            </div>
+            <div style="padding:18px 20px;">
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;">Projected New Commissions</div>
+              <div style="font-size:26px;font-weight:700;color:var(--orange);margin-top:5px;" id="npNewComm">—</div>
+              <div style="font-size:11px;color:var(--gray-400);margin-top:3px;">If all deals close</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Period History Search -->
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:20px;">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;gap:16px;">
+            <h3 style="font-size:14px;font-weight:700;color:var(--navy);">🔍 Period History Search</h3>
+            <select id="histPeriodSelect" onchange="loadHistorySearch()" style="padding:8px 12px;border:1.5px solid var(--gray-200);border-radius:7px;font-family:inherit;font-size:13px;outline:none;">
+              <option value="">Select a period...</option>
+            </select>
+          </div>
+          <div id="histSearchResults" style="padding:20px;text-align:center;color:var(--gray-400);font-size:14px;">Select a period above to view history</div>
+        </div>
+
       </div>
 
       <!-- ── AGENTS ── -->
@@ -761,12 +865,15 @@
         </div>
       </div>
 
-    </div><!-- /content -->
-  </div><!-- /main-layout -->
+
+
+
+
+
 
 
       <!-- REV.IO IMPORT PAGE -->
-      <div id="page-revio" class="page" style="display:none;padding:26px 30px;">
+      <div id="page-revio" class="page">
         <div style="margin-bottom:22px;">
           <h2 style="font-size:22px;font-weight:700;color:var(--navy);">Rev.io Import</h2>
           <p style="color:var(--gray-500);font-size:14px;margin-top:3px;">Upload monthly Rev.io commission report to process agent commissions</p>
@@ -881,7 +988,7 @@
       </div>
 
 <!-- CHANGE PASSWORD PAGE -->
-<div id="page-changepassword" class="page" style="display:none;padding:26px 30px;">
+<div id="page-changepassword" class="page">
   <div style="margin-bottom:22px;">
     <h2 style="font-size:22px;font-weight:700;color:var(--navy);">Change Password</h2>
     <p style="color:var(--gray-500);font-size:14px;margin-top:3px;">Update your admin portal login password</p>
@@ -896,6 +1003,9 @@
   </div>
 </div>
 
+
+    </div><!-- /content -->
+  </div><!-- /main-layout -->
 </div><!-- /appScreen -->
 
 <!-- ══════════════════════════════════════════ MODALS ══════════════════════════════════════════ -->
@@ -982,6 +1092,926 @@
           document.getElementById('topbarUser').textContent = (data.admin.firstName||'') + ' ' + (data.admin.lastName||'');
           loadAllData();
           loadHistoryPeriods();
+          populateAgentFilter();
+          loadPeriodStats();
+        } else {
+          document.getElementById('loginError').style.display = 'block';
+        }
+      })
+      .catch(function() { document.getElementById('loginError').style.display = 'block'; });
+  }
+
+  function adminLogout() {
+    currentAdmin = null;
+    sessionStorage.removeItem('stratelegyAdmin');
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('appScreen').style.display = 'none';
+    document.getElementById('adminEmail').value = '';
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('loginError').style.display = 'none';
+  }
+
+  document.getElementById('adminPassword').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') adminLogin();
+  });
+
+  // Restore session on page refresh
+  (function() {
+    var saved = sessionStorage.getItem('stratelegyAdmin');
+    if (saved) {
+      try {
+        currentAdmin = JSON.parse(saved);
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('appScreen').style.display = 'block';
+        document.getElementById('topbarUser').textContent = (currentAdmin.firstName||'') + ' ' + (currentAdmin.lastName||'');
+        loadAllData();
+      } catch(e) {
+        sessionStorage.removeItem('stratelegyAdmin');
+      }
+    }
+  })();
+
+  // ════════════════════════ NAVIGATION ════════════════════════
+
+  function showPage(pageId, navEl) {
+    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); p.style.display='none'; });
+    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+    var page = document.getElementById('page-' + pageId);
+    if (page) { page.classList.add('active'); page.style.display='block'; }
+    navEl.classList.add('active');
+  }
+
+  function doChangePassword() {
+    var current = document.getElementById('pwCurrent').value.trim();
+    var newPw   = document.getElementById('pwNew').value.trim();
+    var confirm = document.getElementById('pwConfirm').value.trim();
+    var alertEl = document.getElementById('pwAlert');
+    if (!current||!newPw||!confirm) { alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">Please fill in all fields.</div>'; return; }
+    if (newPw !== confirm) { alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">New passwords do not match.</div>'; return; }
+    if (newPw.length < 6) { alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">Password must be at least 6 characters.</div>'; return; }
+    alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--blue-bg);color:var(--blue);">Updating password...</div>';
+    fetch(APPS_SCRIPT_URL+'?action=changeAdminPassword&email='+encodeURIComponent(currentAdmin.email)+'&currentPassword='+btoa(unescape(encodeURIComponent(current)))+'&newPassword='+btoa(unescape(encodeURIComponent(newPw))))
+      .then(function(r){return r.json();})
+      .then(function(data){
+        if(data.success){
+          alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--success-bg);color:var(--success);">Password updated successfully!</div>';
+          document.getElementById('pwCurrent').value='';
+          document.getElementById('pwNew').value='';
+          document.getElementById('pwConfirm').value='';
+        } else {
+          alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">'+(data.error||'Failed to update password.')+'</div>';
+        }
+      }).catch(function(){ alertEl.innerHTML='<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;background:var(--red-bg);color:var(--red);">Connection error. Please try again.</div>'; });
+  }
+
+  // ════════════════════════ DATA LOADING ════════════════════════
+
+  function loadAllData() {
+    loadAgents();
+    loadDeals();
+    loadCommissions();
+    loadApplications();
+  }
+
+  function apiFetch(action, params) {
+    var url = APPS_SCRIPT_URL + '?action=' + action;
+    if (params) {
+      Object.keys(params).forEach(function(k) { url += '&' + k + '=' + encodeURIComponent(params[k]); });
+    }
+    return fetch(url).then(function(r) { return r.json(); });
+  }
+
+  function loadAgents() {
+    apiFetch('getAdminAgents').then(function(data) {
+      allAgents = data.agents || [];
+      renderAgents(allAgents);
+      populateAgentDropdowns();
+      updateDashboardStats();
+    }).catch(function() {
+      document.getElementById('agentsTable').innerHTML = '<tr><td colspan="7" class="empty">Could not load agents from Google Sheets.</td></tr>';
+    });
+  }
+
+  function loadDeals() {
+    apiFetch('getAdminDeals').then(function(data) {
+      allDeals = data.deals || [];
+      renderDeals(allDeals);
+      renderDashboardDeals(allDeals);
+      populateDealAgentFilter();
+      updateDashboardStats();
+    }).catch(function() {
+      document.getElementById('dealsTable').innerHTML = '<tr><td colspan="8" class="empty">Could not load deals from Google Sheets.</td></tr>';
+    });
+  }
+
+  function loadCommissions() {
+    apiFetch('getAdminCommissions').then(function(data) {
+      allCommissions = data.commissions || [];
+      renderCommissions(allCommissions);
+      updateDashboardStats();
+    }).catch(function() {
+      document.getElementById('commissionsTable').innerHTML = '<tr><td colspan="9" class="empty">Could not load commissions from Google Sheets.</td></tr>';
+    });
+  }
+
+  function loadApplications() {
+    apiFetch('getAdminApplications').then(function(data) {
+      allApplications = data.applications || [];
+      renderApplications(allApplications);
+    }).catch(function() {
+      document.getElementById('applicationsTable').innerHTML = '<tr><td colspan="8" class="empty">Could not load applications from Google Sheets.</td></tr>';
+    });
+  }
+
+  // ════════════════════════ DASHBOARD ════════════════════════
+
+  function updateDashboardStats() {
+    var activeAgents = allAgents.filter(function(a) { return a.status === 'Active'; }).length;
+    document.getElementById('statAgents').textContent = activeAgents || allAgents.length || '—';
+    document.getElementById('statDeals').textContent = allDeals.length || '—';
+
+    var activeCustomers = allDeals.filter(function(d) { return d.status === 'Active Customer'; }).length;
+    document.getElementById('statActive').textContent = activeCustomers || '0';
+
+    var totalMRR = 0;
+    allDeals.forEach(function(d) {
+      if (d.status === 'Active Customer') {
+        totalMRR += parseFloat(d.ucaasEstMrr || 0);
+      }
+    });
+    document.getElementById('statMRR').textContent = totalMRR > 0 ? '$' + totalMRR.toLocaleString() : '—';
+
+    renderTopAgents();
+  }
+
+  function renderDashboardDeals(deals) {
+    var tbody = document.getElementById('dashDealsTable');
+    if (!deals.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">No deals yet.</td></tr>'; return; }
+    var recent = deals.slice(0, 10);
+    tbody.innerHTML = recent.map(function(d) {
+      return '<tr>' +
+        '<td><strong>' + esc(d.companyName || d.company || '') + '</strong></td>' +
+        '<td>' + esc(d.agentEmail || '') + '</td>' +
+        '<td>' + esc(d.product || '') + '</td>' +
+        '<td>' + (d.ucaasEstMrr ? '$' + parseFloat(d.ucaasEstMrr).toFixed(2) : '—') + '</td>' +
+        '<td>' + statusBadge(d.status) + '</td>' +
+        '<td>' + esc(d.timestamp ? d.timestamp.substring(0, 10) : '') + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function renderTopAgents() {
+    var tbody = document.getElementById('topAgentsTable');
+    if (!allAgents.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty">No agents yet.</td></tr>'; return; }
+
+    var agentStats = {};
+    allAgents.forEach(function(a) {
+      agentStats[a.email] = { name: a.firstName + ' ' + a.lastName, company: a.company, mrr: 0, accounts: 0, commissions: 0 };
+    });
+
+    allDeals.forEach(function(d) {
+      if (d.status === 'Active Customer' && agentStats[d.agentEmail]) {
+        agentStats[d.agentEmail].mrr += parseFloat(d.ucaasEstMrr || 0);
+        agentStats[d.agentEmail].accounts++;
+      }
+    });
+
+    allCommissions.forEach(function(c) {
+      if (c.status === 'Paid' && agentStats[c.agentEmail]) {
+        agentStats[c.agentEmail].commissions += parseFloat(c.commissionAmount || 0);
+      }
+    });
+
+    var sorted = Object.values(agentStats).sort(function(a, b) { return b.mrr - a.mrr; }).slice(0, 8);
+    tbody.innerHTML = sorted.map(function(a) {
+      return '<tr>' +
+        '<td><strong>' + esc(a.name) + '</strong></td>' +
+        '<td>' + esc(a.company) + '</td>' +
+        '<td>' + a.accounts + '</td>' +
+        '<td>' + (a.mrr > 0 ? '$' + a.mrr.toFixed(2) : '$0.00') + '</td>' +
+        '<td>' + (a.commissions > 0 ? '$' + a.commissions.toFixed(2) : '$0.00') + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  // ════════════════════════ AGENTS ════════════════════════
+
+  function renderAgents(agents) {
+    var tbody = document.getElementById('agentsTable');
+    if (!agents.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">No agents found.</td></tr>'; return; }
+    tbody.innerHTML = agents.map(function(a, i) {
+      var statusBadgeHtml = a.status === 'Active' ? '<span class="badge badge-green">Active</span>' : '<span class="badge badge-gray">Inactive</span>';
+      return '<tr>' +
+        '<td><code>' + esc(a.agentId || '') + '</code></td>' +
+        '<td><strong>' + esc((a.firstName || '') + ' ' + (a.lastName || '')) + '</strong></td>' +
+        '<td>' + esc(a.email || '') + '</td>' +
+        '<td>' + esc(a.company || '') + '</td>' +
+        '<td><strong>' + (a.commissionRate ? a.commissionRate + '%' : '—') + '</strong></td>' +
+        '<td>' + statusBadgeHtml + '</td>' +
+        '<td><button class="btn btn-ghost btn-sm" onclick="toggleAgentStatus(' + i + ')">Toggle Status</button></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterAgents() {
+    var search = document.getElementById('agentSearch').value.toLowerCase();
+    var status = document.getElementById('agentStatusFilter').value;
+    var filtered = allAgents.filter(function(a) {
+      var matchSearch = !search || (a.firstName + ' ' + a.lastName + ' ' + a.email + ' ' + a.company).toLowerCase().includes(search);
+      var matchStatus = !status || a.status === status;
+      return matchSearch && matchStatus;
+    });
+    renderAgents(filtered);
+  }
+
+  function toggleAgentStatus(index) {
+    var agent = allAgents[index];
+    var newStatus = agent.status === 'Active' ? 'Inactive' : 'Active';
+    apiFetch('updateAgentStatus', { email: agent.email, status: newStatus }).then(function() {
+      allAgents[index].status = newStatus;
+      renderAgents(allAgents);
+    }).catch(function() { alert('Failed to update status. Please check the Google Sheet directly.'); });
+  }
+
+  function openAddAgentModal() {
+    document.getElementById('addAgentModal').classList.add('open');
+    document.getElementById('addAgentAlert').innerHTML = '';
+  }
+
+  function saveNewAgent() {
+    var first = document.getElementById('newAgentFirst').value.trim();
+    var last = document.getElementById('newAgentLast').value.trim();
+    var email = document.getElementById('newAgentEmail').value.trim();
+    var phone = document.getElementById('newAgentPhone').value.trim();
+    var company = document.getElementById('newAgentCompany').value.trim();
+    var agentId = document.getElementById('newAgentID').value.trim();
+    var pass = document.getElementById('newAgentPass').value.trim();
+    var comm = document.getElementById('newAgentComm').value.trim();
+
+    if (!first || !last || !email || !agentId || !pass || !comm) {
+      document.getElementById('addAgentAlert').innerHTML = '<div class="alert alert-error">Please fill in all required fields.</div>';
+      return;
+    }
+
+    apiFetch('addAgent', {
+      firstName: first, lastName: last, email: email, phone: phone,
+      company: company, agentId: agentId, password: pass, commissionRate: comm
+    }).then(function() {
+      closeModal('addAgentModal');
+      loadAgents();
+    }).catch(function() {
+      document.getElementById('addAgentAlert').innerHTML = '<div class="alert alert-error">Failed to add agent. Check the Apps Script.</div>';
+    });
+  }
+
+  function populateAgentDropdowns() {
+    var selects = ['commAgent', 'dealAgentFilter', 'commAgentFilter'];
+    selects.forEach(function(id) {
+      var sel = document.getElementById(id);
+      if (!sel) return;
+      var current = sel.value;
+      while (sel.options.length > 1) sel.remove(1);
+      allAgents.forEach(function(a) {
+        var opt = document.createElement('option');
+        opt.value = a.email;
+        opt.textContent = (a.firstName || '') + ' ' + (a.lastName || '') + ' (' + a.email + ')';
+        sel.appendChild(opt);
+      });
+      sel.value = current;
+    });
+  }
+
+  // ════════════════════════ DEALS ════════════════════════
+
+  function renderDeals(deals) {
+    var tbody = document.getElementById('dealsTable');
+    if (!deals.length) { tbody.innerHTML = '<tr><td colspan="8" class="empty">No deals found.</td></tr>'; return; }
+    tbody.innerHTML = deals.map(function(d, i) {
+      var mrr = d.ucaasEstMrr ? '$' + parseFloat(d.ucaasEstMrr).toFixed(2) : '—';
+      return '<tr>' +
+        '<td><strong>' + esc(d.companyName || d.company || '') + '</strong></td>' +
+        '<td>' + esc((d.firstName || '') + ' ' + (d.lastName || '')) + '</td>' +
+        '<td>' + esc(d.agentEmail || '') + '</td>' +
+        '<td>' + esc(d.product || '') + '</td>' +
+        '<td>' + mrr + '</td>' +
+        '<td>' + statusBadge(d.status) + '</td>' +
+        '<td>' + esc(d.timestamp ? d.timestamp.substring(0, 10) : '') + '</td>' +
+        '<td><button class="btn btn-ghost btn-sm" onclick="openDealModal(' + i + ')">Update</button></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterDeals() {
+    var search = document.getElementById('dealSearch').value.toLowerCase();
+    var status = document.getElementById('dealStatusFilter').value;
+    var agent = document.getElementById('dealAgentFilter').value;
+    var filtered = allDeals.filter(function(d) {
+      var matchSearch = !search || ((d.companyName || d.company || '') + ' ' + (d.agentEmail || '')).toLowerCase().includes(search);
+      var matchStatus = !status || d.status === status;
+      var matchAgent = !agent || d.agentEmail === agent;
+      return matchSearch && matchStatus && matchAgent;
+    });
+    renderDeals(filtered);
+  }
+
+  function populateDealAgentFilter() {
+    var sel = document.getElementById('dealAgentFilter');
+    while (sel.options.length > 1) sel.remove(1);
+    var emails = {};
+    allDeals.forEach(function(d) { if (d.agentEmail) emails[d.agentEmail] = true; });
+    Object.keys(emails).forEach(function(e) {
+      var opt = document.createElement('option');
+      opt.value = e; opt.textContent = e;
+      sel.appendChild(opt);
+    });
+  }
+
+  function openDealModal(index) {
+    var d = allDeals[index];
+    document.getElementById('dealModalInfo').innerHTML =
+      '<strong>' + esc(d.companyName || d.company || '') + '</strong> — ' + esc(d.agentEmail || '') +
+      '<br>Product: ' + esc(d.product || '') + ' | Current Status: ' + statusBadge(d.status);
+    document.getElementById('dealNewStatus').value = d.status || 'Submitted';
+    document.getElementById('dealModalRow').value = index;
+    document.getElementById('dealModal').classList.add('open');
+  }
+
+  function saveDealStatus() {
+    var index = parseInt(document.getElementById('dealModalRow').value);
+    var newStatus = document.getElementById('dealNewStatus').value;
+    var deal = allDeals[index];
+
+    apiFetch('updateDealStatus', { agentEmail: deal.agentEmail, company: deal.companyName || deal.company, status: newStatus, rowIndex: deal.rowIndex || '' })
+      .then(function() {
+        allDeals[index].status = newStatus;
+        renderDeals(allDeals);
+        renderDashboardDeals(allDeals);
+        updateDashboardStats();
+        closeModal('dealModal');
+      }).catch(function() { alert('Could not update status. Please update directly in Google Sheets.'); });
+  }
+
+  // ════════════════════════ COMMISSIONS ════════════════════════
+
+  function calcCommission() {
+    var mrr = parseFloat(document.getElementById('commMRR').value) || 0;
+    var rate = parseFloat(document.getElementById('commRate').value) || 0;
+    var amount = mrr * (rate / 100);
+    document.getElementById('previewMRR').textContent = '$' + mrr.toFixed(2);
+    document.getElementById('previewRate').textContent = rate + '%';
+    document.getElementById('previewAmount').textContent = '$' + amount.toFixed(2);
+  }
+
+  document.getElementById('commAgent').addEventListener('change', function() {
+    var email = this.value;
+    var dealSel = document.getElementById('commDeal');
+    while (dealSel.options.length > 1) dealSel.remove(1);
+    if (!email) { dealSel.options[0].textContent = 'Select agent first...'; return; }
+    dealSel.options[0].textContent = 'Select deal...';
+
+    var rate = '';
+    allAgents.forEach(function(a) { if (a.email === email) rate = a.commissionRate || ''; });
+    if (rate) document.getElementById('commRate').value = rate;
+    calcCommission();
+
+    var agentDeals = allDeals.filter(function(d) { return d.agentEmail === email; });
+    agentDeals.forEach(function(d) {
+      var opt = document.createElement('option');
+      opt.value = d.companyName || d.company;
+      opt.textContent = (d.companyName || d.company) + ' — ' + (d.product || '');
+      if (d.ucaasEstMrr) opt.dataset.mrr = d.ucaasEstMrr;
+      dealSel.appendChild(opt);
+    });
+  });
+
+  document.getElementById('commDeal').addEventListener('change', function() {
+    var sel = this.options[this.selectedIndex];
+    if (sel && sel.dataset.mrr) {
+      document.getElementById('commMRR').value = parseFloat(sel.dataset.mrr).toFixed(2);
+      calcCommission();
+    }
+  });
+
+  function submitCommission() {
+    var agent = document.getElementById('commAgent').value;
+    var deal = document.getElementById('commDeal').value;
+    var mrr = document.getElementById('commMRR').value;
+    var rate = document.getElementById('commRate').value;
+    var date = document.getElementById('commDate').value;
+    var product = document.getElementById('commProduct').value;
+    var status = document.getElementById('commStatus').value;
+    var alertEl = document.getElementById('commAlert');
+
+    if (!agent || !deal || !mrr || !rate || !date) {
+      alertEl.innerHTML = '<div class="alert alert-error">Please fill in all required fields.</div>';
+      return;
+    }
+
+    var amount = (parseFloat(mrr) * parseFloat(rate) / 100).toFixed(2);
+
+    apiFetch('addCommission', {
+      agentEmail: agent, customer: deal, product: product,
+      customerMRR: mrr, commissionRate: rate, commissionAmount: amount,
+      paymentDate: date, status: status
+    }).then(function() {
+      alertEl.innerHTML = '<div class="alert alert-success">Commission of $' + amount + ' saved successfully!</div>';
+      loadCommissions();
+      setTimeout(function() { alertEl.innerHTML = ''; }, 3000);
+    }).catch(function() {
+      alertEl.innerHTML = '<div class="alert alert-error">Failed to save commission. Check Apps Script.</div>';
+    });
+  }
+
+  function renderCommissions(comms) {
+    var tbody = document.getElementById('commissionsTable');
+    if (!comms.length) { tbody.innerHTML = '<tr><td colspan="9" class="empty">No commissions yet.</td></tr>'; return; }
+    tbody.innerHTML = comms.map(function(c) {
+      var statusBadgeHtml = c.status === 'Paid'
+        ? '<span class="badge badge-green">Paid</span>'
+        : '<span class="badge badge-amber">Pending</span>';
+      return '<tr>' +
+        '<td><code style="font-size:11px;">' + esc(c.commissionId || '') + '</code></td>' +
+        '<td>' + esc(c.agentEmail || '') + '</td>' +
+        '<td><strong>' + esc(c.customer || '') + '</strong></td>' +
+        '<td>' + esc(c.product || '') + '</td>' +
+        '<td>$' + parseFloat(c.customerMRR || 0).toFixed(2) + '</td>' +
+        '<td>' + (c.commissionRate || '') + '%</td>' +
+        '<td><strong style="color:var(--success)">$' + parseFloat(c.commissionAmount || 0).toFixed(2) + '</strong></td>' +
+        '<td>' + esc(c.paymentDate || '') + '</td>' +
+        '<td>' + statusBadgeHtml + '</td>' +
+      '</tr>';
+    }).join('');
+
+    // populate commission filters
+    var sel = document.getElementById('commAgentFilter');
+    var emails = {};
+    comms.forEach(function(c) { if (c.agentEmail) emails[c.agentEmail] = true; });
+    while (sel.options.length > 1) sel.remove(1);
+    Object.keys(emails).forEach(function(e) {
+      var opt = document.createElement('option');
+      opt.value = e; opt.textContent = e;
+      sel.appendChild(opt);
+    });
+  }
+
+  function filterCommissions() {
+    var agent = document.getElementById('commAgentFilter').value;
+    var status = document.getElementById('commStatusFilter').value;
+    var filtered = allCommissions.filter(function(c) {
+      var matchAgent = !agent || c.agentEmail === agent;
+      var matchStatus = !status || c.status === status;
+      return matchAgent && matchStatus;
+    });
+    renderCommissions(filtered);
+  }
+
+  // ════════════════════════ APPLICATIONS ════════════════════════
+
+  function renderApplications(apps) {
+    var tbody = document.getElementById('applicationsTable');
+    if (!apps.length) { tbody.innerHTML = '<tr><td colspan="8" class="empty">No applications found.</td></tr>'; return; }
+    tbody.innerHTML = apps.map(function(a, i) {
+      var statusHtml = a.status === 'Approved'
+        ? '<span class="badge badge-green">Approved</span>'
+        : '<span class="badge badge-amber">Pending Review</span>';
+      var actionHtml = a.status !== 'Approved'
+        ? '<button class="btn btn-success btn-sm" onclick="approveApplication(' + i + ')">Approve</button>'
+        : '<span style="color:var(--gray-400);font-size:12px;">Done</span>';
+      return '<tr>' +
+        '<td><strong>' + esc((a.firstName || '') + ' ' + (a.lastName || '')) + '</strong></td>' +
+        '<td>' + esc(a.email || '') + '</td>' +
+        '<td>' + esc(a.company || '') + '</td>' +
+        '<td>' + esc(a.phone || '') + '</td>' +
+        '<td>' + esc(a.yearsExperience || '') + ' yrs</td>' +
+        '<td>' + esc(a.timestamp ? a.timestamp.substring(0, 10) : '') + '</td>' +
+        '<td>' + statusHtml + '</td>' +
+        '<td>' + actionHtml + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterApplications() {
+    var status = document.getElementById('appStatusFilter').value;
+    var filtered = !status ? allApplications : allApplications.filter(function(a) { return a.status === status; });
+    renderApplications(filtered);
+  }
+
+  function approveApplication(index) {
+    var app = allApplications[index];
+    apiFetch('approveApplication', { email: app.email }).then(function() {
+      allApplications[index].status = 'Approved';
+      renderApplications(allApplications);
+    }).catch(function() { alert('Could not approve. Please update directly in Google Sheets.'); });
+  }
+
+  // ════════════════════════ HELPERS ════════════════════════
+
+  function statusBadge(status) {
+    var map = {
+      'Submitted': 'badge-blue',
+      'In Review': 'badge-amber',
+      'Approved': 'badge-green',
+      'Active Customer': 'badge-purple'
+    };
+    return '<span class="badge ' + (map[status] || 'badge-gray') + '">' + esc(status || '—') + '</span>';
+  }
+
+
+  // ════════════════════════ PERIOD STATS ════════════════════════
+
+  var MONTHS_LABEL = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function populateAgentFilter() {
+    var sel = document.getElementById('periodAgentFilter');
+    if (!sel) return;
+    while (sel.options.length > 1) sel.remove(1);
+    allAgents.forEach(function(a) {
+      var opt = document.createElement('option');
+      opt.value = String(a.email||'').toLowerCase();
+      opt.textContent = (a.firstName||'') + ' ' + (a.lastName||'') + ' (' + (a.email||'') + ')';
+      sel.appendChild(opt);
+    });
+  }
+
+  function populateHistPeriodDropdown(periods) {
+    var sel = document.getElementById('histPeriodSelect');
+    if (!sel) return;
+    while (sel.options.length > 1) sel.remove(1);
+    (periods||[]).forEach(function(p) {
+      var opt = document.createElement('option');
+      opt.value = p.month + '_' + p.year;
+      opt.textContent = MONTHS_LABEL[parseInt(p.month)] + ' ' + p.year;
+      sel.appendChild(opt);
+    });
+  }
+
+  function loadPeriodStats() {
+    var agentEmail = document.getElementById('periodAgentFilter') ? document.getElementById('periodAgentFilter').value : '';
+    var url = APPS_SCRIPT_URL + '?action=getAdminDashboardStats';
+    if (agentEmail) url += '&agentEmail=' + encodeURIComponent(agentEmail);
+
+    fetch(url).then(function(r){ return r.json(); }).then(function(data) {
+      if (!data.success) return;
+      var cp = data.currentPeriod;
+      var pp = data.previousPeriod;
+      var np = data.newProjections;
+
+      // Current Period
+      document.getElementById('currentPeriodLabel').textContent = MONTHS_LABEL[cp.month] + ' ' + cp.year;
+      document.getElementById('cpActiveAccounts').textContent = cp.activeAccounts;
+      document.getElementById('cpActiveMRR').textContent = '$' + parseFloat(cp.activeMRR).toFixed(2);
+      document.getElementById('cpPaidCount').textContent = cp.paidCount;
+      document.getElementById('cpPaidMRR').textContent = 'MRR: $' + parseFloat(cp.paidMRR||0).toFixed(2);
+      document.getElementById('cpUnpaidCount').textContent = cp.unpaidCount;
+      document.getElementById('cpPaidComm').textContent = '$' + parseFloat(cp.paidComm||0).toFixed(2);
+      document.getElementById('cpProjComm').textContent = '$' + parseFloat(cp.projectedComm).toFixed(2);
+
+      // Previous Period
+      document.getElementById('prevPeriodLabel').textContent = MONTHS_LABEL[pp.month] + ' ' + pp.year;
+      document.getElementById('ppPaidCount').textContent = pp.paidCount;
+      document.getElementById('ppUnpaidCount').textContent = pp.unpaidCount;
+      document.getElementById('ppMRR').textContent = '$' + parseFloat(pp.paidMRR||0).toFixed(2);
+      document.getElementById('ppComm').textContent = '$' + parseFloat(pp.paidComm||0).toFixed(2);
+
+      // New Projections
+      document.getElementById('npNewDeals').textContent = np.newDealCount;
+      document.getElementById('npNewMRR').textContent = '$' + parseFloat(np.newMRR).toFixed(2);
+      document.getElementById('npNewComm').textContent = '$' + parseFloat(np.newProjComm).toFixed(2);
+
+      // Populate history dropdown
+      populateHistPeriodDropdown(data.availablePeriods);
+
+    }).catch(function() {});
+  }
+
+  function loadHistorySearch() {
+    var val = document.getElementById('histPeriodSelect').value;
+    if (!val) return;
+    var parts = val.split('_');
+    var month = parts[0]; var year = parts[1];
+    var agentEmail = document.getElementById('periodAgentFilter') ? document.getElementById('periodAgentFilter').value : '';
+    var url = APPS_SCRIPT_URL + '?action=getAdminDashboardStats&histMonth=' + month + '&histYear=' + year;
+    if (agentEmail) url += '&agentEmail=' + encodeURIComponent(agentEmail);
+    var resultsEl = document.getElementById('histSearchResults');
+    resultsEl.innerHTML = '<span style="color:var(--gray-400);">Loading...</span>';
+
+    fetch(url).then(function(r){ return r.json(); }).then(function(data) {
+      if (!data.success || !data.historyResult || !data.historyResult.period) {
+        resultsEl.innerHTML = '<span style="color:var(--gray-400);">No data for this period.</span>';
+        return;
+      }
+      var h = data.historyResult;
+      resultsEl.innerHTML =
+        '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:16px;">' +
+          '<div style="padding:16px 20px;border-right:1px solid var(--gray-100);">' +
+            '<div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;">Paid Accounts</div>' +
+            '<div style="font-size:24px;font-weight:700;color:var(--success);margin-top:4px;">' + h.paidCount + '</div>' +
+          '</div>' +
+          '<div style="padding:16px 20px;border-right:1px solid var(--gray-100);">' +
+            '<div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;">Unpaid Accounts</div>' +
+            '<div style="font-size:24px;font-weight:700;color:var(--red);margin-top:4px;">' + h.unpaidCount + '</div>' +
+          '</div>' +
+          '<div style="padding:16px 20px;border-right:1px solid var(--gray-100);">' +
+            '<div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;">Total MRR</div>' +
+            '<div style="font-size:24px;font-weight:700;color:var(--navy);margin-top:4px;">$' + parseFloat(h.totalMRR||0).toFixed(2) + '</div>' +
+          '</div>' +
+          '<div style="padding:16px 20px;">' +
+            '<div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;">Commissions</div>' +
+            '<div style="font-size:24px;font-weight:700;color:var(--success);margin-top:4px;">$' + parseFloat(h.totalComm||0).toFixed(2) + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<table style="width:100%;border-collapse:collapse;font-size:13px;">' +
+          '<thead><tr>' +
+            '<th style="background:var(--gray-50);padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;border-bottom:1px solid var(--gray-100);">Customer</th>' +
+            '<th style="background:var(--gray-50);padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;border-bottom:1px solid var(--gray-100);">Agent</th>' +
+            '<th style="background:var(--gray-50);padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;border-bottom:1px solid var(--gray-100);">Charges</th>' +
+            '<th style="background:var(--gray-50);padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;border-bottom:1px solid var(--gray-100);">Commission</th>' +
+            '<th style="background:var(--gray-50);padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;border-bottom:1px solid var(--gray-100);">Status</th>' +
+          '</tr></thead><tbody>' +
+          (h.records||[]).map(function(r) {
+            var sc = r.status==='Processed'?'var(--success)':r.status==='Not Paid'?'var(--red)':'var(--gray-500)';
+            var sb = r.status==='Processed'?'var(--success-bg)':r.status==='Not Paid'?'var(--red-bg)':'var(--gray-100)';
+            return '<tr>' +
+              '<td style="padding:10px 16px;border-bottom:1px solid var(--gray-100);"><strong>' + esc(r.customerName||'') + '</strong></td>' +
+              '<td style="padding:10px 16px;border-bottom:1px solid var(--gray-100);font-size:12px;color:var(--gray-500);">' + esc(r.agentEmail||'—') + '</td>' +
+              '<td style="padding:10px 16px;border-bottom:1px solid var(--gray-100);">' + (parseFloat(r.totalCharges||0)>0?'$'+parseFloat(r.totalCharges).toFixed(2):'—') + '</td>' +
+              '<td style="padding:10px 16px;border-bottom:1px solid var(--gray-100);"><strong style="color:var(--success);">' + (parseFloat(r.commissionAmount||0)>0?'$'+parseFloat(r.commissionAmount).toFixed(2):'—') + '</strong></td>' +
+              '<td style="padding:10px 16px;border-bottom:1px solid var(--gray-100);"><span style="display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;background:'+sb+';color:'+sc+';">' + esc(r.status||'') + '</span></td>' +
+            '</tr>';
+          }).join('') +
+        '</tbody></table>';
+    }).catch(function() { resultsEl.innerHTML = '<span style="color:var(--red);">Error loading data.</span>'; });
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+
+  // ════════════════════════ REV.IO IMPORT ════════════════════════
+
+  var revioPreviewData = null;
+  var MONTHS = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function previewRevio() {
+    var month   = document.getElementById('revioMonth').value;
+    var year    = document.getElementById('revioYear').value;
+    var fileEl  = document.getElementById('revioFile');
+    var alertEl = document.getElementById('revioUploadAlert');
+    if (!month || !year) { alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--red-bg);color:var(--red);">Please select a period month and year.</div>'; return; }
+    if (!fileEl.files || !fileEl.files[0]) { alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--red-bg);color:var(--red);">Please select a CSV file.</div>'; return; }
+    alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--blue-bg);color:var(--blue);">Reading file...</div>';
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var csv = e.target.result;
+      var records = parseRevioCSV(csv);
+      if (!records.length) { alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--red-bg);color:var(--red);">No valid records found in file.</div>'; return; }
+      var customerTotals = {};
+      records.forEach(function(r) {
+        if (!r.customerId) return;
+        if (!customerTotals[r.customerId]) { customerTotals[r.customerId] = { customerId: r.customerId, customerName: r.customerName, totalCharges: 0 }; }
+        customerTotals[r.customerId].totalCharges += r.charges;
+      });
+      var matched = []; var unmatched = [];
+      Object.values(customerTotals).forEach(function(c) {
+        var matchedDeal = null;
+        allDeals.forEach(function(d) { if (String(d.customerId||'').trim() === c.customerId) matchedDeal = d; });
+        if (matchedDeal) {
+          var agentEmail = String(matchedDeal.agentEmail||'').trim().toLowerCase();
+          var commRate = 0;
+          allAgents.forEach(function(a) { if (String(a.email||'').toLowerCase() === agentEmail) commRate = parseFloat(a.commissionRate||0); });
+          matched.push({ customerId: c.customerId, customerName: c.customerName, totalCharges: c.totalCharges, agentEmail: agentEmail, commissionRate: commRate, commissionAmount: c.totalCharges * (commRate/100) });
+        } else {
+          unmatched.push({ customerId: c.customerId, customerName: c.customerName });
+        }
+      });
+      revioPreviewData = { matched: matched, unmatched: unmatched, month: month, year: year, records: records };
+      renderRevioPreview(matched, unmatched);
+      alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--success-bg);color:var(--success);">Found ' + records.length + ' line items — ' + matched.length + ' accounts matched, ' + unmatched.length + ' unmatched.</div>';
+    };
+    reader.readAsText(fileEl.files[0]);
+  }
+
+  function parseRevioCSV(csv) {
+    var lines = csv.split(/\r?\n/);
+    var headers = parseCSVLine(lines[0]);
+    var records = [];
+    for (var i = 1; i < lines.length; i++) {
+      if (!lines[i].trim()) continue;
+      var cols = parseCSVLine(lines[i]);
+      var record = {};
+      headers.forEach(function(h, idx) { record[h.trim().replace(/"/g,'')] = (cols[idx]||'').trim().replace(/"/g,''); });
+      if (record['Customer Id'] || record['Customer ID']) {
+        records.push({ customerName: record['Customer Name']||'', customerId: record['Customer Id']||record['Customer ID']||'', product: record['Product']||'', charges: parseFloat(record['Charges']||0) });
+      }
+    }
+    return records;
+  }
+
+  function parseCSVLine(line) {
+    var result = []; var current = ''; var inQuotes = false;
+    for (var i = 0; i < line.length; i++) {
+      var ch = line[i];
+      if (ch === '"') { inQuotes = !inQuotes; }
+      else if (ch === ',' && !inQuotes) { result.push(current); current = ''; }
+      else { current += ch; }
+    }
+    result.push(current);
+    return result;
+  }
+
+  function renderRevioPreview(matched, unmatched) {
+    var tbody = document.getElementById('revioPreviewTable');
+    if (!matched.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:36px;color:var(--gray-400);">No matching accounts found.</td></tr>';
+    } else {
+      tbody.innerHTML = matched.map(function(r) {
+        return '<tr><td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><strong>' + esc(r.customerName) + '</strong></td>' +
+          '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><code>' + esc(r.customerId) + '</code></td>' +
+          '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);">$' + parseFloat(r.totalCharges).toFixed(2) + '</td>' +
+          '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);">' + esc(r.agentEmail) + '</td>' +
+          '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);">' + r.commissionRate + '%</td>' +
+          '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><strong style="color:var(--success);">$' + parseFloat(r.commissionAmount).toFixed(2) + '</strong></td>' +
+          '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><span style="display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--success-bg);color:var(--success);">Matched</span></td></tr>';
+      }).join('');
+    }
+    var us = document.getElementById('revioUnmatchedSection');
+    if (unmatched.length) {
+      us.style.display = 'block';
+      document.getElementById('revioUnmatchedTable').innerHTML = unmatched.map(function(r) {
+        return '<tr><td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);">' + esc(r.customerName) + '</td><td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><code>' + esc(r.customerId) + '</code></td></tr>';
+      }).join('');
+    } else { us.style.display = 'none'; }
+    document.getElementById('revioPreviewSection').style.display = 'block';
+  }
+
+  function processRevio() {
+    if (!revioPreviewData) return;
+    var alertEl = document.getElementById('revioUploadAlert');
+    var btn = document.getElementById('processBtn');
+    btn.disabled = true; btn.textContent = 'Processing...';
+    alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--blue-bg);color:var(--blue);">Processing commissions — please wait...</div>';
+    var recordsToSend = revioPreviewData.records.map(function(r) { return { customerId: r.customerId, customerName: r.customerName, charges: r.charges }; });
+    fetch(APPS_SCRIPT_URL + '?action=processRevioUpload&periodMonth=' + encodeURIComponent(revioPreviewData.month) + '&periodYear=' + encodeURIComponent(revioPreviewData.year) + '&records=' + encodeURIComponent(JSON.stringify(recordsToSend)))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--success-bg);color:var(--success);">✅ Successfully processed ' + (data.processed||[]).length + ' commissions for ' + MONTHS[parseInt(revioPreviewData.month)] + ' ' + revioPreviewData.year + '!</div>';
+          document.getElementById('revioPreviewSection').style.display = 'none';
+          revioPreviewData = null; btn.disabled = false; btn.textContent = '✓ Process Commissions';
+          loadHistoryPeriods(); loadAllData();
+        } else {
+          alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--red-bg);color:var(--red);">' + (data.error||'Processing failed.') + '</div>';
+          btn.disabled = false; btn.textContent = '✓ Process Commissions';
+        }
+      }).catch(function() {
+        alertEl.innerHTML = '<div style="padding:11px 15px;border-radius:8px;font-size:13px;font-weight:600;background:var(--red-bg);color:var(--red);">Connection error. Please try again.</div>';
+        btn.disabled = false; btn.textContent = '✓ Process Commissions';
+      });
+  }
+
+  function loadHistoryPeriods() {
+    fetch(APPS_SCRIPT_URL + '?action=getPaymentHistory')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var sel = document.getElementById('historyPeriod');
+        if (!sel) return;
+        while (sel.options.length > 1) sel.remove(1);
+        (data.periods||[]).forEach(function(p) {
+          var opt = document.createElement('option');
+          opt.value = p.month + '_' + p.year;
+          opt.textContent = MONTHS[parseInt(p.month)] + ' ' + p.year;
+          sel.appendChild(opt);
+        });
+      }).catch(function() {});
+  }
+
+  function loadHistory() {
+    var val = document.getElementById('historyPeriod').value;
+    if (!val) return;
+    var parts = val.split('_'); var month = parts[0]; var year = parts[1];
+    fetch(APPS_SCRIPT_URL + '?action=getPaymentHistory&periodMonth=' + month + '&periodYear=' + year)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var tbody = document.getElementById('historyTable');
+        var rows = data.history || [];
+        if (!rows.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:36px;color:var(--gray-400);">No records for this period.</td></tr>'; return; }
+        tbody.innerHTML = rows.map(function(r) {
+          var sc = r.status==='Processed'?'var(--success)':r.status==='Not Paid'?'var(--red)':r.status==='Override'?'var(--orange)':'var(--gray-500)';
+          var sb = r.status==='Processed'?'var(--success-bg)':r.status==='Not Paid'?'var(--red-bg)':r.status==='Override'?'#fde8d8':'var(--gray-100)';
+          return '<tr><td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><strong>' + esc(r.customerName||'') + '</strong></td>' +
+            '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);color:var(--gray-600);">' + esc(r.agentEmail||'—') + '</td>' +
+            '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);">' + (parseFloat(r.totalCharges||0)>0?'$'+parseFloat(r.totalCharges).toFixed(2):'—') + '</td>' +
+            '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><strong style="color:var(--success);">' + (parseFloat(r.commissionAmount||0)>0?'$'+parseFloat(r.commissionAmount).toFixed(2):'—') + '</strong></td>' +
+            '<td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);"><span style="display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;background:'+sb+';color:'+sc+';">' + esc(r.status||'') + '</span></td></tr>';
+        }).join('');
+      }).catch(function() {});
+  }
+
+
+  function esc(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) overlay.classList.remove('open');
+    });
+  });
+
+  // Set today's date on commission date field
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('commDate').value = today;
+</script>
+</body>
+</html></div><!-- /appScreen -->
+
+<!-- ══════════════════════════════════════════ MODALS ══════════════════════════════════════════ -->
+
+<!-- Update Deal Status Modal -->
+<div class="modal-overlay" id="dealModal">
+  <div class="modal">
+    <h3>Update Deal Status</h3>
+    <div id="dealModalInfo" style="margin-bottom:16px;padding:12px;background:var(--gray-50);border-radius:8px;font-size:13px;color:var(--gray-600);"></div>
+    <div class="field" style="margin-bottom:20px;">
+      <label>New Status</label>
+      <select id="dealNewStatus">
+        <option value="Submitted">Submitted</option>
+        <option value="In Review">In Review</option>
+        <option value="Approved">Approved</option>
+        <option value="Active Customer">Active Customer</option>
+      </select>
+    </div>
+    <input type="hidden" id="dealModalRow">
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('dealModal')">Cancel</button>
+      <button class="btn btn-navy" onclick="saveDealStatus()">Update Status</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Agent Modal -->
+<div class="modal-overlay" id="addAgentModal">
+  <div class="modal">
+    <h3>Add New Agent</h3>
+    <div class="form-row">
+      <div class="field"><label>First Name *</label><input type="text" id="newAgentFirst"></div>
+      <div class="field"><label>Last Name *</label><input type="text" id="newAgentLast"></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Email *</label><input type="email" id="newAgentEmail"></div>
+      <div class="field"><label>Phone</label><input type="text" id="newAgentPhone"></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Company</label><input type="text" id="newAgentCompany"></div>
+      <div class="field"><label>Agent ID *</label><input type="text" id="newAgentID" placeholder="AGT001"></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Password *</label><input type="text" id="newAgentPass"></div>
+      <div class="field"><label>Commission Rate (%) *</label><input type="number" id="newAgentComm" placeholder="8"></div>
+    </div>
+    <div id="addAgentAlert"></div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('addAgentModal')">Cancel</button>
+      <button class="btn btn-orange" onclick="saveNewAgent()">Add Agent</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ JS ══════════════════════════════════════════ -->
+<script>
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7twQrTsg1PCtVWSjRGy3HBzJ44EqHD24KmD8WXnb01Ed3lwlPslbQoW5DzaFVWBM/exec';
+
+  // Admin credentials now stored in Google Sheets Admins tab
+
+  var currentAdmin = null;
+
+  // ── Global data store ──
+  var allAgents = [];
+  var allDeals = [];
+  var allCommissions = [];
+  var allApplications = [];
+
+  // ════════════════════════ AUTH ════════════════════════
+
+  function adminLogin() {
+    var email    = document.getElementById('adminEmail').value.trim().toLowerCase();
+    var password = document.getElementById('adminPassword').value.trim();
+    document.getElementById('loginError').style.display = 'none';
+    sessionStorage.removeItem('stratelegyAdmin');
+    fetch(APPS_SCRIPT_URL + '?action=loginAdmin&email=' + encodeURIComponent(email) + '&password=' + btoa(unescape(encodeURIComponent(password))))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          currentAdmin = data.admin;
+          sessionStorage.setItem('stratelegyAdmin', JSON.stringify(currentAdmin));
+          document.getElementById('loginScreen').style.display = 'none';
+          document.getElementById('appScreen').style.display = 'block';
+          document.getElementById('topbarUser').textContent = (data.admin.firstName||'') + ' ' + (data.admin.lastName||'');
+          loadAllData();
+          loadHistoryPeriods();
+          populateAgentFilter();
+          loadPeriodStats();
         } else {
           document.getElementById('loginError').style.display = 'block';
         }
