@@ -818,7 +818,7 @@ function doUpdateDealStatus() {
   if (!d) return;
   var alertEl = document.getElementById('dealModalAlert');
   alertEl.innerHTML = '<div class="alert alert-info">Updating...</div>';
-  fetch(APPS_SCRIPT_URL + '?action=updateDealStatus&timestamp=' + encodeURIComponent(d.timestamp) + '&agentEmail=' + encodeURIComponent(d.agentEmail) + '&status=' + encodeURIComponent(status))
+  fetch(APPS_SCRIPT_URL + '?action=updateDealStatus&rowIndex=' + encodeURIComponent(d._rowIndex||0) + '&timestamp=' + encodeURIComponent(d.timestamp) + '&agentEmail=' + encodeURIComponent(d.agentEmail) + '&status=' + encodeURIComponent(status))
     .then(function(r){ return r.json(); })
     .then(function(data){
       if (data.success) {
