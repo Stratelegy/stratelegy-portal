@@ -1396,11 +1396,11 @@
       var mrr    = parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0);
       var mrrStr = mrr > 0 ? '$' + mrr.toFixed(2) : '—';
       var custId = String(d.customerId || '').trim();
-      var rowIdx = d._rowIndex || '';
-      // Inline editable Customer ID cell
+      var rowIdx = String(d._rowIndex || '');
+      // Inline editable Customer ID cell - use data attributes to avoid quote issues
       var custIdCell = custId
-        ? '<span style="font-family:monospace;font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(custId) + '')">' + esc(custId) + ' ✏️</span>'
-        : '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','')">⚠️ Add ID</span>';
+        ? '<span class="cust-id-display" style="font-family:monospace;font-size:12px;cursor:pointer;" data-row="' + rowIdx + '" data-id="' + custId.replace(/"/g,'&quot;') + '" onclick="editCustomerId(this)">' + esc(custId) + ' ✏️</span>'
+        : '<span class="cust-id-display" style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" data-row="' + rowIdx + '" data-id="" onclick="editCustomerId(this)">⚠️ Add ID</span>'; '','' + esc(custId) + '')">;
       return '<tr>' +
         '<td><strong>' + esc(d.customerName || d.companyName || d.company || '') + '</strong></td>' +
         '<td id="custIdCell_' + rowIdx + '">' + custIdCell + '</td>' +
@@ -1415,50 +1415,67 @@
     }).join('');
   }
 
-  function editCustomerId(el, rowIdx, currentId) {
-    var cell = document.getElementById('custIdCell_' + rowIdx);
+  function editCustomerId(el) {
+    var rowIdx    = el.getAttribute('data-row');
+    var currentId = el.getAttribute('data-id') || '';
+    var cell      = document.getElementById('custIdCell_' + rowIdx);
     if (!cell) return;
-    cell.innerHTML =
-      '<div style="display:flex;align-items:center;gap:6px;">' +
-        '<input type="text" id="custIdInput_' + rowIdx + '" value="' + esc(currentId) + '" ' +
-          'style="padding:4px 8px;border:1.5px solid var(--navy);border-radius:6px;font-family:inherit;font-size:13px;width:110px;outline:none;" ' +
-          'onkeydown="if(event.key==='Enter')saveCustomerId('' + rowIdx + '')" autofocus>' +
-        '<button onclick="saveCustomerId('' + rowIdx + '')" style="padding:4px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:none;background:var(--navy);color:var(--white);">Save</button>' +
-        '<button onclick="cancelCustomerId('' + rowIdx + '','' + esc(currentId) + '')" style="padding:4px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:none;background:var(--gray-100);color:var(--gray-700);">Cancel</button>' +
-      '</div>';
+    var input = document.createElement('input');
+    input.type  = 'text';
+    input.value = currentId;
+    input.style.cssText = 'padding:4px 8px;border:1.5px solid var(--navy);border-radius:6px;font-family:inherit;font-size:13px;width:110px;outline:none;';
+    var saveBtn = document.createElement('button');
+    saveBtn.textContent = 'Save';
+    saveBtn.style.cssText = 'padding:4px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:none;background:var(--navy);color:var(--white);margin-left:6px;';
+    var cancelBtn = document.createElement('button');
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.style.cssText = 'padding:4px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:none;background:var(--gray-100);color:var(--gray-700);margin-left:4px;';
+    var wrapper = document.createElement('div');
+    wrapper.style.display = 'flex';
+    wrapper.style.alignItems = 'center';
+    wrapper.appendChild(input);
+    wrapper.appendChild(saveBtn);
+    wrapper.appendChild(cancelBtn);
+    cell.innerHTML = '';
+    cell.appendChild(wrapper);
+    input.focus();
+    saveBtn.onclick   = function() { saveCustomerId(rowIdx, input.value.trim()); };
+    cancelBtn.onclick = function() { restoreCustIdCell(cell, rowIdx, currentId); };
+    input.onkeydown   = function(e) { if (e.key === 'Enter') saveCustomerId(rowIdx, input.value.trim()); if (e.key === 'Escape') restoreCustIdCell(cell, rowIdx, currentId); };
   }
 
-  function saveCustomerId(rowIdx) {
-    var input = document.getElementById('custIdInput_' + rowIdx);
-    if (!input) return;
-    var newId = input.value.trim();
-    var cell  = document.getElementById('custIdCell_' + rowIdx);
+  function saveCustomerId(rowIdx, newId) {
+    var cell = document.getElementById('custIdCell_' + rowIdx);
+    if (!cell) return;
     cell.innerHTML = '<span style="color:var(--gray-400);font-size:12px;">Saving...</span>';
     fetch(APPS_SCRIPT_URL + '?action=updateCustomerId&rowIndex=' + encodeURIComponent(rowIdx) + '&customerId=' + encodeURIComponent(newId))
       .then(function(r){ return r.json(); })
       .then(function(data){
         if (data.success) {
-          if (newId) {
-            cell.innerHTML = '<span style="font-family:monospace;font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(newId) + '')">' + esc(newId) + ' ✏️</span>';
-          } else {
-            cell.innerHTML = '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','')">⚠️ Add ID</span>';
-          }
+          restoreCustIdCell(cell, rowIdx, newId);
         } else {
-          cell.innerHTML = '<span style="color:var(--red);font-size:12px;">Error — click to retry</span>';
+          cell.innerHTML = '<span style="color:var(--red);font-size:12px;">Error saving. Try again.</span>';
         }
       }).catch(function(){
-        cell.innerHTML = '<span style="color:var(--red);font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(newId) + '')">Error — click to retry</span>';
+        cell.innerHTML = '<span style="color:var(--red);font-size:12px;">Connection error. Try again.</span>';
       });
   }
 
-  function cancelCustomerId(rowIdx, currentId) {
-    var cell = document.getElementById('custIdCell_' + rowIdx);
-    if (!cell) return;
-    if (currentId) {
-      cell.innerHTML = '<span style="font-family:monospace;font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(currentId) + '')">' + esc(currentId) + ' ✏️</span>';
+  function restoreCustIdCell(cell, rowIdx, custId) {
+    var span = document.createElement('span');
+    span.setAttribute('data-row', rowIdx);
+    span.setAttribute('data-id', custId || '');
+    span.setAttribute('class', 'cust-id-display');
+    span.setAttribute('onclick', 'editCustomerId(this)');
+    if (custId) {
+      span.style.cssText = 'font-family:monospace;font-size:12px;cursor:pointer;';
+      span.textContent = custId + ' ✏️';
     } else {
-      cell.innerHTML = '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','')">⚠️ Add ID</span>';
+      span.style.cssText = 'display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;';
+      span.textContent = '⚠️ Add ID';
     }
+    cell.innerHTML = '';
+    cell.appendChild(span);
   }
 
   function filterDeals() {
@@ -2374,11 +2391,11 @@
       var mrr    = parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0);
       var mrrStr = mrr > 0 ? '$' + mrr.toFixed(2) : '—';
       var custId = String(d.customerId || '').trim();
-      var rowIdx = d._rowIndex || '';
-      // Inline editable Customer ID cell
+      var rowIdx = String(d._rowIndex || '');
+      // Inline editable Customer ID cell - use data attributes to avoid quote issues
       var custIdCell = custId
-        ? '<span style="font-family:monospace;font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(custId) + '')">' + esc(custId) + ' ✏️</span>'
-        : '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','')">⚠️ Add ID</span>';
+        ? '<span class="cust-id-display" style="font-family:monospace;font-size:12px;cursor:pointer;" data-row="' + rowIdx + '" data-id="' + custId.replace(/"/g,'&quot;') + '" onclick="editCustomerId(this)">' + esc(custId) + ' ✏️</span>'
+        : '<span class="cust-id-display" style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" data-row="' + rowIdx + '" data-id="" onclick="editCustomerId(this)">⚠️ Add ID</span>'; '','' + esc(custId) + '')">;
       return '<tr>' +
         '<td><strong>' + esc(d.customerName || d.companyName || d.company || '') + '</strong></td>' +
         '<td id="custIdCell_' + rowIdx + '">' + custIdCell + '</td>' +
@@ -2393,50 +2410,67 @@
     }).join('');
   }
 
-  function editCustomerId(el, rowIdx, currentId) {
-    var cell = document.getElementById('custIdCell_' + rowIdx);
+  function editCustomerId(el) {
+    var rowIdx    = el.getAttribute('data-row');
+    var currentId = el.getAttribute('data-id') || '';
+    var cell      = document.getElementById('custIdCell_' + rowIdx);
     if (!cell) return;
-    cell.innerHTML =
-      '<div style="display:flex;align-items:center;gap:6px;">' +
-        '<input type="text" id="custIdInput_' + rowIdx + '" value="' + esc(currentId) + '" ' +
-          'style="padding:4px 8px;border:1.5px solid var(--navy);border-radius:6px;font-family:inherit;font-size:13px;width:110px;outline:none;" ' +
-          'onkeydown="if(event.key==='Enter')saveCustomerId('' + rowIdx + '')" autofocus>' +
-        '<button onclick="saveCustomerId('' + rowIdx + '')" style="padding:4px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:none;background:var(--navy);color:var(--white);">Save</button>' +
-        '<button onclick="cancelCustomerId('' + rowIdx + '','' + esc(currentId) + '')" style="padding:4px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:none;background:var(--gray-100);color:var(--gray-700);">Cancel</button>' +
-      '</div>';
+    var input = document.createElement('input');
+    input.type  = 'text';
+    input.value = currentId;
+    input.style.cssText = 'padding:4px 8px;border:1.5px solid var(--navy);border-radius:6px;font-family:inherit;font-size:13px;width:110px;outline:none;';
+    var saveBtn = document.createElement('button');
+    saveBtn.textContent = 'Save';
+    saveBtn.style.cssText = 'padding:4px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:none;background:var(--navy);color:var(--white);margin-left:6px;';
+    var cancelBtn = document.createElement('button');
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.style.cssText = 'padding:4px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:none;background:var(--gray-100);color:var(--gray-700);margin-left:4px;';
+    var wrapper = document.createElement('div');
+    wrapper.style.display = 'flex';
+    wrapper.style.alignItems = 'center';
+    wrapper.appendChild(input);
+    wrapper.appendChild(saveBtn);
+    wrapper.appendChild(cancelBtn);
+    cell.innerHTML = '';
+    cell.appendChild(wrapper);
+    input.focus();
+    saveBtn.onclick   = function() { saveCustomerId(rowIdx, input.value.trim()); };
+    cancelBtn.onclick = function() { restoreCustIdCell(cell, rowIdx, currentId); };
+    input.onkeydown   = function(e) { if (e.key === 'Enter') saveCustomerId(rowIdx, input.value.trim()); if (e.key === 'Escape') restoreCustIdCell(cell, rowIdx, currentId); };
   }
 
-  function saveCustomerId(rowIdx) {
-    var input = document.getElementById('custIdInput_' + rowIdx);
-    if (!input) return;
-    var newId = input.value.trim();
-    var cell  = document.getElementById('custIdCell_' + rowIdx);
+  function saveCustomerId(rowIdx, newId) {
+    var cell = document.getElementById('custIdCell_' + rowIdx);
+    if (!cell) return;
     cell.innerHTML = '<span style="color:var(--gray-400);font-size:12px;">Saving...</span>';
     fetch(APPS_SCRIPT_URL + '?action=updateCustomerId&rowIndex=' + encodeURIComponent(rowIdx) + '&customerId=' + encodeURIComponent(newId))
       .then(function(r){ return r.json(); })
       .then(function(data){
         if (data.success) {
-          if (newId) {
-            cell.innerHTML = '<span style="font-family:monospace;font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(newId) + '')">' + esc(newId) + ' ✏️</span>';
-          } else {
-            cell.innerHTML = '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','')">⚠️ Add ID</span>';
-          }
+          restoreCustIdCell(cell, rowIdx, newId);
         } else {
-          cell.innerHTML = '<span style="color:var(--red);font-size:12px;">Error — click to retry</span>';
+          cell.innerHTML = '<span style="color:var(--red);font-size:12px;">Error saving. Try again.</span>';
         }
       }).catch(function(){
-        cell.innerHTML = '<span style="color:var(--red);font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(newId) + '')">Error — click to retry</span>';
+        cell.innerHTML = '<span style="color:var(--red);font-size:12px;">Connection error. Try again.</span>';
       });
   }
 
-  function cancelCustomerId(rowIdx, currentId) {
-    var cell = document.getElementById('custIdCell_' + rowIdx);
-    if (!cell) return;
-    if (currentId) {
-      cell.innerHTML = '<span style="font-family:monospace;font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(currentId) + '')">' + esc(currentId) + ' ✏️</span>';
+  function restoreCustIdCell(cell, rowIdx, custId) {
+    var span = document.createElement('span');
+    span.setAttribute('data-row', rowIdx);
+    span.setAttribute('data-id', custId || '');
+    span.setAttribute('class', 'cust-id-display');
+    span.setAttribute('onclick', 'editCustomerId(this)');
+    if (custId) {
+      span.style.cssText = 'font-family:monospace;font-size:12px;cursor:pointer;';
+      span.textContent = custId + ' ✏️';
     } else {
-      cell.innerHTML = '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','')">⚠️ Add ID</span>';
+      span.style.cssText = 'display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;';
+      span.textContent = '⚠️ Add ID';
     }
+    cell.innerHTML = '';
+    cell.appendChild(span);
   }
 
   function filterDeals() {
