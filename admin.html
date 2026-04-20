@@ -556,7 +556,7 @@
           <div class="card-header"><h3>Recent Deals</h3></div>
           <div class="card-body">
             <table class="data-table">
-              <thead><tr><th>Company</th><th>Agent</th><th>Product</th><th>MRR</th><th>Status</th><th>Date</th></tr></thead>
+              <thead><tr><th>Customer Name</th><th>Customer ID</th><th>Agent</th><th>Product</th><th>MRR</th><th>Status</th><th>Date</th></tr></thead>
               <tbody id="dashDealsTable"><tr><td colspan="6" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody>
             </table>
           </div>
@@ -730,7 +730,7 @@
           <div class="card-header"><h3>All Deals</h3></div>
           <div class="card-body">
             <table class="data-table">
-              <thead><tr><th>Company</th><th>Contact</th><th>Agent</th><th>Product</th><th>UCaaS MRR</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Customer Name</th><th>Customer ID</th><th>Contact</th><th>Agent</th><th>Product</th><th>MRR</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
               <tbody id="dealsTable"><tr><td colspan="8" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody>
             </table>
           </div>
@@ -1246,14 +1246,20 @@
 
   function renderDashboardDeals(deals) {
     var tbody = document.getElementById('dashDealsTable');
-    if (!deals.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">No deals yet.</td></tr>'; return; }
+    if (!deals.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">No deals yet.</td></tr>'; return; }
     var recent = deals.slice(0, 10);
     tbody.innerHTML = recent.map(function(d) {
+      var custId   = String(d.customerId || '').trim();
+      var custIdDisplay = custId
+        ? '<span style="font-family:monospace;font-size:12px;">' + esc(custId) + '</span>'
+        : '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);">⚠️ Missing</span>';
+      var mrr = parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0);
       return '<tr>' +
-        '<td><strong>' + esc(d.companyName || d.company || '') + '</strong></td>' +
+        '<td><strong>' + esc(d.customerName || d.companyName || d.company || '') + '</strong></td>' +
+        '<td>' + custIdDisplay + '</td>' +
         '<td>' + esc(d.agentEmail || '') + '</td>' +
         '<td>' + esc(d.product || '') + '</td>' +
-        '<td>' + (d.ucaasEstMrr ? '$' + parseFloat(d.ucaasEstMrr).toFixed(2) : '—') + '</td>' +
+        '<td>' + (mrr > 0 ? '$' + mrr.toFixed(2) : '—') + '</td>' +
         '<td>' + statusBadge(d.status) + '</td>' +
         '<td>' + esc(d.timestamp ? d.timestamp.substring(0, 10) : '') + '</td>' +
       '</tr>';
@@ -1385,20 +1391,74 @@
 
   function renderDeals(deals) {
     var tbody = document.getElementById('dealsTable');
-    if (!deals.length) { tbody.innerHTML = '<tr><td colspan="8" class="empty">No deals found.</td></tr>'; return; }
+    if (!deals.length) { tbody.innerHTML = '<tr><td colspan="9" class="empty">No deals found.</td></tr>'; return; }
     tbody.innerHTML = deals.map(function(d, i) {
-      var mrr = d.ucaasEstMrr ? '$' + parseFloat(d.ucaasEstMrr).toFixed(2) : '—';
+      var mrr    = parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0);
+      var mrrStr = mrr > 0 ? '$' + mrr.toFixed(2) : '—';
+      var custId = String(d.customerId || '').trim();
+      var rowIdx = d._rowIndex || '';
+      // Inline editable Customer ID cell
+      var custIdCell = custId
+        ? '<span style="font-family:monospace;font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(custId) + '')">' + esc(custId) + ' ✏️</span>'
+        : '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','')">⚠️ Add ID</span>';
       return '<tr>' +
-        '<td><strong>' + esc(d.companyName || d.company || '') + '</strong></td>' +
+        '<td><strong>' + esc(d.customerName || d.companyName || d.company || '') + '</strong></td>' +
+        '<td id="custIdCell_' + rowIdx + '">' + custIdCell + '</td>' +
         '<td>' + esc((d.firstName || '') + ' ' + (d.lastName || '')) + '</td>' +
         '<td>' + esc(d.agentEmail || '') + '</td>' +
         '<td>' + esc(d.product || '') + '</td>' +
-        '<td>' + mrr + '</td>' +
+        '<td>' + mrrStr + '</td>' +
         '<td>' + statusBadge(d.status) + '</td>' +
         '<td>' + esc(d.timestamp ? d.timestamp.substring(0, 10) : '') + '</td>' +
         '<td><button class="btn btn-ghost btn-sm" onclick="openDealModal(' + i + ')">Update</button></td>' +
       '</tr>';
     }).join('');
+  }
+
+  function editCustomerId(el, rowIdx, currentId) {
+    var cell = document.getElementById('custIdCell_' + rowIdx);
+    if (!cell) return;
+    cell.innerHTML =
+      '<div style="display:flex;align-items:center;gap:6px;">' +
+        '<input type="text" id="custIdInput_' + rowIdx + '" value="' + esc(currentId) + '" ' +
+          'style="padding:4px 8px;border:1.5px solid var(--navy);border-radius:6px;font-family:inherit;font-size:13px;width:110px;outline:none;" ' +
+          'onkeydown="if(event.key==='Enter')saveCustomerId('' + rowIdx + '')" autofocus>' +
+        '<button onclick="saveCustomerId('' + rowIdx + '')" style="padding:4px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:none;background:var(--navy);color:var(--white);">Save</button>' +
+        '<button onclick="cancelCustomerId('' + rowIdx + '','' + esc(currentId) + '')" style="padding:4px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:none;background:var(--gray-100);color:var(--gray-700);">Cancel</button>' +
+      '</div>';
+  }
+
+  function saveCustomerId(rowIdx) {
+    var input = document.getElementById('custIdInput_' + rowIdx);
+    if (!input) return;
+    var newId = input.value.trim();
+    var cell  = document.getElementById('custIdCell_' + rowIdx);
+    cell.innerHTML = '<span style="color:var(--gray-400);font-size:12px;">Saving...</span>';
+    fetch(APPS_SCRIPT_URL + '?action=updateCustomerId&rowIndex=' + encodeURIComponent(rowIdx) + '&customerId=' + encodeURIComponent(newId))
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data.success) {
+          if (newId) {
+            cell.innerHTML = '<span style="font-family:monospace;font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(newId) + '')">' + esc(newId) + ' ✏️</span>';
+          } else {
+            cell.innerHTML = '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','')">⚠️ Add ID</span>';
+          }
+        } else {
+          cell.innerHTML = '<span style="color:var(--red);font-size:12px;">Error — click to retry</span>';
+        }
+      }).catch(function(){
+        cell.innerHTML = '<span style="color:var(--red);font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(newId) + '')">Error — click to retry</span>';
+      });
+  }
+
+  function cancelCustomerId(rowIdx, currentId) {
+    var cell = document.getElementById('custIdCell_' + rowIdx);
+    if (!cell) return;
+    if (currentId) {
+      cell.innerHTML = '<span style="font-family:monospace;font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(currentId) + '')">' + esc(currentId) + ' ✏️</span>';
+    } else {
+      cell.innerHTML = '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','')">⚠️ Add ID</span>';
+    }
   }
 
   function filterDeals() {
@@ -2164,14 +2224,20 @@
 
   function renderDashboardDeals(deals) {
     var tbody = document.getElementById('dashDealsTable');
-    if (!deals.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">No deals yet.</td></tr>'; return; }
+    if (!deals.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">No deals yet.</td></tr>'; return; }
     var recent = deals.slice(0, 10);
     tbody.innerHTML = recent.map(function(d) {
+      var custId   = String(d.customerId || '').trim();
+      var custIdDisplay = custId
+        ? '<span style="font-family:monospace;font-size:12px;">' + esc(custId) + '</span>'
+        : '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);">⚠️ Missing</span>';
+      var mrr = parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0);
       return '<tr>' +
-        '<td><strong>' + esc(d.companyName || d.company || '') + '</strong></td>' +
+        '<td><strong>' + esc(d.customerName || d.companyName || d.company || '') + '</strong></td>' +
+        '<td>' + custIdDisplay + '</td>' +
         '<td>' + esc(d.agentEmail || '') + '</td>' +
         '<td>' + esc(d.product || '') + '</td>' +
-        '<td>' + (d.ucaasEstMrr ? '$' + parseFloat(d.ucaasEstMrr).toFixed(2) : '—') + '</td>' +
+        '<td>' + (mrr > 0 ? '$' + mrr.toFixed(2) : '—') + '</td>' +
         '<td>' + statusBadge(d.status) + '</td>' +
         '<td>' + esc(d.timestamp ? d.timestamp.substring(0, 10) : '') + '</td>' +
       '</tr>';
@@ -2303,20 +2369,74 @@
 
   function renderDeals(deals) {
     var tbody = document.getElementById('dealsTable');
-    if (!deals.length) { tbody.innerHTML = '<tr><td colspan="8" class="empty">No deals found.</td></tr>'; return; }
+    if (!deals.length) { tbody.innerHTML = '<tr><td colspan="9" class="empty">No deals found.</td></tr>'; return; }
     tbody.innerHTML = deals.map(function(d, i) {
-      var mrr = d.ucaasEstMrr ? '$' + parseFloat(d.ucaasEstMrr).toFixed(2) : '—';
+      var mrr    = parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0);
+      var mrrStr = mrr > 0 ? '$' + mrr.toFixed(2) : '—';
+      var custId = String(d.customerId || '').trim();
+      var rowIdx = d._rowIndex || '';
+      // Inline editable Customer ID cell
+      var custIdCell = custId
+        ? '<span style="font-family:monospace;font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(custId) + '')">' + esc(custId) + ' ✏️</span>'
+        : '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','')">⚠️ Add ID</span>';
       return '<tr>' +
-        '<td><strong>' + esc(d.companyName || d.company || '') + '</strong></td>' +
+        '<td><strong>' + esc(d.customerName || d.companyName || d.company || '') + '</strong></td>' +
+        '<td id="custIdCell_' + rowIdx + '">' + custIdCell + '</td>' +
         '<td>' + esc((d.firstName || '') + ' ' + (d.lastName || '')) + '</td>' +
         '<td>' + esc(d.agentEmail || '') + '</td>' +
         '<td>' + esc(d.product || '') + '</td>' +
-        '<td>' + mrr + '</td>' +
+        '<td>' + mrrStr + '</td>' +
         '<td>' + statusBadge(d.status) + '</td>' +
         '<td>' + esc(d.timestamp ? d.timestamp.substring(0, 10) : '') + '</td>' +
         '<td><button class="btn btn-ghost btn-sm" onclick="openDealModal(' + i + ')">Update</button></td>' +
       '</tr>';
     }).join('');
+  }
+
+  function editCustomerId(el, rowIdx, currentId) {
+    var cell = document.getElementById('custIdCell_' + rowIdx);
+    if (!cell) return;
+    cell.innerHTML =
+      '<div style="display:flex;align-items:center;gap:6px;">' +
+        '<input type="text" id="custIdInput_' + rowIdx + '" value="' + esc(currentId) + '" ' +
+          'style="padding:4px 8px;border:1.5px solid var(--navy);border-radius:6px;font-family:inherit;font-size:13px;width:110px;outline:none;" ' +
+          'onkeydown="if(event.key==='Enter')saveCustomerId('' + rowIdx + '')" autofocus>' +
+        '<button onclick="saveCustomerId('' + rowIdx + '')" style="padding:4px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:none;background:var(--navy);color:var(--white);">Save</button>' +
+        '<button onclick="cancelCustomerId('' + rowIdx + '','' + esc(currentId) + '')" style="padding:4px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:none;background:var(--gray-100);color:var(--gray-700);">Cancel</button>' +
+      '</div>';
+  }
+
+  function saveCustomerId(rowIdx) {
+    var input = document.getElementById('custIdInput_' + rowIdx);
+    if (!input) return;
+    var newId = input.value.trim();
+    var cell  = document.getElementById('custIdCell_' + rowIdx);
+    cell.innerHTML = '<span style="color:var(--gray-400);font-size:12px;">Saving...</span>';
+    fetch(APPS_SCRIPT_URL + '?action=updateCustomerId&rowIndex=' + encodeURIComponent(rowIdx) + '&customerId=' + encodeURIComponent(newId))
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data.success) {
+          if (newId) {
+            cell.innerHTML = '<span style="font-family:monospace;font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(newId) + '')">' + esc(newId) + ' ✏️</span>';
+          } else {
+            cell.innerHTML = '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','')">⚠️ Add ID</span>';
+          }
+        } else {
+          cell.innerHTML = '<span style="color:var(--red);font-size:12px;">Error — click to retry</span>';
+        }
+      }).catch(function(){
+        cell.innerHTML = '<span style="color:var(--red);font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(newId) + '')">Error — click to retry</span>';
+      });
+  }
+
+  function cancelCustomerId(rowIdx, currentId) {
+    var cell = document.getElementById('custIdCell_' + rowIdx);
+    if (!cell) return;
+    if (currentId) {
+      cell.innerHTML = '<span style="font-family:monospace;font-size:12px;cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','' + esc(currentId) + '')">' + esc(currentId) + ' ✏️</span>';
+    } else {
+      cell.innerHTML = '<span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;background:var(--warning-bg);color:var(--warning);cursor:pointer;" onclick="editCustomerId(this,'' + rowIdx + '','')">⚠️ Add ID</span>';
+    }
   }
 
   function filterDeals() {
