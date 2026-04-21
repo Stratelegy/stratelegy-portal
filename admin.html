@@ -129,6 +129,10 @@
   .modal h3{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:18px;}
 
   /* MISC */
+  .sortable{cursor:pointer;user-select:none;}
+  .sortable:hover{background:var(--gray-100);}
+  .sort-asc::after{content:' ▲';font-size:9px;color:var(--navy);}
+  .sort-desc::after{content:' ▼';font-size:9px;color:var(--navy);}
   .loading{text-align:center;padding:36px;color:var(--gray-400);font-size:14px;}
   .empty{text-align:center;padding:36px;color:var(--gray-400);font-size:14px;}
   .spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--gray-200);border-top-color:var(--navy);border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:8px;}
@@ -266,7 +270,15 @@
         <div class="card">
           <div class="card-header"><h3>Recent Deals</h3></div>
           <table class="data-table">
-            <thead><tr><th>Customer Name</th><th>Customer ID</th><th>Agent</th><th>Product</th><th>MRR</th><th>Status</th><th>Date</th></tr></thead>
+            <thead><tr>
+  <th class="sortable" onclick="sortDashDeals('customerName')">Customer Name <span id="dashSort_customerName"></span></th>
+  <th class="sortable" onclick="sortDashDeals('customerId')">Customer ID <span id="dashSort_customerId"></span></th>
+  <th class="sortable" onclick="sortDashDeals('agentEmail')">Agent <span id="dashSort_agentEmail"></span></th>
+  <th class="sortable" onclick="sortDashDeals('product')">Product <span id="dashSort_product"></span></th>
+  <th class="sortable" onclick="sortDashDeals('mrr')">MRR <span id="dashSort_mrr"></span></th>
+  <th class="sortable" onclick="sortDashDeals('status')">Status <span id="dashSort_status"></span></th>
+  <th class="sortable" onclick="sortDashDeals('timestamp')">Date <span id="dashSort_timestamp"></span></th>
+</tr></thead>
             <tbody id="dashDealsTable"><tr><td colspan="7" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody>
           </table>
         </div>
@@ -308,7 +320,17 @@
         <div class="card">
           <div class="card-header"><h3>All Deals</h3></div>
           <table class="data-table">
-            <thead><tr><th>Customer Name</th><th>Customer ID</th><th>Contact</th><th>Agent</th><th>Product</th><th>MRR</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <thead><tr>
+  <th class="sortable" onclick="sortDeals('customerName')">Customer Name <span id="dealSort_customerName"></span></th>
+  <th class="sortable" onclick="sortDeals('customerId')">Customer ID <span id="dealSort_customerId"></span></th>
+  <th>Contact</th>
+  <th class="sortable" onclick="sortDeals('agentEmail')">Agent <span id="dealSort_agentEmail"></span></th>
+  <th class="sortable" onclick="sortDeals('product')">Product <span id="dealSort_product"></span></th>
+  <th class="sortable" onclick="sortDeals('mrr')">MRR <span id="dealSort_mrr"></span></th>
+  <th class="sortable" onclick="sortDeals('status')">Status <span id="dealSort_status"></span></th>
+  <th class="sortable" onclick="sortDeals('timestamp')">Date <span id="dealSort_timestamp"></span></th>
+  <th>Actions</th>
+</tr></thead>
             <tbody id="dealsTable"><tr><td colspan="9" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody>
           </table>
         </div>
@@ -509,6 +531,10 @@ var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7twQrTsg1PCtVWS
 var currentAdmin = null;
 var allDeals = [];
 var allAgents = [];
+var dealSortCol = '';
+var dealSortAsc = true;
+var dashSortCol = '';
+var dashSortAsc = true;
 var MONTHS = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
 
 // ── SESSION RESTORE ──
@@ -1180,6 +1206,53 @@ function doChangePassword() {
       }
     }).catch(function(){ alertEl.innerHTML = '<div class="alert alert-error">Connection error.</div>'; });
 }
+
+
+  // ════════════════════════ SORTING ════════════════════════
+
+  function getSortValue(d, col) {
+    switch(col) {
+      case 'customerName': return String(d.customerName||d.companyName||'').toLowerCase();
+      case 'customerId':   return String(d.customerId||'').toLowerCase();
+      case 'agentEmail':   return String(d.agentEmail||'').toLowerCase();
+      case 'product':      return String(d.product||'').toLowerCase();
+      case 'mrr':          return parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0);
+      case 'status':       return String(d.status||'').toLowerCase();
+      case 'timestamp':    return String(d.timestamp||'').toLowerCase();
+      default:             return '';
+    }
+  }
+
+  function sortedDeals(deals, col, asc) {
+    return deals.slice().sort(function(a, b) {
+      var av = getSortValue(a, col);
+      var bv = getSortValue(b, col);
+      if (av < bv) return asc ? -1 : 1;
+      if (av > bv) return asc ? 1 : -1;
+      return 0;
+    });
+  }
+
+  function updateSortIndicators(prefix, activeCol, asc) {
+    var cols = ['customerName','customerId','agentEmail','product','mrr','status','timestamp'];
+    cols.forEach(function(c) {
+      var el = document.getElementById(prefix + c);
+      if (!el) return;
+      el.textContent = c === activeCol ? (asc ? ' ▲' : ' ▼') : '';
+    });
+  }
+
+  function sortDeals(col) {
+    if (dealSortCol === col) { dealSortAsc = !dealSortAsc; } else { dealSortCol = col; dealSortAsc = true; }
+    updateSortIndicators('dealSort_', dealSortCol, dealSortAsc);
+    renderDeals(sortedDeals(allDeals, dealSortCol, dealSortAsc));
+  }
+
+  function sortDashDeals(col) {
+    if (dashSortCol === col) { dashSortAsc = !dashSortAsc; } else { dashSortCol = col; dashSortAsc = true; }
+    updateSortIndicators('dashSort_', dashSortCol, dashSortAsc);
+    renderDashboardDeals(sortedDeals(allDeals, dashSortCol, dashSortAsc));
+  }
 
 // ── HELPERS ──
 function statusBadge(status) {
