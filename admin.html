@@ -560,7 +560,6 @@ function launchApp() {
   document.getElementById('topbarUser').textContent = (currentAdmin.firstName||'') + ' ' + (currentAdmin.lastName||'');
   loadAllData();
   loadHistoryPeriods();
-  populateAgentFilter();
   loadPeriodStats();
 }
 
@@ -580,6 +579,9 @@ function loadAllData() {
     renderAgents(allAgents);
     updateAllTimeStats(allAgents, allDeals);
     renderTopAgents(allAgents, allDeals);
+    populateAgentFilter();
+  }).catch(function() {
+    document.getElementById('agentsTable').innerHTML = '<tr><td colspan="8" class="empty">Error loading agents.</td></tr>';
   });
   apiFetch('getAdminDeals').then(function(data) {
     allDeals = data.deals || [];
@@ -587,12 +589,23 @@ function loadAllData() {
     renderDashboardDeals(allDeals);
     updateAllTimeStats(allAgents, allDeals);
     renderTopAgents(allAgents, allDeals);
+  }).catch(function() {
+    document.getElementById('dealsTable').innerHTML = '<tr><td colspan="9" class="empty">Error loading deals.</td></tr>';
+    document.getElementById('dashDealsTable').innerHTML = '<tr><td colspan="7" class="empty">Error loading deals.</td></tr>';
   });
   apiFetch('getAdminCommissions').then(function(data) {
     renderCommissions(data.commissions || []);
+  }).catch(function() {
+    document.getElementById('commissionsTable').innerHTML = '<tr><td colspan="9" class="empty">Error loading commissions.</td></tr>';
+    document.getElementById('dashCommTable').innerHTML = '<tr><td colspan="7" class="empty">No commissions yet.</td></tr>';
+    document.getElementById('commTotalPaid').textContent = '$0.00';
+    document.getElementById('commTotalPending').textContent = '$0.00';
+    document.getElementById('commTotalCount').textContent = '0';
   });
   apiFetch('getAdminApplications').then(function(data) {
     renderApplications(data.applications || []);
+  }).catch(function() {
+    document.getElementById('applicationsTable').innerHTML = '<tr><td colspan="8" class="empty">Error loading applications.</td></tr>';
   });
 }
 
@@ -745,12 +758,18 @@ function renderTopAgents(agents, deals) {
 
 function renderCommissions(comms) {
   var tbody = document.getElementById('commissionsTable');
+  var dashTbody = document.getElementById('dashCommTable');
   var paid = comms.filter(function(c){ return c.status==='Paid'; }).reduce(function(s,c){ return s+parseFloat(c.commissionAmount||0); },0);
   var pend = comms.filter(function(c){ return c.status!=='Paid'; }).reduce(function(s,c){ return s+parseFloat(c.commissionAmount||0); },0);
   document.getElementById('commTotalPaid').textContent = '$'+paid.toFixed(2);
   document.getElementById('commTotalPending').textContent = '$'+pend.toFixed(2);
   document.getElementById('commTotalCount').textContent = comms.length;
-  if (!comms.length) { tbody.innerHTML = '<tr><td colspan="9" class="empty">No commissions.</td></tr>'; return; }
+  if (!comms.length) {
+    tbody.innerHTML = '<tr><td colspan="9" class="empty">No commissions yet.</td></tr>';
+    if (dashTbody) dashTbody.innerHTML = '<tr><td colspan="7" class="empty">No commissions yet.</td></tr>';
+    return;
+  }
+  if (dashTbody) renderDashComm(comms);
   tbody.innerHTML = comms.map(function(c) {
     return '<tr>' +
       '<td>' + esc(c.agentEmail||'') + '</td>' +
