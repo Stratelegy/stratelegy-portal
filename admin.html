@@ -347,7 +347,7 @@
         <div class="card">
           <div class="card-header"><h3>Commission Records</h3><button class="btn btn-orange btn-sm" onclick="openModal('addCommModal')">+ Add Commission</button></div>
           <table class="data-table">
-            <thead><tr><th>Agent</th><th>Customer</th><th>Product</th><th>MRR</th><th>Rate</th><th>Commission</th><th>Type</th><th>Date</th><th>Status</th></tr></thead>
+            <thead><tr><th>Agent</th><th>Customer Name</th><th>Product</th><th>MRR</th><th>Rate</th><th>Commission</th><th>Type</th><th>Date</th><th>Status</th></tr></thead>
             <tbody id="commissionsTable"><tr><td colspan="9" class="loading"><span class="spinner"></span>Loading...</td></tr></tbody>
           </table>
         </div>
@@ -782,34 +782,44 @@ function renderTopAgents(agents, deals) {
   }).join('');
 }
 
-function renderCommissions(comms) {
-  var tbody = document.getElementById('commissionsTable');
-  var dashTbody = document.getElementById('dashCommTable');
-  var paid = comms.filter(function(c){ return c.status==='Paid'; }).reduce(function(s,c){ return s+parseFloat(c.commissionAmount||0); },0);
-  var pend = comms.filter(function(c){ return c.status!=='Paid'; }).reduce(function(s,c){ return s+parseFloat(c.commissionAmount||0); },0);
-  document.getElementById('commTotalPaid').textContent = '$'+paid.toFixed(2);
-  document.getElementById('commTotalPending').textContent = '$'+pend.toFixed(2);
-  document.getElementById('commTotalCount').textContent = comms.length;
-  if (!comms.length) {
-    tbody.innerHTML = '<tr><td colspan="9" class="empty">No commissions yet.</td></tr>';
-    if (dashTbody) dashTbody.innerHTML = '<tr><td colspan="7" class="empty">No commissions yet.</td></tr>';
-    return;
+function getAgentName(email) {
+    var name = '';
+    allAgents.forEach(function(a) {
+      if (String(a.email||'').toLowerCase() === String(email||'').toLowerCase()) {
+        name = ((a.firstName||'') + ' ' + (a.lastName||'')).trim();
+      }
+    });
+    return name || email || '';
   }
-  if (dashTbody) renderDashComm(comms);
-  tbody.innerHTML = comms.map(function(c) {
-    return '<tr>' +
-      '<td>' + esc(c.agentEmail||'') + '</td>' +
-      '<td><strong>' + esc(c.customer||'') + '</strong></td>' +
-      '<td>' + esc(c.product||'') + '</td>' +
-      '<td>$' + parseFloat(c.customerMrr||c.customerMRR||0).toFixed(2) + '</td>' +
-      '<td>' + (c.commissionRate||'') + '%</td>' +
-      '<td><strong style="color:var(--success);">$' + parseFloat(c.commissionAmount||0).toFixed(2) + '</strong></td>' +
-      '<td><span class="badge ' + (c.commissionType==='Override'?'badge-orange':'badge-blue') + '">' + esc(c.commissionType||'Direct') + '</span></td>' +
-      '<td>' + esc(c.paymentDate||'') + '</td>' +
-      '<td>' + (c.status==='Paid'?'<span class="badge badge-green">Paid</span>':'<span class="badge badge-amber">Pending</span>') + '</td>' +
-    '</tr>';
-  }).join('');
-}
+
+  function renderCommissions(comms) {
+    var tbody = document.getElementById('commissionsTable');
+    var dashTbody = document.getElementById('dashCommTable');
+    var paid = comms.filter(function(c){ return c.status==='Paid'; }).reduce(function(s,c){ return s+parseFloat(c.commissionAmount||0); },0);
+    var pend = comms.filter(function(c){ return c.status!=='Paid'; }).reduce(function(s,c){ return s+parseFloat(c.commissionAmount||0); },0);
+    document.getElementById('commTotalPaid').textContent = '$'+paid.toFixed(2);
+    document.getElementById('commTotalPending').textContent = '$'+pend.toFixed(2);
+    document.getElementById('commTotalCount').textContent = comms.length;
+    if (!comms.length) {
+      tbody.innerHTML = '<tr><td colspan="9" class="empty">No commissions yet.</td></tr>';
+      if (dashTbody) dashTbody.innerHTML = '<tr><td colspan="7" class="empty">No commissions yet.</td></tr>';
+      return;
+    }
+    if (dashTbody) renderDashComm(comms);
+    tbody.innerHTML = comms.map(function(c) {
+      return '<tr>' +
+        '<td><strong>' + esc(getAgentName(c.agentEmail)) + '</strong><br><span style="font-size:11px;color:var(--gray-400);">' + esc(c.agentEmail||'') + '</span></td>' +
+        '<td><strong>' + esc(c.customerName||c.customer||'') + '</strong></td>' +
+        '<td>' + esc(c.product||'') + '</td>' +
+        '<td>$' + parseFloat(c.customerMrr||c.customerMRR||0).toFixed(2) + '</td>' +
+        '<td>' + (c.commissionRate||'') + '%</td>' +
+        '<td><strong style="color:var(--success);">$' + parseFloat(c.commissionAmount||0).toFixed(2) + '</strong></td>' +
+        '<td><span class="badge ' + (c.commissionType==='Override'?'badge-orange':'badge-blue') + '">' + esc(c.commissionType||'Direct') + '</span></td>' +
+        '<td>' + esc(c.paymentDate||'') + '</td>' +
+        '<td>' + (c.status==='Paid'?'<span class="badge badge-green">Paid</span>':'<span class="badge badge-amber">Pending</span>') + '</td>' +
+      '</tr>';
+    }).join('');
+  }
 
 function renderApplications(apps) {
   var tbody = document.getElementById('applicationsTable');
@@ -834,7 +844,7 @@ function renderDashComm(comms) {
   tbody.innerHTML = comms.slice(0,10).map(function(c) {
     return '<tr>' +
       '<td>' + esc(c.agentEmail||'') + '</td>' +
-      '<td><strong>' + esc(c.customer||'') + '</strong></td>' +
+      '<td><strong>' + esc(c.customerName||c.customer||'') + '</strong></td>' +
       '<td>$' + parseFloat(c.customerMrr||c.customerMRR||0).toFixed(2) + '</td>' +
       '<td><strong style="color:var(--success);">$' + parseFloat(c.commissionAmount||0).toFixed(2) + '</strong></td>' +
       '<td><span class="badge ' + (c.commissionType==='Override'?'badge-orange':'badge-blue') + '">' + esc(c.commissionType||'Direct') + '</span></td>' +

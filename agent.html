@@ -562,6 +562,25 @@
               <div style="font-size:13px;font-weight:700;color:var(--navy);" id="elevatorMRRDisplay">$0.00</div>
             </div>
 
+
+            <!-- Security Alarm -->
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--gray-100);">
+              <div>
+                <div style="font-size:13.5px;font-weight:700;color:var(--navy);">🚨 Security Alarm Lines</div>
+              </div>
+              <div>
+                <select id="securityPrice" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+                  <option value="29.95">$29.95</option>
+                  <option value="39.95">$39.95</option>
+                  <option value="49.95">$49.95</option>
+                </select>
+              </div>
+              <div>
+                <input type="number" id="securityLines" min="0" value="0" oninput="calcDeal()" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--navy);" id="securityMRRDisplay">$0.00</div>
+            </div>
+
             <!-- Emergency Call Box -->
             <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 14px;">
               <div>
@@ -870,7 +889,7 @@ function renderDashComm(comms) {
   var tbody = document.getElementById('dashCommTable');
   if (!comms.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty">No commissions recorded yet.</td></tr>'; return; }
   tbody.innerHTML = comms.slice(0,8).map(function(c) {
-    return '<tr><td><strong>'+esc(c.customer||'')+'</strong></td><td>$'+parseFloat(c.customerMrr||c.customerMRR||0).toFixed(2)+'</td><td><strong style="color:var(--success)">$'+parseFloat(c.commissionAmount||0).toFixed(2)+'</strong></td><td>'+esc(c.paymentDate||'')+'</td><td>'+(c.status==='Paid'?'<span class="badge badge-green">Paid</span>':'<span class="badge badge-amber">Pending</span>')+'</td></tr>';
+    return '<tr><td><strong>'+esc(c.customerName||c.customer||'')+'</strong></td><td>$'+parseFloat(c.customerMrr||c.customerMRR||0).toFixed(2)+'</td><td><strong style="color:var(--success)">$'+parseFloat(c.commissionAmount||0).toFixed(2)+'</strong></td><td>'+esc(c.paymentDate||'')+'</td><td>'+(c.status==='Paid'?'<span class="badge badge-green">Paid</span>':'<span class="badge badge-amber">Pending</span>')+'</td></tr>';
   }).join('');
 }
 
@@ -964,7 +983,7 @@ function renderCommTable(comms) {
   var total = 0;
   var rows = comms.map(function(c) {
     total += parseFloat(c.commissionAmount||0);
-    return '<tr><td><strong>'+esc(c.customer||'')+'</strong></td><td>'+esc(c.product||'')+'</td><td>$'+parseFloat(c.customerMrr||c.customerMRR||0).toFixed(2)+'</td><td>'+(c.commissionRate||'')+'%</td><td><strong style="color:var(--success)">$'+parseFloat(c.commissionAmount||0).toFixed(2)+'</strong></td><td>'+esc(c.paymentDate||'')+'</td><td>'+(c.status==='Paid'?'<span class="badge badge-green">Paid</span>':'<span class="badge badge-amber">Pending</span>')+'</td></tr>';
+    return '<tr><td><strong>'+esc(c.customerName||c.customer||'')+'</strong></td><td>'+esc(c.product||'')+'</td><td>$'+parseFloat(c.customerMrr||c.customerMRR||0).toFixed(2)+'</td><td>'+(c.commissionRate||'')+'%</td><td><strong style="color:var(--success)">$'+parseFloat(c.commissionAmount||0).toFixed(2)+'</strong></td><td>'+esc(c.paymentDate||'')+'</td><td>'+(c.status==='Paid'?'<span class="badge badge-green">Paid</span>':'<span class="badge badge-amber">Pending</span>')+'</td></tr>';
   }).join('');
   tbody.innerHTML = rows + '<tr class="totals-row"><td colspan="4">Total</td><td>$'+total.toFixed(2)+'</td><td colspan="2"></td></tr>';
 }
@@ -1032,12 +1051,16 @@ function calcDeal() {
   var fireMRR    = firePanelLines*firePanelPrice;
   var elevMRR    = elevatorLines*elevatorPrice;
   var callBoxMRR = callBoxLines*callBoxPrice;
+  var securityLines = parseInt(document.getElementById('securityLines').value)||0;
+  var securityPrice = parseFloat(document.getElementById('securityPrice').value)||29.95;
+  var securityMRR   = securityLines*securityPrice;
   document.getElementById('firePanelMRRDisplay').textContent = '$'+fireMRR.toFixed(2);
   document.getElementById('elevatorMRRDisplay').textContent  = '$'+elevMRR.toFixed(2);
   document.getElementById('callBoxMRRDisplay').textContent   = '$'+callBoxMRR.toFixed(2);
+  document.getElementById('securityMRRDisplay').textContent  = '$'+securityMRR.toFixed(2);
 
   // Total
-  var totalMRR = basicMRR+premiumMRR+execMRR+omniRespMRR+omniChanMRR+omniEntMRR+fireMRR+elevMRR+callBoxMRR;
+  var totalMRR = basicMRR+premiumMRR+execMRR+omniRespMRR+omniChanMRR+omniEntMRR+fireMRR+elevMRR+callBoxMRR+securityMRR;
   var rate     = parseFloat(currentAgent?currentAgent.commissionRate:0)||0;
   document.getElementById('calcMRR').textContent  = '$'+totalMRR.toFixed(2);
   document.getElementById('calcRate').textContent = rate+'%';
@@ -1092,6 +1115,9 @@ function doSubmitDeal() {
   if(firePanel>0)   productParts.push('Fire Panel x'+firePanel+' @$'+firePanelPrice.toFixed(2));
   if(elevatorLines>0) productParts.push('Elevator x'+elevatorLines+' @$'+elevatorPrice.toFixed(2));
   if(callBoxLines>0)  productParts.push('Emergency Call Box x'+callBoxLines+' @$'+callBoxPrice.toFixed(2));
+  var securityLines2= parseInt(document.getElementById('securityLines').value)||0;
+  var securityPrice2= parseFloat(document.getElementById('securityPrice').value)||29.95;
+  if(securityLines2>0) productParts.push('Security Alarm x'+securityLines2+' @$'+securityPrice2.toFixed(2));
 
   if(!productParts.length) { alertEl.innerHTML='<div class="alert alert-error">Please select at least one product.</div>'; return; }
 
@@ -1125,7 +1151,7 @@ function doSubmitDeal() {
     '&omniEnterpriseQty='+omniEntQty+'&omniEnterprisePrice='+omniEntPrice+'&omniEnterprisePhone='+encodeURIComponent(omniEntPhone)+
     '&firePanelLines='+firePanel+'&firePanelPrice='+firePanelPrice+
     '&elevatorLines='+elevatorLines+'&elevatorPrice='+elevatorPrice+
-    '&callBoxLines='+callBoxLines+'&callBoxPrice='+callBoxPrice)
+    '&callBoxLines='+callBoxLines+'&callBoxPrice='+callBoxPrice+'&securityLines='+securityLines2+'&securityPrice='+securityPrice2)
     .then(function(r){return r.json();})
     .then(function(data){
       if(data.success){
@@ -1139,13 +1165,13 @@ function doSubmitDeal() {
 
 function resetDealForm() {
   ['dealCompany','dealCurrentSystem','dealFirst','dealLast','dealTitle','dealEmail','dealPhone','dealCity','dealState','dealNotes','dealUsers'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
-  ['basicQty','premiumQty','execQty','omniRespQty','omniChanQty','omniEntQty','firePanelLines','elevatorLines','callBoxLines'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='0';});
-  ['basicPrice','premiumPrice','execPrice','omniRespPrice','omniChanPrice','omniEntPrice','firePanelPrice','elevatorPrice','callBoxPrice'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0;});
+  ['basicQty','premiumQty','execQty','omniRespQty','omniChanQty','omniEntQty','firePanelLines','elevatorLines','callBoxLines','securityLines'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='0';});
+  ['basicPrice','premiumPrice','execPrice','omniRespPrice','omniChanPrice','omniEntPrice','firePanelPrice','elevatorPrice','callBoxPrice','securityPrice'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0;});
   ['basicPhone','premiumPhone','omniChanPhone','omniEntPhone'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0;});
   document.getElementById('dealTimeline').value='';
   document.getElementById('dealAlert').innerHTML='';
   document.getElementById('firePanelError').style.display='none';
-  ['basicMRRDisplay','premiumMRRDisplay','execMRRDisplay','omniRespMRRDisplay','omniChanMRRDisplay','omniEntMRRDisplay','firePanelMRRDisplay','elevatorMRRDisplay','callBoxMRRDisplay'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent='$0.00';});
+  ['basicMRRDisplay','premiumMRRDisplay','execMRRDisplay','omniRespMRRDisplay','omniChanMRRDisplay','omniEntMRRDisplay','firePanelMRRDisplay','elevatorMRRDisplay','callBoxMRRDisplay','securityMRRDisplay'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent='$0.00';});
   calcDeal();
 }
 
