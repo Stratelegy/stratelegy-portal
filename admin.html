@@ -987,8 +987,7 @@ function previewRevio() {
 }
 
 function parseRevioCSV(csv){
-  var lines=csv.split(/?
-/),headers=parseCSVLine(lines[0]),records=[];
+  var lines=csv.split(/\r?\n/),headers=parseCSVLine(lines[0]),records=[];
   for(var i=1;i<lines.length;i++){
     if(!lines[i].trim()) continue;
     var cols=parseCSVLine(lines[i]),rec={};
