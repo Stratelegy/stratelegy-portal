@@ -163,12 +163,42 @@ body{font-family:"Open Sans",sans-serif;background:var(--gray-100);color:var(--g
             <tbody id="dashDealsTable"><tr><td colspan=6 class=loading><span class=spinner></span>Loading...</td></tr></tbody>
           </table>
         </div>
-        <div class="card">
-          <div class="card-header"><h3>&#10003; Active Accounts</h3></div>
-          <table class="data-table">
-            <thead><tr><th>Customer Name</th><th>Contact</th><th>Product</th><th>MRR</th><th>Status</th><th>Date</th></tr></thead>
-            <tbody id="dashActiveTable"><tr><td colspan=6 class=loading><span class=spinner></span>Loading...</td></tr></tbody>
-          </table>
+        <!-- Commission Period Status -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
+          <div class="card" style="margin-bottom:0;">
+            <div style="padding:12px 18px;background:linear-gradient(135deg,var(--navy-dark),var(--navy));"><h3 style="font-size:13px;font-weight:700;color:var(--white);">&#128197; Current Period &mdash; <span id="cpPeriodLabel">&#8212;</span></h3></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+              <div style="padding:16px 18px;border-right:1px solid var(--gray-100);">
+                <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;">Paid Accounts</div>
+                <div style="font-size:28px;font-weight:700;color:var(--success);margin-top:4px;" id="cpPaidCount">&#8212;</div>
+              </div>
+              <div style="padding:16px 18px;">
+                <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;">Unpaid Accounts</div>
+                <div style="font-size:28px;font-weight:700;color:var(--red);margin-top:4px;" id="cpUnpaidCount">&#8212;</div>
+              </div>
+            </div>
+            <div style="padding:10px 18px;background:var(--gray-50);border-top:1px solid var(--gray-100);">
+              <span style="font-size:12px;color:var(--gray-500);">Commissions Paid: </span>
+              <strong style="color:var(--success);" id="cpCommTotal">&#8212;</strong>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:0;">
+            <div style="padding:12px 18px;border-bottom:1px solid var(--gray-100);"><h3 style="font-size:13px;font-weight:700;color:var(--navy);">&#128198; Previous Period &mdash; <span id="ppPeriodLabel">&#8212;</span></h3></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+              <div style="padding:16px 18px;border-right:1px solid var(--gray-100);">
+                <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;">Paid Accounts</div>
+                <div style="font-size:28px;font-weight:700;color:var(--success);margin-top:4px;" id="ppPaidCount">&#8212;</div>
+              </div>
+              <div style="padding:16px 18px;">
+                <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;">Unpaid Accounts</div>
+                <div style="font-size:28px;font-weight:700;color:var(--red);margin-top:4px;" id="ppUnpaidCount">&#8212;</div>
+              </div>
+            </div>
+            <div style="padding:10px 18px;background:var(--gray-50);border-top:1px solid var(--gray-100);">
+              <span style="font-size:12px;color:var(--gray-500);">Commissions Paid: </span>
+              <strong style="color:var(--success);" id="ppCommTotal">&#8212;</strong>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -326,6 +356,25 @@ body{font-family:"Open Sans",sans-serif;background:var(--gray-100);color:var(--g
           </div>
         </div>
       </div>
+
+      <!-- ACTIVE ACCOUNTS -->
+      <div id="page-activeaccounts" class="page">
+        <div class="page-header"><h2>Active Accounts</h2><p>All your live customer accounts</p></div>
+        <div class="card">
+          <div class="card-header">
+            <div><h3 id="aaPageLabel">Active Accounts</h3><p id="aaCountLabel" style="font-size:12px;color:var(--gray-500);margin-top:2px;"></p></div>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Customer Name</th><th>Products &amp; Commissionable MRR</th><th>Total MRR</th><th>Date</th></tr></thead>
+            <tbody id="activeAccountsTable"><tr><td colspan=4 class=loading><span class=spinner></span>Loading...</td></tr></tbody>
+          </table>
+          <div style="padding:14px 18px;border-top:1px solid var(--gray-100);display:flex;align-items:center;justify-content:flex-end;gap:12px;">
+            <span style="font-size:13px;color:var(--gray-500);" id="aaPageIndicator"></span>
+            <button id="aaPrevBtn" class="btn btn-ghost btn-sm" onclick="aaChangePage(-1)" disabled>&#8592; Prev</button>
+            <button id="aaNextBtn" class="btn btn-ghost btn-sm" onclick="aaChangePage(1)">Next &#8594;</button>
+          </div>
+        </div>
+      </div>
       <!-- MY COMMISSIONS -->
       <div id="page-commissions" class="page">
         <div class="page-header"><h2>My Commissions</h2><p>Track your earned commissions</p></div>
@@ -473,7 +522,7 @@ function launchApp() {
   document.getElementById("agentBadge").textContent="Affiliate Agent";
   if(currentAgent.agentType!=="Partner"&&currentAgent.agentType!=="Affiliate"){var nav=document.getElementById("navMyAgents");if(nav)nav.style.display="none";}
   document.getElementById("calcRate").textContent=(currentAgent.commissionRate||"0")+"%";
-  loadDashboard(); loadDeals(); loadCommissions(); loadNotifications();
+  loadDashboard(); loadDeals(); loadCommissions(); loadNotifications(); loadPeriodStats();
   if(currentAgent.agentType==="Partner"||currentAgent.agentType==="Affiliate") loadMyAgents();
 
 }
@@ -495,7 +544,7 @@ function loadDashboard() {
 function loadDeals() {
   fetch(APPS_SCRIPT_URL+"?action=getDeals&agentEmail="+encodeURIComponent(currentAgent.email))
     .then(function(r){return r.json();})
-    .then(function(d){allDeals=d.deals||[];renderDealsTable(allDeals);renderDashDeals(allDeals);})
+    .then(function(d){allDeals=d.deals||[];renderDealsTable(allDeals);renderDashDeals(allDeals);loadActiveAccounts();})
     .catch(function(){});
 }
 
@@ -511,13 +560,28 @@ function renderDashDeals(deals) {
   var pending=deals.filter(function(d){var s=String(d.status||'').trim();return s==='Submitted'||s==='In Review'||s==='Approved';});
   var active=deals.filter(function(d){return String(d.status||'').trim()==='Active Customer';});
   var pTbody=document.getElementById('dashDealsTable');
-  var aTbody=document.getElementById('dashActiveTable');
   if(document.getElementById('statPending')) document.getElementById('statPending').textContent=pending.length;
   if(document.getElementById('statActive'))  document.getElementById('statActive').textContent=active.length;
   var mrr=active.reduce(function(s,d){return s+parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0);},0);
   if(document.getElementById('statMRR')) document.getElementById('statMRR').textContent=mrr>0?'$'+mrr.toFixed(2):'$0.00';
   if(pTbody){if(!pending.length){pTbody.innerHTML='<tr><td colspan=6 class=empty>No pending deals.</td></tr>';}else{pTbody.innerHTML=pending.slice(0,5).map(function(d){var m=parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0);return '<tr><td><strong>'+esc(d.customerName||d.companyName||'')+'</strong></td><td>'+esc((d.firstName||'')+' '+(d.lastName||''))+'</td><td style=font-size:12px>'+esc(d.product||'')+'</td><td>'+(m>0?'$'+m.toFixed(2):'&#8212;')+'</td><td>'+statusBadge(d.status)+'</td><td>'+esc((d.timestamp||'').substring(0,10))+'</td></tr>';}).join('');}}
-  if(aTbody){if(!active.length){aTbody.innerHTML='<tr><td colspan=6 class=empty>No active accounts yet.</td></tr>';}else{aTbody.innerHTML=active.slice(0,5).map(function(d){var m=parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0);return '<tr><td><strong>'+esc(d.customerName||d.companyName||'')+'</strong></td><td>'+esc((d.firstName||'')+' '+(d.lastName||''))+'</td><td style=font-size:12px>'+esc(d.product||'')+'</td><td>'+(m>0?'$'+m.toFixed(2):'&#8212;')+'</td><td>'+statusBadge(d.status)+'</td><td>'+esc((d.timestamp||'').substring(0,10))+'</td></tr>';}).join('');}}
+}
+
+function loadPeriodStats() {
+  fetch(APPS_SCRIPT_URL+'?action=getAgentPeriodStats&agentEmail='+encodeURIComponent(currentAgent.email))
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(!d.success) return;
+      var cp=d.currentPeriod, pp=d.previousPeriod;
+      if(document.getElementById('cpPaidCount'))   document.getElementById('cpPaidCount').textContent=cp.paid;
+      if(document.getElementById('cpUnpaidCount')) document.getElementById('cpUnpaidCount').textContent=cp.unpaid;
+      if(document.getElementById('cpCommTotal'))   document.getElementById('cpCommTotal').textContent='$'+parseFloat(cp.commissionTotal).toFixed(2);
+      if(document.getElementById('cpPeriodLabel')) document.getElementById('cpPeriodLabel').textContent=MONTHS[cp.month]+' '+cp.year;
+      if(document.getElementById('ppPaidCount'))   document.getElementById('ppPaidCount').textContent=pp.paid;
+      if(document.getElementById('ppUnpaidCount')) document.getElementById('ppUnpaidCount').textContent=pp.unpaid;
+      if(document.getElementById('ppCommTotal'))   document.getElementById('ppCommTotal').textContent='$'+parseFloat(pp.commissionTotal).toFixed(2);
+      if(document.getElementById('ppPeriodLabel')) document.getElementById('ppPeriodLabel').textContent=MONTHS[pp.month]+' '+pp.year;
+    }).catch(function(){});
 }
 
 function renderDealsTable(deals) {
@@ -794,6 +858,54 @@ function doAddRecruitedAgent() {
       if(d.success){alertEl.innerHTML='<div class=alert alert-success>Agent added successfully!</div>';document.getElementById('newRecFirst').value='';document.getElementById('newRecLast').value='';document.getElementById('newRecEmail').value='';document.getElementById('newRecPhone').value='';document.getElementById('newRecCompany').value='';document.getElementById('newRecPassword').value='';loadMyAgents();}
       else{alertEl.innerHTML='<div class=alert alert-error>'+(d.error||'Failed.')+'</div>';}
     }).catch(function(){alertEl.innerHTML='<div class=alert alert-error>Connection error.</div>';});
+}
+
+var aaCurrentPage = 1;
+var aaPageSize = 10;
+var aaAllAccounts = [];
+
+function loadActiveAccounts() {
+  aaAllAccounts = allDeals.filter(function(d){ return String(d.status||'').trim()==='Active Customer'; });
+  aaCurrentPage = 1;
+  renderActiveAccounts();
+}
+
+function renderActiveAccounts() {
+  var tbody = document.getElementById('activeAccountsTable');
+  if (!tbody) return;
+  var total = aaAllAccounts.length;
+  var totalPages = Math.max(1, Math.ceil(total / aaPageSize));
+  var start = (aaCurrentPage - 1) * aaPageSize;
+  var end = Math.min(start + aaPageSize, total);
+  var page = aaAllAccounts.slice(start, end);
+
+  document.getElementById('aaPageLabel').textContent = 'Active Accounts';
+  document.getElementById('aaCountLabel').textContent = total + ' total account' + (total !== 1 ? 's' : '');
+  document.getElementById('aaPageIndicator').textContent = 'Page ' + aaCurrentPage + ' of ' + totalPages;
+  document.getElementById('aaPrevBtn').disabled = aaCurrentPage <= 1;
+  document.getElementById('aaNextBtn').disabled = aaCurrentPage >= totalPages;
+
+  if (!page.length) {
+    tbody.innerHTML = '<tr><td colspan=4 class=empty>No active accounts yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = page.map(function(d) {
+    var breakdown = buildMRRBreakdown(d);
+    var mrr = parseFloat(d.totalCommissionableMrr||d.ucaasEstMrr||0);
+    return '<tr>' +
+      '<td><strong>' + esc(d.customerName||d.companyName||'') + '</strong></td>' +
+      '<td style="font-size:12px;">' + breakdown + '</td>' +
+      '<td><strong style="color:var(--navy);">' + (mrr>0?'$'+mrr.toFixed(2):'&#8212;') + '</strong></td>' +
+      '<td>' + esc((d.timestamp||'').substring(0,10)) + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function aaChangePage(dir) {
+  var total = aaAllAccounts.length;
+  var totalPages = Math.max(1, Math.ceil(total / aaPageSize));
+  aaCurrentPage = Math.min(Math.max(1, aaCurrentPage + dir), totalPages);
+  renderActiveAccounts();
 }
 
 function doChangePassword() {
