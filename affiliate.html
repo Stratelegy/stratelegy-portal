@@ -126,6 +126,7 @@ body{font-family:"Open Sans",sans-serif;background:var(--gray-100);color:var(--g
   <div class="sidebar-section"><div class="sidebar-label">Overview</div><div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">&#128202;</span> Dashboard</div></div>
   <div class="sidebar-section"><div class="sidebar-label">My Business</div>
     <div class="nav-item" onclick="showPage('deals',this)"><span class="icon">&#128203;</span> My Deals</div>
+    <div class="nav-item" onclick="showPage('activeaccounts',this)"><span class="icon">&#10003;</span> Active Accounts</div>
     <div class="nav-item" onclick="showPage('submit',this)"><span class="icon">&#10133;</span> Submit Deal</div>
     <div class="nav-item" onclick="showPage('commissions',this)"><span class="icon">&#128176;</span> My Commissions</div>
     <div class="nav-item" id="navMyAgents" onclick="showPage('myagents',this)"><span class="icon">&#128101;</span> My Agents</div>
@@ -156,6 +157,33 @@ body{font-family:"Open Sans",sans-serif;background:var(--gray-100);color:var(--g
             </div>
           </div>
         </div>
+
+        <!-- Override Commission Breakdown -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
+          <div class="card" style="margin-bottom:0;">
+            <div style="padding:12px 18px;background:linear-gradient(135deg,#2d5a27,#3d7a35);"><h3 style="font-size:13px;font-weight:700;color:var(--white);">&#9733; Current Period Override Commissions</h3></div>
+            <table class="data-table">
+              <thead><tr><th>Agent</th><th>Paid Accounts</th><th>Override Earned</th></tr></thead>
+              <tbody id="cpOverrideTable"><tr><td colspan=3 style="text-align:center;padding:12px;color:var(--gray-400);font-size:13px;">Loading...</td></tr></tbody>
+            </table>
+            <div style="padding:10px 18px;background:var(--gray-50);border-top:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:12px;font-weight:700;color:var(--gray-600);">Total Override</span>
+              <strong style="color:var(--success);" id="cpOverrideTotal">&#8212;</strong>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:0;">
+            <div style="padding:12px 18px;border-bottom:1px solid var(--gray-100);"><h3 style="font-size:13px;font-weight:700;color:var(--navy);">&#9733; Previous Period Override Commissions</h3></div>
+            <table class="data-table">
+              <thead><tr><th>Agent</th><th>Paid Accounts</th><th>Override Earned</th></tr></thead>
+              <tbody id="ppOverrideTable"><tr><td colspan=3 style="text-align:center;padding:12px;color:var(--gray-400);font-size:13px;">Loading...</td></tr></tbody>
+            </table>
+            <div style="padding:10px 18px;background:var(--gray-50);border-top:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:12px;font-weight:700;color:var(--gray-600);">Total Override</span>
+              <strong style="color:var(--success);" id="ppOverrideTotal">&#8212;</strong>
+            </div>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-header"><h3>&#9200; Pending Deals</h3><p>Submitted, In Review, Approved</p></div>
           <table class="data-table">
@@ -568,7 +596,7 @@ function renderDashDeals(deals) {
 }
 
 function loadPeriodStats() {
-  fetch(APPS_SCRIPT_URL+'?action=getAgentPeriodStats&agentEmail='+encodeURIComponent(currentAgent.email))
+  fetch(APPS_SCRIPT_URL+'?action=getAgentPeriodStats&agentEmail='+encodeURIComponent(currentAgent.email)+'&agentId='+encodeURIComponent(currentAgent.agentId||''))
     .then(function(r){return r.json();})
     .then(function(d){
       if(!d.success) return;
@@ -581,7 +609,29 @@ function loadPeriodStats() {
       if(document.getElementById('ppUnpaidCount')) document.getElementById('ppUnpaidCount').textContent=pp.unpaid;
       if(document.getElementById('ppCommTotal'))   document.getElementById('ppCommTotal').textContent='$'+parseFloat(pp.commissionTotal).toFixed(2);
       if(document.getElementById('ppPeriodLabel')) document.getElementById('ppPeriodLabel').textContent=MONTHS[pp.month]+' '+pp.year;
+      // Override commissions (Affiliate only)
+      renderOverride('cpOverrideTable', 'cpOverrideTotal', cp.override);
+      renderOverride('ppOverrideTable', 'ppOverrideTotal', pp.override);
     }).catch(function(){});
+}
+
+function renderOverride(tableId, totalId, override) {
+  var tbody = document.getElementById(tableId);
+  var totalEl = document.getElementById(totalId);
+  if (!tbody || !override) return;
+  var rows = override.breakdown || [];
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan=3 style="text-align:center;padding:12px;color:var(--gray-400);font-size:13px;">No override commissions this period.</td></tr>';
+  } else {
+    tbody.innerHTML = rows.map(function(r) {
+      return '<tr>' +
+        '<td><strong>' + esc(r.agentName) + '</strong></td>' +
+        '<td>' + r.paidAccounts + ' account' + (r.paidAccounts!==1?'s':'') + '</td>' +
+        '<td><strong style="color:var(--success);">$' + parseFloat(r.overrideTotal).toFixed(2) + '</strong></td>' +
+      '</tr>';
+    }).join('');
+  }
+  if (totalEl) totalEl.textContent = '$' + parseFloat(override.grandTotal||0).toFixed(2);
 }
 
 function renderDealsTable(deals) {
