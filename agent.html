@@ -126,7 +126,6 @@ body{font-family:"Open Sans",sans-serif;background:var(--gray-100);color:var(--g
   <div class="sidebar-section"><div class="sidebar-label">Overview</div><div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">&#128202;</span> Dashboard</div></div>
   <div class="sidebar-section"><div class="sidebar-label">My Business</div>
     <div class="nav-item" onclick="showPage('deals',this)"><span class="icon">&#128203;</span> My Deals</div>
-    <div class="nav-item" onclick="showPage('activeaccounts',this)"><span class="icon">&#10003;</span> Active Accounts</div>
     <div class="nav-item" onclick="showPage('submit',this)"><span class="icon">&#10133;</span> Submit Deal</div>
     <div class="nav-item" onclick="showPage('commissions',this)"><span class="icon">&#128176;</span> My Commissions</div>
   </div>
@@ -243,6 +242,10 @@ body{font-family:"Open Sans",sans-serif;background:var(--gray-100);color:var(--g
             <div class="field"><label>Phone</label><input type="text" id="dealPhone"></div>
           </div>
           <div class="field-row">
+            <div class="field"><label>Address Line 1</label><input type="text" id="dealAddress1" placeholder="Street address"></div>
+            <div class="field"><label>Address Line 2</label><input type="text" id="dealAddress2" placeholder="Suite, floor, unit (optional)"></div>
+          </div>
+          <div class="field-row">
             <div class="field"><label>City</label><input type="text" id="dealCity"></div>
             <div class="field"><label>State</label><input type="text" id="dealState"></div>
           </div>
@@ -326,7 +329,7 @@ body{font-family:"Open Sans",sans-serif;background:var(--gray-100);color:var(--g
             </div>
             <div id="firePanelError" style="display:none;padding:6px 14px;color:var(--red);font-size:12px;font-weight:600;background:var(--red-bg);">&#9888; Fire Panel requires an even number of lines</div>
             <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--gray-100);">
-              <div><div style="font-size:13.5px;font-weight:700;color:var(--navy);">&#128728; Elevator Lines</div></div>
+              <div><div style="font-size:13.5px;font-weight:700;color:var(--navy);">&#127970; Elevator Lines</div></div>
               <div><select id="elevatorPrice" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;"><option value="29.95">$29.95</option><option value="39.95">$39.95</option><option value="49.95">$49.95</option></select></div>
               <div><input type="number" id="elevatorLines" min="0" value="0" oninput="calcDeal()" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;"></div>
               <div style="font-size:13px;font-weight:700;color:var(--navy);" id="elevatorMRRDisplay">$0.00</div>
@@ -693,6 +696,8 @@ function doSubmitDeal() {
     '&title='+encodeURIComponent(document.getElementById('dealTitle').value)+
     '&email='+encodeURIComponent(document.getElementById('dealEmail').value)+
     '&phone='+encodeURIComponent(document.getElementById('dealPhone').value)+
+    '&address1='+encodeURIComponent(document.getElementById('dealAddress1').value)+
+    '&address2='+encodeURIComponent(document.getElementById('dealAddress2').value)+
     '&city='+encodeURIComponent(document.getElementById('dealCity').value)+
     '&state='+encodeURIComponent(document.getElementById('dealState').value)+
     '&users='+encodeURIComponent(document.getElementById('dealUsers').value||0)+
@@ -718,7 +723,7 @@ function doSubmitDeal() {
 }
 
 function resetDealForm() {
-  ['dealCompany','dealCurrentSystem','dealFirst','dealLast','dealTitle','dealEmail','dealPhone','dealCity','dealState','dealNotes'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  ['dealCompany','dealCurrentSystem','dealFirst','dealLast','dealTitle','dealEmail','dealPhone','dealAddress1','dealAddress2','dealCity','dealState','dealNotes'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   if(document.getElementById('dealUsers')) document.getElementById('dealUsers').value='';
   ['basicQty','premiumQty','execQty','omniRespQty','omniChanQty','omniEntQty','firePanelLines','elevatorLines','callBoxLines','securityLines'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='0';});
   ['basicPrice','premiumPrice','execPrice','omniRespPrice','omniChanPrice','omniEntPrice','firePanelPrice','elevatorPrice','callBoxPrice','securityPrice'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0;});

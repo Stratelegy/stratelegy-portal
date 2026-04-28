@@ -126,7 +126,6 @@ body{font-family:"Open Sans",sans-serif;background:var(--gray-100);color:var(--g
   <div class="sidebar-section"><div class="sidebar-label">Overview</div><div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">&#128202;</span> Dashboard</div></div>
   <div class="sidebar-section"><div class="sidebar-label">My Business</div>
     <div class="nav-item" onclick="showPage('deals',this)"><span class="icon">&#128203;</span> My Deals</div>
-    <div class="nav-item" onclick="showPage('activeaccounts',this)"><span class="icon">&#10003;</span> Active Accounts</div>
     <div class="nav-item" onclick="showPage('submit',this)"><span class="icon">&#10133;</span> Submit Deal</div>
     <div class="nav-item" onclick="showPage('commissions',this)"><span class="icon">&#128176;</span> My Commissions</div>
     <div class="nav-item" id="navMyAgents" onclick="showPage('myagents',this)"><span class="icon">&#128101;</span> My Agents</div>
@@ -142,18 +141,10 @@ body{font-family:"Open Sans",sans-serif;background:var(--gray-100);color:var(--g
       <!-- DASHBOARD -->
       <div id="page-dashboard" class="page active">
         <div class="page-header"><h2 id="dashGreeting">Dashboard</h2><p>Welcome back! Here's your pipeline overview.</p></div>
-
         <div class="stat-grid">
           <div class="stat-card navy"><div class="stat-label">Pending Deals</div><div class="stat-value" id="statPending">&#8212;</div><div class="stat-sub">In pipeline</div></div>
           <div class="stat-card green"><div class="stat-label">Active Accounts</div><div class="stat-value" id="statActive">&#8212;</div><div class="stat-sub">Live customers</div></div>
           <div class="stat-card orange"><div class="stat-label">Total MRR</div><div class="stat-value" id="statMRR">&#8212;</div><div class="stat-sub">Commissionable</div></div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3>&#9200; Pending Deals</h3><p>Submitted, In Review, Approved</p></div>
-          <table class="data-table">
-            <thead><tr><th>Customer Name</th><th>Contact</th><th>Product</th><th>MRR</th><th>Status</th><th>Date</th></tr></thead>
-            <tbody id="dashDealsTable"><tr><td colspan=6 class=loading><span class=spinner></span>Loading...</td></tr></tbody>
-          </table>
         </div>
         <div id="notificationsSection" style="display:none;margin-bottom:18px;">
           <div class="card">
@@ -164,6 +155,13 @@ body{font-family:"Open Sans",sans-serif;background:var(--gray-100);color:var(--g
               <div id="teamNotificationsList" style="padding:8px 0;"></div>
             </div>
           </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>&#9200; Pending Deals</h3><p>Submitted, In Review, Approved</p></div>
+          <table class="data-table">
+            <thead><tr><th>Customer Name</th><th>Contact</th><th>Product</th><th>MRR</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="dashDealsTable"><tr><td colspan=6 class=loading><span class=spinner></span>Loading...</td></tr></tbody>
+          </table>
         </div>
         <!-- Commission Period Status -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
@@ -202,34 +200,10 @@ body{font-family:"Open Sans",sans-serif;background:var(--gray-100);color:var(--g
             </div>
           </div>
         </div>
-        <!-- Override Commission Breakdown -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
-          <div class="card" style="margin-bottom:0;">
-            <div style="padding:12px 18px;background:linear-gradient(135deg,#2d5a27,#3d7a35);"><h3 style="font-size:13px;font-weight:700;color:var(--white);">&#9733; Current Period Override Commissions</h3></div>
-            <table class="data-table">
-              <thead><tr><th>Agent</th><th>Paid Accounts</th><th>Override Earned</th></tr></thead>
-              <tbody id="cpOverrideTable"><tr><td colspan=3 style="text-align:center;padding:12px;color:var(--gray-400);font-size:13px;">Loading...</td></tr></tbody>
-            </table>
-            <div style="padding:10px 18px;background:var(--gray-50);border-top:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:12px;font-weight:700;color:var(--gray-600);">Total Override</span>
-              <strong style="color:var(--success);" id="cpOverrideTotal">&#8212;</strong>
-            </div>
-          </div>
-          <div class="card" style="margin-bottom:0;">
-            <div style="padding:12px 18px;border-bottom:1px solid var(--gray-100);"><h3 style="font-size:13px;font-weight:700;color:var(--navy);">&#9733; Previous Period Override Commissions</h3></div>
-            <table class="data-table">
-              <thead><tr><th>Agent</th><th>Paid Accounts</th><th>Override Earned</th></tr></thead>
-              <tbody id="ppOverrideTable"><tr><td colspan=3 style="text-align:center;padding:12px;color:var(--gray-400);font-size:13px;">Loading...</td></tr></tbody>
-            </table>
-            <div style="padding:10px 18px;background:var(--gray-50);border-top:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:12px;font-weight:700;color:var(--gray-600);">Total Override</span>
-              <strong style="color:var(--success);" id="ppOverrideTotal">&#8212;</strong>
-            </div>
-          </div>
-        </div>
       </div>
 
-<div id="page-deals" class="page">
+      <!-- MY DEALS -->
+      <div id="page-deals" class="page">
         <div class="page-header"><h2>My Deals</h2><p>Track all your submitted deals</p></div>
         <div class="card" style="margin-bottom:18px;">
           <div class="card-header"><h3>&#9200; Pending Deals</h3><p>Submitted, In Review, Approved</p></div>
@@ -272,6 +246,10 @@ body{font-family:"Open Sans",sans-serif;background:var(--gray-100);color:var(--g
           <div class="field-row">
             <div class="field"><label>Email</label><input type="email" id="dealEmail"></div>
             <div class="field"><label>Phone</label><input type="text" id="dealPhone"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Address Line 1</label><input type="text" id="dealAddress1" placeholder="Street address"></div>
+            <div class="field"><label>Address Line 2</label><input type="text" id="dealAddress2" placeholder="Suite, floor, unit (optional)"></div>
           </div>
           <div class="field-row">
             <div class="field"><label>City</label><input type="text" id="dealCity"></div>
@@ -357,7 +335,7 @@ body{font-family:"Open Sans",sans-serif;background:var(--gray-100);color:var(--g
             </div>
             <div id="firePanelError" style="display:none;padding:6px 14px;color:var(--red);font-size:12px;font-weight:600;background:var(--red-bg);">&#9888; Fire Panel requires an even number of lines</div>
             <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--gray-100);">
-              <div><div style="font-size:13.5px;font-weight:700;color:var(--navy);">&#128728; Elevator Lines</div></div>
+              <div><div style="font-size:13.5px;font-weight:700;color:var(--navy);">&#127970; Elevator Lines</div></div>
               <div><select id="elevatorPrice" onchange="calcDeal()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;"><option value="29.95">$29.95</option><option value="39.95">$39.95</option><option value="49.95">$49.95</option></select></div>
               <div><input type="number" id="elevatorLines" min="0" value="0" oninput="calcDeal()" style="width:70px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-family:inherit;font-size:13px;outline:none;"></div>
               <div style="font-size:13px;font-weight:700;color:var(--navy);" id="elevatorMRRDisplay">$0.00</div>
@@ -594,7 +572,7 @@ function renderDashDeals(deals) {
 }
 
 function loadPeriodStats() {
-  fetch(APPS_SCRIPT_URL+'?action=getAgentPeriodStats&agentEmail='+encodeURIComponent(currentAgent.email)+'&agentId='+encodeURIComponent(currentAgent.agentId||''))
+  fetch(APPS_SCRIPT_URL+'?action=getAgentPeriodStats&agentEmail='+encodeURIComponent(currentAgent.email))
     .then(function(r){return r.json();})
     .then(function(d){
       if(!d.success) return;
@@ -607,29 +585,7 @@ function loadPeriodStats() {
       if(document.getElementById('ppUnpaidCount')) document.getElementById('ppUnpaidCount').textContent=pp.unpaid;
       if(document.getElementById('ppCommTotal'))   document.getElementById('ppCommTotal').textContent='$'+parseFloat(pp.commissionTotal).toFixed(2);
       if(document.getElementById('ppPeriodLabel')) document.getElementById('ppPeriodLabel').textContent=MONTHS[pp.month]+' '+pp.year;
-      // Override commissions (Affiliate only)
-      renderOverride('cpOverrideTable', 'cpOverrideTotal', cp.override);
-      renderOverride('ppOverrideTable', 'ppOverrideTotal', pp.override);
     }).catch(function(){});
-}
-
-function renderOverride(tableId, totalId, override) {
-  var tbody = document.getElementById(tableId);
-  var totalEl = document.getElementById(totalId);
-  if (!tbody || !override) return;
-  var rows = override.breakdown || [];
-  if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan=3 style="text-align:center;padding:12px;color:var(--gray-400);font-size:13px;">No override commissions this period.</td></tr>';
-  } else {
-    tbody.innerHTML = rows.map(function(r) {
-      return '<tr>' +
-        '<td><strong>' + esc(r.agentName) + '</strong></td>' +
-        '<td>' + r.paidAccounts + ' account' + (r.paidAccounts!==1?'s':'') + '</td>' +
-        '<td><strong style="color:var(--success);">$' + parseFloat(r.overrideTotal).toFixed(2) + '</strong></td>' +
-      '</tr>';
-    }).join('');
-  }
-  if (totalEl) totalEl.textContent = '$' + parseFloat(override.grandTotal||0).toFixed(2);
 }
 
 function renderDealsTable(deals) {
@@ -816,6 +772,8 @@ function doSubmitDeal() {
     '&title='+encodeURIComponent(document.getElementById('dealTitle').value)+
     '&email='+encodeURIComponent(document.getElementById('dealEmail').value)+
     '&phone='+encodeURIComponent(document.getElementById('dealPhone').value)+
+    '&address1='+encodeURIComponent(document.getElementById('dealAddress1').value)+
+    '&address2='+encodeURIComponent(document.getElementById('dealAddress2').value)+
     '&city='+encodeURIComponent(document.getElementById('dealCity').value)+
     '&state='+encodeURIComponent(document.getElementById('dealState').value)+
     '&users='+encodeURIComponent(document.getElementById('dealUsers').value||0)+
@@ -841,7 +799,7 @@ function doSubmitDeal() {
 }
 
 function resetDealForm() {
-  ['dealCompany','dealCurrentSystem','dealFirst','dealLast','dealTitle','dealEmail','dealPhone','dealCity','dealState','dealNotes'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  ['dealCompany','dealCurrentSystem','dealFirst','dealLast','dealTitle','dealEmail','dealPhone','dealAddress1','dealAddress2','dealCity','dealState','dealNotes'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   if(document.getElementById('dealUsers')) document.getElementById('dealUsers').value='';
   ['basicQty','premiumQty','execQty','omniRespQty','omniChanQty','omniEntQty','firePanelLines','elevatorLines','callBoxLines','securityLines'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='0';});
   ['basicPrice','premiumPrice','execPrice','omniRespPrice','omniChanPrice','omniEntPrice','firePanelPrice','elevatorPrice','callBoxPrice','securityPrice'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0;});
